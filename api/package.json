@@ -1,0 +1,15 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "npm-run-all --parallel build:* && cd ../",
+    "build:test": "cd test/get && npm run build"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: The Monster of the Week api gateway deployment
+
+Parameters:
+  StageName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: master
+
+Resources:
+  Deployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !ImportValue ApiGatewayId
+
+  Stage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      StageName: !Ref StageName
+      RestApiId: !ImportValue ApiGatewayId
+      DeploymentId: !Ref Deployment

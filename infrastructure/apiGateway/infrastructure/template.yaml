@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: The Monster of the Week api gateway infrastructure
+
+Parameters:
+  BasePathDomain:
+    Type: String
+    Default: ''
+
+Resources:
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Description: The Monster of the Week API
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Name: !Sub ${AWS::StackName}-ApiGateway
+
+  ApiGatewayDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: !Ref BasePathDomain
+      RegionalCertificateArn: arn:aws:acm:us-east-1:625961017727:certificate/edd15537-9b78-4e21-a100-9ce277ca42bf
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  ApiBasePath:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref ApiGatewayDomainName
+      RestApiId: !Ref ApiGateway
+
+  TestGet:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ../../../api/test/get/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGateway
+        RootResourceId: !GetAtt ApiGateway.RootResourceId
+
+Outputs:
+  ApiGatewayId:
+    Value: !Ref ApiGateway
+    Description: The ID of the api gateway
+    Export:
+      Name: ApiGatewayId
+  
+  RootResourceId:
+    Value: !GetAtt ApiGateway.RootResourceId
+    Description: The ID of the api root resource
+    Export:
+      Name: RootResourceId

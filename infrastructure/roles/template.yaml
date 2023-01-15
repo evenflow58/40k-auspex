@@ -211,16 +211,22 @@ Resources:
               - Action:
                   - lambda:DeleteFunction
                   - lambda:CreateFunction
+                  - lambda:UpdateFunction
+                  - lambda:GetFunction
                   - lambda:TagResource
                   - lambda:UntagResource
-                  - lambda:GetFunction
                   - lambda:ListVersionsByFunction
+                  - lambda:ListTags
                   - lambda:PublishVersion
                   - lambda:CreateAlias
                   - lambda:DeleteAlias
-                  - lambda:UpdateFunctionCode
-                  - lambda:ListTags
                   - lambda:UpdateAlias
+                  - lambda:UpdateFunctionCode
+                  - lambda:UpdateFunctionConfiguration
+                  - lambda:GetFunctionCodeSigningConfig
+                  - lambda:AddPermission
+                  - lambda:UpdatePermission
+                  - lambda:RemovePermission
                 Effect: Allow
                 Resource: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*'
               - Action:
@@ -235,6 +241,12 @@ Resources:
                 Effect: Allow
                 Resource: arn:aws:route53:::change/*
               - Action:
+                  - acm:RequestCertificate
+                  - acm:DescribeCertificate
+                  - acm:DeleteCertificate
+                Effect: Allow
+                Resource: !Sub 'arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/*'
+              - Action:
                   - s3:PutBucketPolicy
                 Effect: Allow
                 Resource: arn:aws:s3:::*
@@ -245,6 +257,18 @@ Resources:
                   Fn::Sub:
                     - 'arn:aws:s3:::${ArtifactBucketId}/*'
                     - ArtifactBucketId: !ImportValue ArtifactBucketId
+              - Action:
+                  - apigateway:POST
+                Effect: Allow
+                Resource: !Sub 'arn:aws:apigateway:${AWS::Region}::/restapis'
+              - Action:
+                  - apigateway:DELETE
+                  - apigateway:GET
+                  - apigateway:PUT
+                  - apigateway:POST
+                  - apigateway:PATCH
+                Effect: Allow
+                Resource: !Sub 'arn:aws:apigateway:${AWS::Region}::*'
 
   # PipelineExecutionRole:
   #   Type: AWS::IAM::Role

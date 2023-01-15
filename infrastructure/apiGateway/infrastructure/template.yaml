@@ -22,6 +22,9 @@ Resources:
     Properties:
       DomainName: !Ref BasePathDomain
       CertificateArn: arn:aws:acm:us-east-1:625961017727:certificate/edd15537-9b78-4e21-a100-9ce277ca42bf
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
 
   ApiBasePath:
     Type: AWS::ApiGateway::BasePathMapping

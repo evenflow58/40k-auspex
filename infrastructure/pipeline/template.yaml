@@ -109,7 +109,7 @@ Resources:
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 ParameterOverrides: !Sub
                   - '{ "BasePathDomain": "${BasePathDomain}" } '
-                  - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api.${GitHubBranch}.monsterplaybook.rip']
+                  - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
                 StackName: !Sub '${AWS::StackName}-Stack-Api'
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND

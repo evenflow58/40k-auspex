@@ -3,6 +3,7 @@ import {
   CreateStackCommand,
   CreateStackCommandInput,
 } from "@aws-sdk/client-cloudformation";
+import { createFile } from './createFile';
 
 export const handler = async (event: {
   BranchName: string;
@@ -15,6 +16,9 @@ export const handler = async (event: {
     console.log("Not creating anything because this is the master branch.");
     return;
   }
+
+  // // Add template configuration file to S3 bucket
+  // await createFile(branchName);
 
   const client = new CloudFormationClient({ region: "us-east-1" });
   const input: CreateStackCommandInput = {

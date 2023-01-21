@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-cloudformation": "^3.178.0",
+    "@aws-sdk/client-codepipeline": "^3.254.0",
     "@aws-sdk/util-waiter": "^3.180.0",
     "uuid": "^9.0.0"
   }

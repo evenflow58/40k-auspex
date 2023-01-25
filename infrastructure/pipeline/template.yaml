@@ -20,8 +20,6 @@ Resources:
   BuildRunner:
     Type: AWS::CodeBuild::Project
     Properties:
-      Tags:
-        - Branch: !Ref GitHubBranch
       Name: !Sub ${AWS::StackName}-BuildRunner
       Artifacts:
         Type: CODEPIPELINE
@@ -42,8 +40,6 @@ Resources:
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      Tags:
-        - Branch: !Ref GitHubBranch
       Name: !Sub ${AWS::StackName}
       ArtifactStore:
         Type: S3

@@ -3,7 +3,7 @@ import {
   CreateStackCommand,
   CreateStackCommandInput,
 } from "@aws-sdk/client-cloudformation";
-import { createFile } from './createFile';
+import {S3Client, PutObjectCommand, PutObjectCommandInput} from "@aws-sdk/client-s3"
 
 export const handler = async (event: {
   BranchName: string;
@@ -17,9 +17,25 @@ export const handler = async (event: {
     return;
   }
 
-  // // Add template configuration file to S3 bucket
-  // await createFile(branchName);
+  console.log("Uploading template for tagging")
+  const templateConfigurationFile = {
+    Tags: {
+      BranchName: branchName
+    }
+  }
+  const fileName = `${branchName}-template-config-file`
+  const s3Client = new S3Client({ region: "us-east-1" });
+  const s3Input: PutObjectCommandInput = {
+    Body: JSON.stringify(templateConfigurationFile),
+    Bucket: "monster-of-week-code",
+    Key: fileName,
+  }
+  const s3Command = new PutObjectCommand(s3Input);
+  const response = await s3Client.send(s3Command);
 
+  console.log("response", response);
+
+  // Uploading and running pipeline
   const client = new CloudFormationClient({ region: "us-east-1" });
   const input: CreateStackCommandInput = {
     StackName: `monster-week-${branchName}`,
@@ -28,6 +44,7 @@ export const handler = async (event: {
       {
         ParameterKey: "GitHubBranch",
         ParameterValue: branchName,
+        TemplateUrl: "",
       },
     ],
     OnFailure: "ROLLBACK",

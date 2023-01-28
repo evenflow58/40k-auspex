@@ -98,27 +98,42 @@ Resources:
               InputArtifacts:
                 - Name: uiBuildOutput
               Region: us-east-1
-            - Name: DeployApi
+            - Name: CreateApiStack
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Provider: CloudFormation
                 Version: 1
-              Configuration:
-                ActionMode: CREATE_UPDATE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}" } '
-                  - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
-                StackName: !Sub '${AWS::StackName}-Stack-Api'
-                TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                OutputFileName: api.json
               InputArtifacts:
                 - Name: apiGatewayBuildOutput
-              OutputArtifacts:
-                - Name: apiGatewayTemplateOutput
+              Configuration:
+                ActionMode: REPLACE_ON_FAILURE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                StackName: !Sub '${AWS::StackName}-Stack-Api'
+                TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
               RunOrder: 1
+            # - Name: DeployApi
+            #   ActionTypeId:
+            #     Category: Deploy
+            #     Owner: AWS
+            #     Provider: CloudFormation
+            #     Version: 1
+            #   Configuration:
+            #     ActionMode: CREATE_UPDATE
+            #     RoleArn: !ImportValue CloudFormationExecutionRoleArn
+            #     ParameterOverrides: !Sub
+            #       - '{ "BasePathDomain": "${BasePathDomain}" } '
+            #       - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
+            #     StackName: !Sub '${AWS::StackName}-Stack-Api'
+            #     TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
+            #     Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+            #     OutputFileName: api.json
+            #   InputArtifacts:
+            #     - Name: apiGatewayBuildOutput
+            #   OutputArtifacts:
+            #     - Name: apiGatewayTemplateOutput
+            #   RunOrder: 1
+
             # - Name: TestGet
             #   ActionTypeId:
             #     Category: Deploy
@@ -140,43 +155,45 @@ Resources:
             #     - Name: testGetBuildOutput
             #     - Name: apiGatewayTemplateOutput
             #   RunOrder: 2
-            - Name: DeployUI
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: 1
-              Configuration:
-                ActionMode: CREATE_UPDATE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                StackName: !Sub '${AWS::StackName}-Stack-UI'
-                TemplatePath: lambdaEdgeBuildOutput::infrastructure/template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                ParameterOverrides: !Sub
-                  - '{ "Domain": "${SubDomain}.monsterplaybook.rip", "BranchName": "${BranchName}" }'
-                  - SubDomain: !If [IsProduction, 'staging', !Ref GitHubBranch]
-                    BranchName: !Ref GitHubBranch
-              InputArtifacts:
-                - Name: lambdaEdgeBuildOutput
-              RunOrder: 3
-            - Name: DeployApiDeployment
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: 1
-              Configuration:
-                ActionMode: CREATE_UPDATE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
-                TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                ParameterOverrides: !Sub
-                  - '{ "StageName": "${StageName}" }'
-                  - StageName: !If [IsProduction, 'staging', !Ref GitHubBranch]
-              InputArtifacts:
-                - Name: apiGatewayDeploymentBuildOutput
-              RunOrder: 3
+            
+            # - Name: DeployUI
+            #   ActionTypeId:
+            #     Category: Deploy
+            #     Owner: AWS
+            #     Provider: CloudFormation
+            #     Version: 1
+            #   Configuration:
+            #     ActionMode: CREATE_UPDATE
+            #     RoleArn: !ImportValue CloudFormationExecutionRoleArn
+            #     StackName: !Sub '${AWS::StackName}-Stack-UI'
+            #     TemplatePath: lambdaEdgeBuildOutput::infrastructure/template.package.yaml
+            #     Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+            #     ParameterOverrides: !Sub
+            #       - '{ "Domain": "${SubDomain}.monsterplaybook.rip", "BranchName": "${BranchName}" }'
+            #       - SubDomain: !If [IsProduction, 'staging', !Ref GitHubBranch]
+            #         BranchName: !Ref GitHubBranch
+            #   InputArtifacts:
+            #     - Name: lambdaEdgeBuildOutput
+            #   RunOrder: 3
+            # - Name: DeployApiDeployment
+            #   ActionTypeId:
+            #     Category: Deploy
+            #     Owner: AWS
+            #     Provider: CloudFormation
+            #     Version: 1
+            #   Configuration:
+            #     ActionMode: CREATE_UPDATE
+            #     RoleArn: !ImportValue CloudFormationExecutionRoleArn
+            #     StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
+            #     TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
+            #     Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+            #     ParameterOverrides: !Sub
+            #       - '{ "StageName": "${StageName}" }'
+            #       - StageName: !If [IsProduction, 'staging', !Ref GitHubBranch]
+            #   InputArtifacts:
+            #     - Name: apiGatewayDeploymentBuildOutput
+            #   RunOrder: 3
+            
             # - Name: ExecuteApiChangeSet
             #   ActionTypeId:
             #     Category: Deploy

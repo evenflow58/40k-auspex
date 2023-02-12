@@ -111,6 +111,7 @@ Resources:
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 StackName: !Sub '${AWS::StackName}-Stack-Api'
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
               RunOrder: 1
             # - Name: DeployApi
             #   ActionTypeId:

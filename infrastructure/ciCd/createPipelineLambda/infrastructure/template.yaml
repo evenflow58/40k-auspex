@@ -20,7 +20,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambda_FullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
-        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
+        - arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess
         - arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs
       Policies:
       - PolicyName: create-pipeline-lambda-policy
@@ -34,7 +34,7 @@ Resources:
           - Effect: Allow
             Action:
               - codebuild:DeleteProject
-            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/monster-week-test-events-*"
+            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/monster-week-*"
           - Effect: Allow
             Action:
               - codepipeline:*

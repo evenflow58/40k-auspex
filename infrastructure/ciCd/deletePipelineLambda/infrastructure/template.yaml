@@ -20,7 +20,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambda_FullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
-        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
+        - arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess
         - arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs
       Policies:
       - PolicyName: create-pipeline-lambda-policy

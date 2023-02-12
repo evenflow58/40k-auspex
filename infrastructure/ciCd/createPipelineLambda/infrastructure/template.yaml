@@ -39,6 +39,10 @@ Resources:
             Action:
               - codepipeline:*
             Resource: "*"
+          - Effect: Allow
+            Action:
+              - secretsmanager:GetSecretValue
+            Resource: "*"
       
   CreatePipelineLamda:
    Type: AWS::Serverless::Function

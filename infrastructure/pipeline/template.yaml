@@ -98,6 +98,23 @@ Resources:
               InputArtifacts:
                 - Name: uiBuildOutput
               Region: us-east-1
+            - Name: CreateChangeSet
+                ActionTypeId:
+                  Category: Deploy
+                  Owner: AWS
+                  Provider: CloudFormation
+                  Version: 1
+                Configuration:
+                  ActionMode: CHANGE_SET_REPLACE
+                  RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                  StackName: !Sub '${AWS::StackName}-Stack-UI-Prod'
+                  ChangeSetName: !Sub '${AWS::StackName}-ChangeSet-UI'
+                  TemplatePath: lambdaEdgeBuildOutput::ui.yaml
+                  Capabilities: CAPABILITY_IAM
+                  ParameterOverrides: '{ "Domain": "monsterplaybook.rip" }'
+                InputArtifacts:
+                  - Name: lambdaEdgeBuildOutput
+                RunOrder: 2
             - Name: CreateApiStack
               ActionTypeId:
                 Category: Deploy
@@ -107,11 +124,12 @@ Resources:
               InputArtifacts:
                 - Name: apiGatewayBuildOutput
               Configuration:
-                ActionMode: REPLACE_ON_FAILURE
+                ActionMode: CHANGE_SET_REPLACE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 StackName: !Sub '${AWS::StackName}-Stack-Api'
+                ChangeSetName: !Sub '${AWS::StackName}-ChangeSet-API'
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                Capabilities: CAPABILITY_IAM
               RunOrder: 1
             # - Name: DeployApi
             #   ActionTypeId:

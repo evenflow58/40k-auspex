@@ -39,7 +39,7 @@ Resources:
     Type: AWS::Route53::RecordSet
     Properties:
       AliasTarget:
-        DNSName: !GetAtt ApiGatewayDomainName.DistributionDomainName
+        DNSName: !GetAtt ApiGatewayDomainName.RegionalDomainName
         EvaluateTargetHealth: false
         HostedZoneId: Z2FDTNDATAQYW2
       HostedZoneId: !Ref HostedZoneId

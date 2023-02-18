@@ -6,6 +6,9 @@ Parameters:
   BasePathDomain:
     Type: String
     Default: ''
+  HostedZoneId:
+    Type: String
+    Default: Z0953270AK2JGXA33JIB
 
 Resources:
   ApiGateway:
@@ -36,9 +39,9 @@ Resources:
     Type: AWS::Route53::RecordSet
     Properties:
       AliasTarget:
-        DNSName: !GetAtt [ApiGatewayDomainName, DistributionDomainName]
+        DNSName: !GetAtt ApiGatewayDomainName.DistributionDomainName
         EvaluateTargetHealth: false
-        HostedZoneId: !Ref HostedZoneId
+        HostedZoneId: Z2FDTNDATAQYW2
       HostedZoneId: !Ref HostedZoneId
       Name: !Join [ "", [ !Ref BasepathDomain, "." ] ]
       Type: A

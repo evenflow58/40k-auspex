@@ -43,7 +43,7 @@ Resources:
         EvaluateTargetHealth: false
         HostedZoneId: Z2FDTNDATAQYW2
       HostedZoneId: !Ref HostedZoneId
-      Name: !Join [ "", [ !Ref BasepathDomain, "." ] ]
+      Name: !Join [ "", [ !Ref BasePathDomain, "." ] ]
       Type: A
 
   TestGet:

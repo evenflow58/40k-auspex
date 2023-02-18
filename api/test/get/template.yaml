@@ -26,7 +26,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref RootResourceId
-      PathPart: /
+      PathPart: test
       RestApiId: !Ref ApiGatewayId
 
   Endpoint:

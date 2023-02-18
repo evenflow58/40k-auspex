@@ -26,12 +26,6 @@ Resources:
         Types:
           - REGIONAL
 
-  ApiBasePath:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      DomainName: !Ref ApiGatewayDomainName
-      RestApiId: !Ref ApiGateway
-
   TestGet:
     Type: AWS::CloudFormation::Stack
     Properties:

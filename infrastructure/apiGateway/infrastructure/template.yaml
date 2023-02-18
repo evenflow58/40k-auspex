@@ -32,6 +32,17 @@ Resources:
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !Ref ApiGateway
 
+  RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt [ApiGatewayDomainName, DistributionDomainName]
+        EvaluateTargetHealth: false
+        HostedZoneId: !Ref HostedZoneId
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Join [ "", [ !Ref BasepathDomain, "." ] ]
+      Type: A
+
   TestGet:
     Type: AWS::CloudFormation::Stack
     Properties:

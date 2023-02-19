@@ -41,7 +41,7 @@ Resources:
       AliasTarget:
         DNSName: !GetAtt ApiGatewayDomainName.RegionalDomainName
         EvaluateTargetHealth: false
-        HostedZoneId: Z2FDTNDATAQYW2
+        HostedZoneId: !GetAtt ApiGatewayDomainName.RegionalHostedZoneId
       HostedZoneId: !Ref HostedZoneId
       Name: !Join [ "", [ !Ref BasePathDomain, "." ] ]
       Type: A

@@ -15,6 +15,7 @@ Resources:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Description: The Monster of the Week API
+      DisableExecuteApiEndpoint: true
       EndpointConfiguration:
         Types:
           - REGIONAL

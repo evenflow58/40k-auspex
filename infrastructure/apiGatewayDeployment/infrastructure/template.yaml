@@ -6,7 +6,7 @@ Parameters:
   StageName:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: master
+    Default: prod
 
 Resources:
   Deployment:

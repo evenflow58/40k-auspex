@@ -8,7 +8,7 @@ import {
   waitUntilStackDeleteComplete,
   DescribeStacksCommandInput,
 } from "@aws-sdk/client-cloudformation";
-import { WaiterConfiguration } from "@aws-sdk/util-waiter";
+import { WaiterConfiguration, WaiterState } from "@aws-sdk/util-waiter";
 import {GetPipelineCommand, GetPipelineCommandInput, GetPipelineStateCommandOutput, CodePipelineClient} from "@aws-sdk/client-codepipeline"
 import { v4 } from "uuid";
 
@@ -85,7 +85,7 @@ export const handler = async (event: { BranchName: string }): Promise<any> => {
           // });
       });
 
-    stacksToDelete.forEach(async stackToDelete => {
+    for (const stackToDelete of stacksToDelete) {
       console.log(`Deleting stack ${stackToDelete}`);
 
       const deleteStackCommandInput: DeleteStackCommandInput = {
@@ -103,13 +103,14 @@ export const handler = async (event: { BranchName: string }): Promise<any> => {
         maxWaitTime: 300,
       };
 
-      const stackDeleteResult = await waitUntilStackDeleteComplete(
-        waiterConfig,
-        waitUntilStackDeleteInput
-      );
-
-      console.log(stackDeleteResult);
-    });
+      let stackDeleteResult;
+      do {
+        stackDeleteResult = await waitUntilStackDeleteComplete(
+          waiterConfig,
+          waitUntilStackDeleteInput
+        );
+      } while(stackDeleteResult.state === WaiterState.RETRY);
+    }
 
     // const branchName = event.BranchName;
     // if (branchName === "master") {

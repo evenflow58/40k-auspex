@@ -2,14 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway infrastructure
 
-Parameters:
-  BasePathDomain:
-    Type: String
-    Default: ''
-  HostedZoneId:
-    Type: String
-    Default: Z0953270AK2JGXA33JIB
-
 Resources:
   ApiGateway:
     Type: AWS::ApiGateway::RestApi
@@ -20,33 +12,6 @@ Resources:
         Types:
           - REGIONAL
       Name: !Sub ${AWS::StackName}-ApiGateway
-
-  ApiGatewayDomainName:
-    Type: AWS::ApiGateway::DomainName
-    Properties:
-      DomainName: !Ref BasePathDomain
-      RegionalCertificateArn: arn:aws:acm:us-east-1:625961017727:certificate/edd15537-9b78-4e21-a100-9ce277ca42bf
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
-
-  BasePathMapping:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      DomainName: !Ref ApiGatewayDomainName
-      RestApiId: !Ref ApiGateway
-      Stage: prod
-
-  RecordSet:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      AliasTarget:
-        DNSName: !GetAtt ApiGatewayDomainName.RegionalDomainName
-        EvaluateTargetHealth: false
-        HostedZoneId: !GetAtt ApiGatewayDomainName.RegionalHostedZoneId
-      HostedZoneId: !Ref HostedZoneId
-      Name: !Join [ "", [ !Ref BasePathDomain, "." ] ]
-      Type: A
 
   TestGet:
     Type: AWS::CloudFormation::Stack
@@ -62,7 +27,7 @@ Outputs:
     Description: The ID of the api gateway
     Export:
       Name: ApiGatewayId
-  
+
   RootResourceId:
     Value: !GetAtt ApiGateway.RootResourceId
     Description: The ID of the api root resource

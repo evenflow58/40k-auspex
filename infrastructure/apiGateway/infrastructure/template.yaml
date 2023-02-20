@@ -35,6 +35,7 @@ Resources:
     Properties:
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !Ref ApiGateway
+      Stage: prod
 
   RecordSet:
     Type: AWS::Route53::RecordSet

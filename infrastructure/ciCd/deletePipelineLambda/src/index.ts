@@ -68,7 +68,8 @@ export const handler = async (event: { BranchName: string }): Promise<any> => {
           StackName: stack
         };
 
-        await stackClient.send(new DeleteStackCommand(deleteStackCommandInput));
+        const response = await stackClient.send(new DeleteStackCommand(deleteStackCommandInput));
+        console.log(JSON.stringify(response));
 
         const waitUntilStackDeleteInput: DescribeStacksCommandInput = {
           StackName: stack,
@@ -87,6 +88,7 @@ export const handler = async (event: { BranchName: string }): Promise<any> => {
             waitUntilStackDeleteInput
           );
 
+          console.log("Stack Results");
           console.log(JSON.stringify(stackDeleteResult));
  
           // if (stackDeleteResult.state !== WaiterState.RETRY) {

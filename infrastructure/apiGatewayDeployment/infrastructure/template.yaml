@@ -26,7 +26,6 @@ Resources:
       StageName: !Ref StageName
       RestApiId: !ImportValue ApiGatewayId
       DeploymentId: !Ref Deployment
-    DependsOn: BasePathMapping
 
   BasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
@@ -34,6 +33,7 @@ Resources:
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !ImportValue ApiGatewayId
       Stage: !Ref StageName
+      DependsOn: Stage
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName

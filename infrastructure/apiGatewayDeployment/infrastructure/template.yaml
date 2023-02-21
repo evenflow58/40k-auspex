@@ -32,8 +32,7 @@ Resources:
     Properties:
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !ImportValue ApiGatewayId
-      Stage: !Ref StageName
-      DependsOn: Stage
+      Stage: !Ref Stage
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName

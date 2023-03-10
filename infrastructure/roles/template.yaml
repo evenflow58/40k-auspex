@@ -191,6 +191,7 @@ Resources:
                   - cloudformation:CreateChangeSet
                   - cloudformation:DeleteChangeSet
                   - cloudformation:DescribeChangeSet
+                  - cloudformation:ListChangeSets
                   - cloudformation:ExecuteChangeSet
                   - cloudformation:SetStackPolicy
                   - cloudformation:ValidateTemplate

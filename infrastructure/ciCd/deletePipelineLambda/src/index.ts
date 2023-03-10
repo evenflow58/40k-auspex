@@ -1,83 +1,27 @@
-import {
-  CloudFormationClient,
-  DeleteStackCommand,
-  DeleteStackCommandInput,
-  ListStackResourcesCommandInput,
-  ListStackResourcesCommand,
-  ListStackResourcesCommandOutput,
-  waitUntilStackDeleteComplete,
-  DescribeStacksCommandInput,
-} from "@aws-sdk/client-cloudformation";
-import { WaiterConfiguration } from "@aws-sdk/util-waiter";
-import { v4 } from "uuid";
+import { PipelineDeclaration } from '@aws-sdk/client-codepipeline';
+import { deleteStacks} from './delete';
+import { deleteEdgeLambda } from './lambda';
+import { getPipeline } from './pipeline';
 
 export const handler = async (event: { BranchName: string }): Promise<any> => {
-  try {
-    console.log("event", event);
+  console.log("event", event);
 
-    const id = v4();
+  const branchName = event.BranchName;
 
-    const branchName = event.BranchName;
-    if (branchName === "master") {
-      console.log("Not deleting anything because this is the master branch.");
-      return;
-    }
+  const pipeline = await getPipeline(branchName);
 
-    const client = new CloudFormationClient({ region: "us-east-1" });
-    const lambdaStackName = `monster-week-${branchName}-Stack-Beta`;
+  if (!pipeline) throw new Error(`No pipeline found for branch ${branchName}`)
 
-    // Delete the pipeline stack
-    const deletePipelineInput: DeleteStackCommandInput = {
-      StackName: `monster-week-${branchName}`,
-    };
-    let deletePipelineCommand = new DeleteStackCommand(deletePipelineInput);
+  const promises = await Promise.allSettled([
+    deleteStacks(pipeline as PipelineDeclaration),
+    deleteEdgeLambda(),
+  ]);
 
-    console.log("attempt #1 to delete the stack");
-    // Attempt to delete the edge stack
-    let deleteDeployInput: DeleteStackCommandInput = {
-      StackName: lambdaStackName,
-      ClientRequestToken: id,
-    };
-    let deleteDeployCommand = new DeleteStackCommand(deleteDeployInput);
+  const rejectedPromises =
+    promises.filter((promise: PromiseSettledResult<void>) => promise.status === 'rejected') as Array<PromiseRejectedResult>;
 
-    await Promise.all([
-      client.send(deletePipelineCommand),
-      client.send(deleteDeployCommand),
-    ]);
-
-    const waitUntilStackDeleteInput: DescribeStacksCommandInput = {
-      StackName: lambdaStackName,
-    };
-    const waiterConfig: WaiterConfiguration<CloudFormationClient> = {
-      client,
-      maxWaitTime: 300,
-    };
-
-    console.log("awaiting stack deletion");
-    try {
-      await waitUntilStackDeleteComplete(
-        waiterConfig,
-        waitUntilStackDeleteInput
-      );
-
-      console.log("Stack deleted");
-    } catch (e) {
-      console.log("Stack did not delete. Trying again.", e);
-      // Attempt the delete again with the lambda@edge resource ignored.
-      deleteDeployInput = {
-        StackName: lambdaStackName,
-        RetainResources: ["LambdaEdge"],
-        ClientRequestToken: id,
-      };
-      deleteDeployCommand = new DeleteStackCommand(deleteDeployInput);
-      await client.send(deleteDeployCommand);
-    }
-
-    console.log("All stacks deleted. Good bye.");
-
-    return;
-  } catch (e) {
-    console.log("It broke", e);
-    throw e;
+  if (rejectedPromises.length > 0) {
+    console.log(rejectedPromises.map((promise: PromiseRejectedResult) => promise.reason).join(" | "));
+    throw new Error("Something didn't delete correctly.");
   }
-};
+}

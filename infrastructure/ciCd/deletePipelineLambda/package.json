@@ -12,6 +12,7 @@
   "author": "Evan Johnson",
   "license": "ISC",
   "devDependencies": {
+    "@aws-sdk/types": "^3.272.0",
     "@types/node": "^18.7.19",
     "@types/uuid": "^8.3.4",
     "ts-node": "^10.9.1",
@@ -19,6 +20,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-cloudformation": "^3.178.0",
+    "@aws-sdk/client-codepipeline": "^3.272.0",
+    "@aws-sdk/client-lambda": "^3.288.0",
     "@aws-sdk/util-waiter": "^3.180.0",
     "uuid": "^9.0.0"
   }

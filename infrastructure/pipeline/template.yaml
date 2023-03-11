@@ -35,20 +35,21 @@ Resources:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
 
-  GithubWebhook:
-    Type: AWS::CodePipeline::Webhook
-    Properties:
-      Authentication: GITHUB_HMAC
-      AuthenticationConfiguration:
-        SecretToken: {{resolve:secretsmanager:Github:SecretString:token}}
-      Filters:
-        - JsonPath: "$.ref"
-          MatchEquals: refs/head/{Branch}
-      TargetPipeline: !Ref Pipeline
-      TargetAction: Source
-      Name: GithubWebhook
-      TargetPipelineVersion: !GetAtt Pipeline.Version
-      RegisterWithThirdParty: true
+  # GithubWebhook:
+  #   Type: AWS::CodePipeline::Webhook
+  #   Properties:
+  #     Authentication: GITHUB_HMAC
+  #     AuthenticationConfiguration:
+  #       SecretToken: {{resolve:secretsmanager:Github:SecretString:token}}
+  #     Filters:
+  #       -
+  #         JsonPath: "$.ref"
+  #         MatchEquals: refs/head/{GitHubBranch}
+  #     TargetPipeline: !Ref Pipeline
+  #     TargetAction: Source
+  #     Name: GithubWebhook
+  #     TargetPipelineVersion: !GetAtt Pipeline.Version
+  #     RegisterWithThirdParty: true
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -68,15 +69,19 @@ Resources:
                 - Name: SourceCode
               ActionTypeId:
                 Category: Source
-                Owner: ThirdParty
+                Owner: AWS
                 Version: 1
-                Provider: GitHub
+                Provider: CodeStarSourceConnection
               Configuration:
-                Owner: "{{resolve:secretsmanager:Github:SecretString:owner}}"
-                Repo: !Ref GitHubRepo
-                Branch: !Ref GitHubBranch
-                PollForSourceChanges: false
-                OAuthToken: "{{resolve:secretsmanager:Github:SecretString:token}}"
+                ConnectionArn: arn:aws:codestar-connections:us-east-2:625961017727:connection/760e3889-f416-44aa-9c62-001a92098608
+                FullRepositoryId: "evenflow58/monster-of-week"
+                BranchName: !If [IsProduction, 'master', !Ref GithubBranch]
+                OutputArtifactFormat: "CODE_ZIP"
+                # Owner: "{{resolve:secretsmanager:Github:SecretString:owner}}"
+                # Repo: !Ref GitHubRepo
+                # Branch: !Ref GitHubBranch
+                # PollForSourceChanges: false
+                # OAuthToken: "{{resolve:secretsmanager:Github:SecretString:token}}"
               RunOrder: 1
         - Name: Build
           Actions:

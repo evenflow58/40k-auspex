@@ -35,6 +35,21 @@ Resources:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
 
+  GithubWebhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: {{resolve:secretsmanager:Github:SecretString:token}}
+      Filters:
+        - JsonPath: "$.ref"
+          MatchEquals: refs/head/{Branch}
+      TargetPipeline: !Ref Pipeline
+      TargetAction: Source
+      Name: GithubWebhook
+      TargetPipelineVersion: !GetAtt Pipeline.Version
+      RegisterWithThirdParty: true
+
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:

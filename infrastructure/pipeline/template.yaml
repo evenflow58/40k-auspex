@@ -35,6 +35,12 @@ Resources:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
 
+  GithubConnection:
+    Type: AWS::CodeStarConnections::Connection
+    Properties:
+      ConnectionName: GithubConnection
+      ProviderType: GitHub
+
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
@@ -57,7 +63,7 @@ Resources:
                 Version: 1
                 Provider: CodeStarSourceConnection
               Configuration:
-                ConnectionArn: arn:aws:codestar-connections:us-east-2:625961017727:connection/760e3889-f416-44aa-9c62-001a92098608
+                ConnectionArn: !Ref GithubConnection
                 FullRepositoryId: "evenflow58/monster-of-week"
                 BranchName: !If [IsProduction, 'master', !Ref GithubBranch]
                 OutputArtifactFormat: "CODE_ZIP"

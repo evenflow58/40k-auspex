@@ -154,6 +154,10 @@ Resources:
                 - logs:DeleteLogGroup
                 - logs:PutRetentionPolicy
               Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:*"
+            - Effect: Allow
+              Action:
+                - codestar-connections:UseConnection
+              Resource: arn:aws:codestar-connections:us-east-2:625961017727:connection/760e3889-f416-44aa-9c62-001a92098608
   
   CloudFormationExecutionRole:
     Type: AWS::IAM::Role

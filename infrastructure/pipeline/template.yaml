@@ -47,123 +47,20 @@ Resources:
       Stages:
         - Name: Source
           Actions:
-            - Name: Source
+            - Name: GithubSource
               InputArtifacts: []
               OutputArtifacts:
                 - Name: SourceCode
               ActionTypeId:
                 Category: Source
-                Owner: ThirdParty
-                Version: 1
-                Provider: GitHub
-              Configuration:
-                Owner: "{{resolve:secretsmanager:Github:SecretString:owner}}"
-                Repo: !Ref GitHubRepo
-                Branch: !Ref GitHubBranch
-                PollForSourceChanges: false
-                OAuthToken: "{{resolve:secretsmanager:Github:SecretString:token}}"
-              RunOrder: 1
-        - Name: Build
-          Actions:
-          - Name: Build
-            ActionTypeId:
-              Category: Build
-              Owner: AWS
-              Version: 1
-              Provider: CodeBuild
-            Configuration:
-              ProjectName: !Ref BuildRunner
-            InputArtifacts:
-              - Name: SourceCode
-            OutputArtifacts:
-              - Name: uiBuildOutput
-              - Name: lambdaEdgeBuildOutput
-              - Name: apiGatewayBuildOutput
-              - Name: apiGatewayDeploymentBuildOutput
-              - Name: testGetBuildOutput
-            RunOrder: 1
-        - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
-          Actions:
-            - Name: DeployUiCode
-              ActionTypeId:
-                Category: Deploy
                 Owner: AWS
-                Provider: S3
                 Version: 1
-              RunOrder: 1
+                Provider: CodeStarSourceConnection
               Configuration:
-                BucketName: !ImportValue UiBucketName
-                Extract: true
-                ObjectKey: !If [IsProduction, 'master', !Ref GitHubBranch]
-              InputArtifacts:
-                - Name: uiBuildOutput
-              Region: us-east-1
-            - Name: CreateChangeSet
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: 1
-              Configuration:
-                ActionMode: CHANGE_SET_REPLACE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                StackName: !Sub '${AWS::StackName}-Stack-UI-Prod'
-                ChangeSetName: !Sub '${AWS::StackName}-ChangeSet-UI'
-                TemplatePath: lambdaEdgeBuildOutput::infrastructure/template.yaml
-                Capabilities: CAPABILITY_IAM
-                ParameterOverrides: '{ "Domain": "monsterplaybook.rip" }'
-                #     ParameterOverrides: !Sub
-            #       - '{ "Domain": "${SubDomain}.monsterplaybook.rip", "BranchName": "${BranchName}" }'
-            #       - SubDomain: !If [IsProduction, 'staging', !Ref GitHubBranch]
-            #         BranchName: !Ref GitHubBranch
-Resources:
-  BuildRunner:
-    Type: AWS::CodeBuild::Project
-    Properties:
-      Name: !Sub ${AWS::StackName}-BuildRunner
-      Artifacts:
-        Type: CODEPIPELINE
-      Environment:
-        ComputeType: BUILD_GENERAL1_MEDIUM
-        Image: aws/codebuild/standard:6.0
-        Type: LINUX_CONTAINER
-        EnvironmentVariables:
-          - Name: BUILD_OUTPUT_BUCKET
-            Value: !ImportValue ArtifactBucketId
-          - Name: S3_BUCKET
-            Value: !ImportValue ArtifactBucketId
-      ServiceRole: !ImportValue BuildExecutionRoleArn
-      Source:
-        Type: CODEPIPELINE
-        BuildSpec: infrastructure/pipeline/buildspec-build.yaml
-
-  Pipeline:
-    Type: AWS::CodePipeline::Pipeline
-    Properties:
-      Name: !Sub ${AWS::StackName}
-      ArtifactStore:
-        Type: S3
-        Location: !ImportValue ArtifactBucketId
-      RestartExecutionOnUpdate: true
-      RoleArn: !ImportValue PipelineInfrastructureRoleArn
-      Stages:
-        - Name: Source
-          Actions:
-            - Name: Source
-              InputArtifacts: []
-              OutputArtifacts:
-                - Name: SourceCode
-              ActionTypeId:
-                Category: Source
-                Owner: ThirdParty
-                Version: 1
-                Provider: GitHub
-              Configuration:
-                Owner: "{{resolve:secretsmanager:Github:SecretString:owner}}"
-                Repo: !Ref GitHubRepo
-                Branch: !Ref GitHubBranch
-                PollForSourceChanges: false
-                OAuthToken: "{{resolve:secretsmanager:Github:SecretString:token}}"
+                ConnectionArn: arn:aws:codestar-connections:us-east-2:625961017727:connection/760e3889-f416-44aa-9c62-001a92098608
+                FullRepositoryId: "evenflow58/monster-of-week"
+                BranchName: !If [IsProduction, 'master', !Ref GitHubBranch]
+                OutputArtifactFormat: "CODE_ZIP"
               RunOrder: 1
         - Name: Build
           Actions:

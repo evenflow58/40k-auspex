@@ -35,22 +35,6 @@ Resources:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
 
-  # GithubWebhook:
-  #   Type: AWS::CodePipeline::Webhook
-  #   Properties:
-  #     Authentication: GITHUB_HMAC
-  #     AuthenticationConfiguration:
-  #       SecretToken: {{resolve:secretsmanager:Github:SecretString:token}}
-  #     Filters:
-  #       -
-  #         JsonPath: "$.ref"
-  #         MatchEquals: refs/head/{GitHubBranch}
-  #     TargetPipeline: !Ref Pipeline
-  #     TargetAction: Source
-  #     Name: GithubWebhook
-  #     TargetPipelineVersion: !GetAtt Pipeline.Version
-  #     RegisterWithThirdParty: true
-
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
@@ -63,7 +47,7 @@ Resources:
       Stages:
         - Name: Source
           Actions:
-            - Name: Source
+            - Name: GithubSource
               InputArtifacts: []
               OutputArtifacts:
                 - Name: SourceCode
@@ -77,11 +61,6 @@ Resources:
                 FullRepositoryId: "evenflow58/monster-of-week"
                 BranchName: !If [IsProduction, 'master', !Ref GithubBranch]
                 OutputArtifactFormat: "CODE_ZIP"
-                # Owner: "{{resolve:secretsmanager:Github:SecretString:owner}}"
-                # Repo: !Ref GitHubRepo
-                # Branch: !Ref GitHubBranch
-                # PollForSourceChanges: false
-                # OAuthToken: "{{resolve:secretsmanager:Github:SecretString:token}}"
               RunOrder: 1
         - Name: Build
           Actions:

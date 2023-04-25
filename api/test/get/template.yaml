@@ -22,19 +22,18 @@ Resources:
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
 
-  # Resource:
-  #   Type: AWS::ApiGateway::Resource
-  #   Properties:
-  #     ParentId: !Ref RootResourceId
-  #     PathPart: test
-  #     RestApiId: !Ref ApiGatewayId
+  Resource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref RootResourceId
+      PathPart: test
+      RestApiId: !Ref ApiGatewayId
 
   Endpoint:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGatewayId
-      # ResourceId: !Ref Resource
-      ResourceId: !Ref RootResourceId
+      ResourceId: !Ref Resource
       HttpMethod: GET
       AuthorizationType: NONE
       MethodResponses:

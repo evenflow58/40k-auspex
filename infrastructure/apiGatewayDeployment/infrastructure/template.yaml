@@ -90,7 +90,7 @@ Resources:
   BlueStage:
     Type: AWS::ApiGateway::Stage
     Properties:
-      RestApiId: !Ref ApiGateway
+      RestApiId: !ImportValue ApiGatewayId
       StageName: blue
       MethodSettings:
         - HttpMethod: '*'
@@ -101,7 +101,7 @@ Resources:
   GreenStage:
     Type: AWS::ApiGateway::Stage
     Properties:
-      RestApiId: !Ref ApiGateway
+      RestApiId: !ImportValue ApiGatewayId
       StageName: green
       MethodSettings:
         - HttpMethod: '*'

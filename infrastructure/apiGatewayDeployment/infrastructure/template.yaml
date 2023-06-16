@@ -22,6 +22,7 @@ Resources:
       StageName: blue
       DeploymentCanarySettings:
         PercentTraffic: 0
+      DependsOn: !Ref BlueStage
 
   #  BlueGreenDeployment:
   #   Type: AWS::ApiGatewayV2::Deployment

@@ -3,7 +3,7 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway infrastructure
 
 Resources:
-  ApiGateway:
+  ApiGateway: 
     Type: AWS::ApiGateway::RestApi
     Properties:
       Description: The Monster of the Week API

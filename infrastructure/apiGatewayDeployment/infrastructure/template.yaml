@@ -3,10 +3,10 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway deployment
 
 Parameters:
-  StageName:
-    Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
-    Default: prod
+  # StageName:
+  #   Type: String
+  #   AllowedPattern: "[A-Za-z0-9-]+"
+  #   Default: prod
   BasePathDomain:
     Type: String
     Default: ''
@@ -19,20 +19,53 @@ Resources:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !ImportValue ApiGatewayId
+      StageName: blue
+      DeploymentCanarySettings:
+        PercentTraffic: 0
 
-  Stage:
-    Type: AWS::ApiGateway::Stage
-    Properties:
-      StageName: !Ref StageName
-      RestApiId: !ImportValue ApiGatewayId
-      DeploymentId: !Ref Deployment
+  #  BlueGreenDeployment:
+  #   Type: AWS::ApiGatewayV2::Deployment
+  #   Properties:
+  #     ApiId: !ImportValue ApiGatewayId
+  #     Description: Blue/Green deployment for API Gateway
+  #     DeploymentCanarySettings:
+  #       PercentTraffic: 0
+  #       StageVariableOverrides:
+  #         BLUE_GREEN: "green"
+  #       UseStageCache: true
 
-  BasePathMapping:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      DomainName: !Ref ApiGatewayDomainName
-      RestApiId: !ImportValue ApiGatewayId
-      Stage: !Ref Stage
+  # BlueGreenAlias:
+  #   Type: AWS::ApiGatewayV2::ApiMapping
+  #   Properties:
+  #     ApiId: !ImportValue ApiGatewayId
+  #     Stage: prod
+  #     DomainName: !GetAtt ApiGatewayDomainName.RegionalDomainName
+  #     ApiMappingKey: blue-green
+
+  # MyBlueGreenRoute:
+  #   Type: AWS::ApiGatewayV2::Route
+  #   Properties:
+  #     ApiId: !ImportValue ApiGatewayId
+  #     RouteKey: $default
+  #     Target: !Join
+  #       - "/"
+  #       - - 'integrations'
+  #         - !Ref MyIntegration
+  #     RouteResponseSelectionExpression: "$default"
+
+  # Stage:
+  #   Type: AWS::ApiGateway::Stage
+  #   Properties:
+  #     StageName: !Ref StageName
+  #     RestApiId: !ImportValue ApiGatewayId
+  #     DeploymentId: !Ref Deployment
+
+  # BasePathMapping:
+  #   Type: AWS::ApiGateway::BasePathMapping
+  #   Properties:
+  #     DomainName: !Ref ApiGatewayDomainName
+  #     RestApiId: !ImportValue ApiGatewayId
+  #     Stage: !Ref Stage
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName
@@ -53,3 +86,41 @@ Resources:
       HostedZoneId: !Ref HostedZoneId
       Name: !Join [ "", [ !Ref BasePathDomain, "." ] ]
       Type: A
+
+  BlueStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId: !Ref ApiGateway
+      StageName: blue
+      MethodSettings:
+        - HttpMethod: '*'
+          ResourcePath: /*
+          ThrottlingRateLimit: 1000
+          ThrottlingBurstLimit: 500
+
+  GreenStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId: !Ref ApiGateway
+      StageName: green
+      MethodSettings:
+        - HttpMethod: '*'
+          ResourcePath: /*
+          ThrottlingRateLimit: 2000
+          ThrottlingBurstLimit: 1000
+
+  BlueUrl:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref BasePathDomain
+      RestApiId: !ImportValue ApiGatewayId
+      Stage: !Ref BlueStage
+      BasePath: blue
+
+  GreenUrl:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref BasePathDomain
+      RestApiId: !ImportValue ApiGatewayId
+      Stage: !Ref GreenStage
+      BasePath: green

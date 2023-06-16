@@ -252,9 +252,10 @@ Resources:
                 TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}", "StageName": "${StageName}" } '
+                  # - '{ "BasePathDomain": "${BasePathDomain}", "StageName": "${StageName}" } '
+                  - '{ "BasePathDomain": "${BasePathDomain}" } '
                   - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
-                    StageName: !If [IsProduction, 'staging', 'prod']
+                    # StageName: !If [IsProduction, 'staging', 'prod']
               RunOrder: 1
             - Name: ExecuteApiChangeSet
               ActionTypeId:
@@ -377,7 +378,7 @@ Resources:
                   ChangeSetName: api-deployment
                   TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
                   Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                  ParameterOverrides: '{ "StageName": "prod" }'
+                  # ParameterOverrides: '{ "StageName": "prod" }'
                 RunOrder: 1
               - Name: ExecuteApiChangeSet
                 ActionTypeId:

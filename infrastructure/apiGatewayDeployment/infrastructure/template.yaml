@@ -20,9 +20,8 @@ Resources:
     Properties:
       RestApiId: !ImportValue ApiGatewayId
       StageName: blue
-      DeploymentCanarySettings:
-        PercentTraffic: 0
-      DependsOn: !Ref BlueStage
+      # DeploymentCanarySettings:
+      #   PercentTraffic: 0
 
   #  BlueGreenDeployment:
   #   Type: AWS::ApiGatewayV2::Deployment

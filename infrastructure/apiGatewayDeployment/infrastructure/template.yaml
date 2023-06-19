@@ -14,6 +14,9 @@ Parameters:
     Type: String
     Default: Z0953270AK2JGXA33JIB
 
+Conditions:
+  IsBlue: !Equals [!Ref StageName, "blue"]
+
 Resources:
   Deployment:
     Type: AWS::ApiGateway::Deployment
@@ -22,50 +25,6 @@ Resources:
       # StageName: blue
       # DeploymentCanarySettings:
       #   PercentTraffic: 0
-
-  #  BlueGreenDeployment:
-  #   Type: AWS::ApiGatewayV2::Deployment
-  #   Properties:
-  #     ApiId: !ImportValue ApiGatewayId
-  #     Description: Blue/Green deployment for API Gateway
-  #     DeploymentCanarySettings:
-  #       PercentTraffic: 0
-  #       StageVariableOverrides:
-  #         BLUE_GREEN: "green"
-  #       UseStageCache: true
-
-  # BlueGreenAlias:
-  #   Type: AWS::ApiGatewayV2::ApiMapping
-  #   Properties:
-  #     ApiId: !ImportValue ApiGatewayId
-  #     Stage: prod
-  #     DomainName: !GetAtt ApiGatewayDomainName.RegionalDomainName
-  #     ApiMappingKey: blue-green
-
-  # MyBlueGreenRoute:
-  #   Type: AWS::ApiGatewayV2::Route
-  #   Properties:
-  #     ApiId: !ImportValue ApiGatewayId
-  #     RouteKey: $default
-  #     Target: !Join
-  #       - "/"
-  #       - - 'integrations'
-  #         - !Ref MyIntegration
-  #     RouteResponseSelectionExpression: "$default"
-
-  # Stage:
-  #   Type: AWS::ApiGateway::Stage
-  #   Properties:
-  #     StageName: !Ref StageName
-  #     RestApiId: !ImportValue ApiGatewayId
-  #     DeploymentId: !Ref Deployment
-
-  # BasePathMapping:
-  #   Type: AWS::ApiGateway::BasePathMapping
-  #   Properties:
-  #     DomainName: !Ref ApiGatewayDomainName
-  #     RestApiId: !ImportValue ApiGatewayId
-  #     Stage: !Ref Stage
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName
@@ -99,18 +58,6 @@ Resources:
           ThrottlingRateLimit: 1000
           ThrottlingBurstLimit: 500
 
-  # GreenStage:
-  #   Type: AWS::ApiGateway::Stage
-  #   Properties:
-  #     RestApiId: !ImportValue ApiGatewayId
-  #     StageName: green
-  #     DeploymentId: !Ref Deployment
-  #     MethodSettings:
-  #       - HttpMethod: '*'
-  #         ResourcePath: /*
-  #         ThrottlingRateLimit: 2000
-  #         ThrottlingBurstLimit: 1000
-
   Url:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
@@ -119,10 +66,10 @@ Resources:
       Stage: !Ref Stage
       BasePath: !Ref StageName
 
-  # GreenUrl:
-  #   Type: AWS::ApiGateway::BasePathMapping
-  #   Properties:
-  #     DomainName: !Ref BasePathDomain
-  #     RestApiId: !ImportValue ApiGatewayId
-  #     Stage: !Ref GreenStage
-  #     BasePath: green
+  SSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /api-gateway/current-stage
+      Description: The stage of the api gateway for the next deploy
+      Type: String
+      Value: !If [IsBlue, "green", "blue"]

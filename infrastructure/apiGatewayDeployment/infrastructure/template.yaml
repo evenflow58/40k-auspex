@@ -3,10 +3,10 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway deployment
 
 Parameters:
-  # StageName:
-  #   Type: String
-  #   AllowedPattern: "[A-Za-z0-9-]+"
-  #   Default: prod
+  StageName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: prod
   BasePathDomain:
     Type: String
     Default: ''
@@ -87,11 +87,11 @@ Resources:
       Name: !Join [ "", [ !Ref BasePathDomain, "." ] ]
       Type: A
 
-  BlueStage:
+  Stage:
     Type: AWS::ApiGateway::Stage
     Properties:
       RestApiId: !ImportValue ApiGatewayId
-      StageName: blue
+      StageName: !Ref StageName
       DeploymentId: !Ref Deployment
       MethodSettings:
         - HttpMethod: '*'
@@ -99,30 +99,30 @@ Resources:
           ThrottlingRateLimit: 1000
           ThrottlingBurstLimit: 500
 
-  GreenStage:
-    Type: AWS::ApiGateway::Stage
-    Properties:
-      RestApiId: !ImportValue ApiGatewayId
-      StageName: green
-      DeploymentId: !Ref Deployment
-      MethodSettings:
-        - HttpMethod: '*'
-          ResourcePath: /*
-          ThrottlingRateLimit: 2000
-          ThrottlingBurstLimit: 1000
+  # GreenStage:
+  #   Type: AWS::ApiGateway::Stage
+  #   Properties:
+  #     RestApiId: !ImportValue ApiGatewayId
+  #     StageName: green
+  #     DeploymentId: !Ref Deployment
+  #     MethodSettings:
+  #       - HttpMethod: '*'
+  #         ResourcePath: /*
+  #         ThrottlingRateLimit: 2000
+  #         ThrottlingBurstLimit: 1000
 
-  BlueUrl:
+  Url:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
       DomainName: !Ref BasePathDomain
       RestApiId: !ImportValue ApiGatewayId
-      Stage: !Ref BlueStage
-      BasePath: blue
+      Stage: !Ref Stage
+      BasePath: !Ref StageName
 
-  GreenUrl:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      DomainName: !Ref BasePathDomain
-      RestApiId: !ImportValue ApiGatewayId
-      Stage: !Ref GreenStage
-      BasePath: green
+  # GreenUrl:
+  #   Type: AWS::ApiGateway::BasePathMapping
+  #   Properties:
+  #     DomainName: !Ref BasePathDomain
+  #     RestApiId: !ImportValue ApiGatewayId
+  #     Stage: !Ref GreenStage
+  #     BasePath: green

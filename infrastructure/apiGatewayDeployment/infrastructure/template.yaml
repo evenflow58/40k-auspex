@@ -69,7 +69,7 @@ Resources:
   SSSM:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: /api-gateway/current-stage
+      Name: /api-gateway/next-stage
       Description: The stage of the api gateway for the next deploy
       Type: String
       Value: !If [IsBlue, "green", "blue"]

@@ -254,7 +254,7 @@ Resources:
                 ParameterOverrides: !Sub
                   - '{ "BasePathDomain": "${BasePathDomain}", "StageName": "${StageName}" } '
                   - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
-                    StageName: !Sub '{{resolve:ssm:/api-gateway/current-stage}}'
+                    StageName: !Sub '{{resolve:ssm:/api-gateway/next-stage}}'
               RunOrder: 1
             - Name: ExecuteApiChangeSet
               ActionTypeId:

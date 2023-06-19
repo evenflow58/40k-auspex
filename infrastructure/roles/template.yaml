@@ -274,6 +274,11 @@ Resources:
                   - apigateway:PATCH
                 Effect: Allow
                 Resource: !Sub 'arn:aws:apigateway:${AWS::Region}::*'
+              - Action:
+                  - ssm:PutParameter
+                  - ssm:DeleteParameter
+                Effect: Allow
+                Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
 
   # PipelineExecutionRole:
   #   Type: AWS::IAM::Role

@@ -277,6 +277,7 @@ Resources:
               - Action:
                   - ssm:PutParameter
                   - ssm:DeleteParameter
+                  - ssm:GetParameter
                 Effect: Allow
                 Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
 

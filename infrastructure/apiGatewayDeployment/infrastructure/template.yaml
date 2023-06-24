@@ -6,7 +6,6 @@ Parameters:
   StageName:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: prod
   BasePathDomain:
     Type: String
     Default: ''
@@ -22,7 +21,7 @@ Resources:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !ImportValue ApiGatewayId
-      # StageName: blue
+      StageName: !Ref StageName
       # DeploymentCanarySettings:
       #   PercentTraffic: 0
 
@@ -46,11 +45,11 @@ Resources:
       Name: !Join [ "", [ !Ref BasePathDomain, "." ] ]
       Type: A
 
-  Stage:
+  BlueStage:
     Type: AWS::ApiGateway::Stage
     Properties:
       RestApiId: !ImportValue ApiGatewayId
-      StageName: !Ref StageName
+      StageName: blue
       DeploymentId: !Ref Deployment
       MethodSettings:
         - HttpMethod: '*'
@@ -58,13 +57,33 @@ Resources:
           ThrottlingRateLimit: 1000
           ThrottlingBurstLimit: 500
 
-  Url:
+  GreenStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId: !ImportValue ApiGatewayId
+      StageName: green
+      DeploymentId: !Ref Deployment
+      MethodSettings:
+        - HttpMethod: '*'
+          ResourcePath: /*
+          ThrottlingRateLimit: 1000
+          ThrottlingBurstLimit: 500
+
+  BlueUrl:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
       DomainName: !Ref BasePathDomain
       RestApiId: !ImportValue ApiGatewayId
-      Stage: !Ref Stage
-      BasePath: !Ref StageName
+      Stage: !Ref BlueStage
+      BasePath: blue
+
+  GreenUrl:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref BasePathDomain
+      RestApiId: !ImportValue ApiGatewayId
+      Stage: !Ref GreenStage
+      BasePath: green
 
   SSSM:
     Type: AWS::SSM::Parameter

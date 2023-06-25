@@ -2,6 +2,11 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway infrastructure
 
+Parameters:
+  StageName:
+    Type: String
+    Description: The stage being deployed
+
 Resources:
   ApiGateway: 
     Type: AWS::ApiGateway::RestApi
@@ -20,6 +25,7 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
+        Version: !Ref StageName
 
 Outputs:
   ApiGatewayId:

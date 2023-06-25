@@ -9,6 +9,9 @@ Parameters:
   RootResourceId:
     Type: String
     Description: The ID of the root resource of the api gateway
+  Version:
+    Type: String
+    Description: The version of lambda to be deployed. This should match to an API Gateway stage
 
 Resources:
   Function:
@@ -21,6 +24,12 @@ Resources:
       Timeout: 5
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
+
+  Alias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !Ref Function
+      FunctionVersion: !Ref Version
 
   # Resource:
   #   Type: AWS::ApiGateway::Resource
@@ -43,9 +52,7 @@ Resources:
         Type: AWS
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub
-          - 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations'
-          - lambdaArn: !GetAtt Function.Arn
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Alias.Arn}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |

@@ -235,6 +235,9 @@ Resources:
                 ChangeSetName: api
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                ParameterOverrides: !Sub
+                  - '{ "StageName": "{$StageName}" }'
+                  - StageName: !Sub '{{resolve:ssm:/api-gateway/next-stage}}'
               RunOrder: 1
             - Name: CreateApiDeploymentChangeSet
               ActionTypeId:

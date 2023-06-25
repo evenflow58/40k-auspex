@@ -52,7 +52,7 @@ Resources:
         Type: AWS
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Alias.Arn}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${!Ref Alias}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |

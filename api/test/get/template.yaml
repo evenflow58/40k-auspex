@@ -30,6 +30,7 @@ Resources:
     Properties:
       FunctionName: !Ref Function
       FunctionVersion: !Ref Version
+      Name: !Ref Version
 
   # Resource:
   #   Type: AWS::ApiGateway::Resource

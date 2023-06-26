@@ -9,9 +9,6 @@ Parameters:
   RootResourceId:
     Type: String
     Description: The ID of the root resource of the api gateway
-  Version:
-    Type: String
-    Description: The version of lambda to be deployed. This should match to an API Gateway stage
 
 Resources:
   Function:

@@ -25,13 +25,6 @@ Resources:
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
 
-  Alias:
-    Type: AWS::Lambda::Alias
-    Properties:
-      FunctionName: !Ref Function
-      FunctionVersion: !Ref Version
-      Name: !Ref Version
-
   # Resource:
   #   Type: AWS::ApiGateway::Resource
   #   Properties:
@@ -53,7 +46,7 @@ Resources:
         Type: AWS
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${!Ref Alias}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |

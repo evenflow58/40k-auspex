@@ -3,18 +3,12 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway deployment
 
 Parameters:
-  StageName:
-    Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
   BasePathDomain:
     Type: String
     Default: ''
   HostedZoneId:
     Type: String
     Default: Z0953270AK2JGXA33JIB
-
-Conditions:
-  IsBlue: !Equals [!Ref StageName, "blue"]
 
 Resources:
   Deployment:
@@ -42,11 +36,3 @@ Resources:
       HostedZoneId: !Ref HostedZoneId
       Name: !Join [ "", [ !Ref BasePathDomain, "." ] ]
       Type: A
-
-  SSSM:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: /api-gateway/next-stage
-      Description: The stage of the api gateway for the next deploy
-      Type: String
-      Value: !If [IsBlue, "green", "blue"]

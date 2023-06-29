@@ -155,9 +155,6 @@ Resources:
                 ChangeSetName: api
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                ParameterOverrides: !Sub
-                  - '{ "StageName": "${StageName}" }'
-                  - StageName: !Sub '{{resolve:ssm:/api-gateway/next-stage}}'
               RunOrder: 1
             - Name: CreateApiDeploymentChangeSet
               ActionTypeId:
@@ -175,9 +172,8 @@ Resources:
                 TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}", "StageName": "${StageName}" } '
+                  - '{ "BasePathDomain": "${BasePathDomain}" } '
                   - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
-                    StageName: !Sub '{{resolve:ssm:/api-gateway/next-stage}}'
               RunOrder: 1
             - Name: ExecuteApiChangeSet
               ActionTypeId:
@@ -207,7 +203,7 @@ Resources:
               OutputArtifacts:
                 - Name: !Sub '${AWS::StackName}-ChangeSet-UI-Deploy'
               RunOrder: 3
-            - Name: ExecuteApiDeploymentChangeSet
+            - Name: ExecuteApiDeploymentChangeSetGreen
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -300,7 +296,6 @@ Resources:
                   ChangeSetName: api-deployment
                   TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
                   Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                  # ParameterOverrides: '{ "StageName": "prod" }'
                 RunOrder: 1
               - Name: ExecuteApiChangeSet
                 ActionTypeId:

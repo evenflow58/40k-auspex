@@ -28,8 +28,8 @@ Outputs:
     Export:
       Name: ApiGatewayId
 
-  RootResourceId:
-    Value: !GetAtt ApiGateway.RootResourceId
-    Description: The ID of the api root resource
-    Export:
-      Name: RootResourceId
+  # RootResourceId:
+  #   Value: !GetAtt ApiGateway.RootResourceId
+  #   Description: The ID of the api root resource
+  #   Export:
+  #     Name: RootResourceId

@@ -30,8 +30,9 @@ Resources:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
       BasePath: prod
-      DomainName: !Ref BasePathDomain
+      DomainName: !Ref ApiGatewayDomainName
       RestApiId: !ImportValue ApiGatewayId
+    DependsOn: ApiGatewayDomainName
 
   RecordSet:
     Type: AWS::Route53::RecordSet

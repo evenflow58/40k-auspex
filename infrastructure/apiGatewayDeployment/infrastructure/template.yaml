@@ -29,7 +29,7 @@ Resources:
   ApiGatewayDomainMapping:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
-      BasePath: prod
+      Stage: prod
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !ImportValue ApiGatewayId
     DependsOn: ApiGatewayDomainName

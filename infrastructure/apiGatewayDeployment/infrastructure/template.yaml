@@ -26,6 +26,13 @@ Resources:
         Types:
           - REGIONAL
 
+  ApiGatewayDomainMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      BasePath: prod
+      DomainName: !Ref ApiGatewayDomainName
+      RestApiId: !ImportValue ApiGatewayId
+
   RecordSet:
     Type: AWS::Route53::RecordSet
     Properties:

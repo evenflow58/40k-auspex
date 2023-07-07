@@ -22,19 +22,18 @@ Resources:
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
 
-  # Resource:
-  #   Type: AWS::ApiGateway::Resource
-  #   Properties:
-  #     ParentId: !Ref RootResourceId
-  #     PathPart: test
-  #     RestApiId: !Ref ApiGatewayId
+  ApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ParentId: !Ref RootResourceId
+      PathPart: v1
 
   Endpoint:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGatewayId
-      # ResourceId: !Ref Resource
-      ResourceId: !Ref RootResourceId
+      ResourceId: !Ref ApiGatewayResource
       HttpMethod: GET
       AuthorizationType: NONE
       MethodResponses:
@@ -43,7 +42,7 @@ Resources:
         Type: AWS
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/versions/1/invoke'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |

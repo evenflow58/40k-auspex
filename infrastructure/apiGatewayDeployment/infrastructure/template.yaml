@@ -9,13 +9,19 @@ Parameters:
   HostedZoneId:
     Type: String
     Default: Z0953270AK2JGXA33JIB
+  StageName:
+    Type: String
+    AllowedValues:
+      - prod
+      - v*
+    ConstraintDescription: Please enter a valid environment ('prod' or starting with 'v')
 
 Resources:
   Deployment:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !ImportValue ApiGatewayId
-      StageName: prod
+      StageName: !Ref StageName
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName
@@ -29,7 +35,7 @@ Resources:
   ApiGatewayDomainMapping:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
-      Stage: prod
+      Stage: !Ref StageName
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !ImportValue ApiGatewayId
     DependsOn: ApiGatewayDomainName

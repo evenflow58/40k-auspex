@@ -39,7 +39,7 @@ Resources:
       MethodResponses:
         - StatusCode: 200
       Integration:
-        Type: AWS
+        Type: AWS_PROXY
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/versions/1/invoke'

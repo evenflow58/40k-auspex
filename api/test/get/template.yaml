@@ -22,7 +22,7 @@ Resources:
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
 
-  LambdaVersion:
+  FunctionVersion:
     Type: AWS::Lambda::Version
     Properties:
       FunctionName: !Ref Function
@@ -48,7 +48,7 @@ Resources:
         Credentials: !GetAtt ApiRole.Arn
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/versions/1/invoke'
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FunctionVersion.Arn}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |

@@ -22,12 +22,17 @@ Resources:
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
 
+  LambdaVersion:
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName: !Ref Function
+
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref ApiGatewayId
       ParentId: !Ref RootResourceId
-      PathPart: test
+      PathPart: test 
 
   Endpoint:
     Type: AWS::ApiGateway::Method

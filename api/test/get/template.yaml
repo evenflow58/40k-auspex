@@ -48,7 +48,7 @@ Resources:
         Credentials: !GetAtt ApiRole.Arn
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FunctionVersion.Arn}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FunctionVersion}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |

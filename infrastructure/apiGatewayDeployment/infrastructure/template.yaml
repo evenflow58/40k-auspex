@@ -13,7 +13,7 @@ Parameters:
     Type: String
     AllowedValues:
       - prod
-      - v*
+      - v1
     ConstraintDescription: Please enter a valid environment ('prod' or starting with 'v')
 
 Resources:

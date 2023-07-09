@@ -14,7 +14,7 @@ Resources:
   TestGet:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: ../../../api/v1/test/get/template.yaml
+      TemplateURL: ../../api/v1/test/get/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId

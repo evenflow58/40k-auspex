@@ -26,20 +26,10 @@ Resources:
         Types:
           - REGIONAL
 
-  V1ApiGatewayDomainMapping:
+  ApiGatewayDomainMapping:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
-      Stage: v1
-      BasePath: v1
-      DomainName: !Ref ApiGatewayDomainName
-      RestApiId: !ImportValue ApiGatewayId
-    DependsOn: ApiGatewayDomainName
-
-  V2ApiGatewayDomainMapping:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      Stage: v2
-      BasePath: v2
+      Stage: prod
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !ImportValue ApiGatewayId
     DependsOn: ApiGatewayDomainName

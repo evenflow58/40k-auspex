@@ -169,7 +169,7 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
                 ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}" '
+                  - '{ "BasePathDomain": "${BasePathDomain}" }'
                   - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
               RunOrder: 2
             - Name: ExecuteUIChangeSet

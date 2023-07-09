@@ -21,6 +21,14 @@ Resources:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
 
+  V2:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ../../../api/v2/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGateway
+        RootResourceId: !GetAtt ApiGateway.RootResourceId
+
 Outputs:
   ApiGatewayId:
     Value: !Ref ApiGateway

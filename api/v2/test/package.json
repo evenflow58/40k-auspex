@@ -1,0 +1,14 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm-run-all --parallel build:* && cd ../",
+    "build:get": "cd get && npm run build",
+    "package": "npm-run-all --parallel package:*",
+    "package:get": "cd get && npm run package"
+  },
+  "author": "",
+  "license": "ISC"
+}

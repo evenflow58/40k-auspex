@@ -16,5 +16,5 @@ Resources:
     Properties:
       TemplateURL: test/get/template.yaml
       Parameters:
-        ApiGatewayId: !Ref ApiGateway
+        ApiGatewayId: !Ref ApiGatewayId
         RootResourceId: !Ref RootResourceId

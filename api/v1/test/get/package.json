@@ -6,7 +6,7 @@
   "scripts": {
     "build": "cargo lambda build --release --arm64",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "sam package --template-file ./template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml"
+    "package": "cd ./src && sam package --template-file /template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml"
   },
   "author": "",
   "license": "ISC"

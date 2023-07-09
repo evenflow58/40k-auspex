@@ -26,6 +26,7 @@ Resources:
     Type: AWS::Lambda::Version
     Properties:
       FunctionName: !Ref Function
+      Description: v1
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource
@@ -90,7 +91,7 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt Function.Arn
+      FunctionName: !Ref FunctionVersion
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 

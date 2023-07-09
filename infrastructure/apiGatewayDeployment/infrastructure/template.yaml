@@ -36,6 +36,7 @@ Resources:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
       Stage: !Ref StageName
+      BasePath: !Ref StageName
       DomainName: !Ref ApiGatewayDomainName
       RestApiId: !ImportValue ApiGatewayId
     DependsOn: ApiGatewayDomainName

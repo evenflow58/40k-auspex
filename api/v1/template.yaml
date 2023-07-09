@@ -11,10 +11,17 @@ Parameters:
     Description: The ID of the root resource of the api gateway
 
 Resources:
+  V1Path:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref RootResourceId
+      RestApiId: !Ref ApiGatewayId
+      PathPart: v1
+
   TestGet:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: test/get/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
-        RootResourceId: !Ref RootResourceId
+        RootResourceId: !Ref V1Path

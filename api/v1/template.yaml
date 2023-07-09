@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: The Monster of the Week V1 api gateway code
+
+Parameters:
+  ApiGatewayId:
+    Type: String
+    Description: The ID of the API Gateway this method should be attached to.
+  RootResourceId:
+    Type: String
+    Description: The ID of the root resource of the api gateway
+
+Resources:
+  TestGet:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ../../../api/test/get/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGateway
+        RootResourceId: !GetAtt ApiGateway.RootResourceId

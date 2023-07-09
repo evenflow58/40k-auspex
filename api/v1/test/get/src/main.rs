@@ -13,7 +13,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     let resp = Response::builder()
         .status(200)
         .header("content-type", "application/json")
-        .body("Hello World - version 1".into())
+        .body("Hello World - actual version 1".into())
         .map_err(Box::new)?;
     Ok(resp)
 }

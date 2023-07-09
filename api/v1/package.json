@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "v1",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "npm-run-all --parallel build:* && cd ../",
-    "build:v1": "cd test/get && npm run build"
+    "build:test": "cd test/get && npm run build"
   },
   "author": "",
   "license": "ISC"

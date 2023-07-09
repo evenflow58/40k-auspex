@@ -102,7 +102,7 @@ Resources:
               - Name: lambdaEdgeBuildOutput
               - Name: apiGatewayBuildOutput
               - Name: apiGatewayDeploymentBuildOutput
-              - Name: testGetBuildOutput
+              - Name: apiV1BuildOutput
             RunOrder: 1
         - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
           Actions:

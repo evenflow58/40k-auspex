@@ -42,8 +42,8 @@ artifacts:
       base-directory: infrastructure/apiGateway
       files:
         - '**/*'
-    testGetBuildOutput:
-      base-directory: api/test/get
+    apiV1BuildOutput:
+      base-directory: api/v1
       files:
         - '**/*'
     apiGatewayDeploymentBuildOutput:

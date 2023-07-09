@@ -26,7 +26,6 @@ Resources:
     Type: AWS::Lambda::Version
     Properties:
       FunctionName: !Ref Function
-      Description: v1
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource

@@ -21,6 +21,7 @@ Resources:
       Timeout: 5
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
+      FunctionName: TestGetV1
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource

@@ -9,6 +9,11 @@ Parameters:
   RootResourceId:
     Type: String
     Description: The ID of the root resource of the api gateway
+  Version:
+    Type: String
+    Description: The version to deploy
+    AllowedValues:
+      - v1
 
 Resources:
   Function:
@@ -21,7 +26,7 @@ Resources:
       Timeout: 5
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
-      FunctionName: TestGetV1
+      FunctionName: !Sub TestGet${Version}
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource

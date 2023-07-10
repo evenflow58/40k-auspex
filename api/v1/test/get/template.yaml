@@ -24,7 +24,9 @@ Resources:
       FunctionName: !Sub TestGet_V1
 
   Version:
-    FunctionName: !Ref Function
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName: !Ref Function
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource

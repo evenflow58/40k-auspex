@@ -15,7 +15,7 @@ Resources:
   AuthorizerFunction:
     Type: AWS::ApiGateway::Authorizer
     Properties:
-      RestApiId: !GetAtt ApiGateway.Arn
+      RestApiId: !Ref ApiGateway
       Name: GoogleAuthorizer
       Type: COGNITO_USER_POOLS
       IdentitySource: method.request.header.Authorization

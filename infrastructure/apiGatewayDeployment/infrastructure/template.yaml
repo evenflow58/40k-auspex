@@ -19,14 +19,6 @@ Resources:
       DeploymentCanarySettings:
         PercentTraffic: 50
 
-  # CanaryDeployment:
-  #   Type: AWS::ApiGateway::Deployment
-  #   Properties:
-  #     RestApiId: !ImportValue ApiGatewayId
-  #     StageName: canary
-  #     DeploymentCanarySettings:
-  #       PercentTraffic: 10
-
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName
     Properties:

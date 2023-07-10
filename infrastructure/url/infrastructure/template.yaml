@@ -26,60 +26,6 @@ Mappings:
       Alias: monsterplaybook.rip
 
 Resources:
-  ##################### Lambda
-  LambdaEdgeRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Sid: AllowLambdaServiceToAssumeRole
-            Effect: Allow
-            Action:
-              - sts:AssumeRole
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-                - edgelambda.amazonaws.com
-      Path: /
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: EdgeLambdaPolicy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Effect: Allow
-                Resource: '*'
-              - Action:
-                  - lambda:EnableReplication*
-                Effect: Allow
-                Resource: '*'
-              - Action:
-                  - s3:*
-                Effect: Allow
-                Resource: "*"
-
-  LambdaEdge:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ../dist
-      Role: !GetAtt LambdaEdgeRole.Arn
-      Runtime: nodejs16.x
-      Handler: index.handler
-      Timeout: 5
-      AutoPublishAlias: live
-
-  LogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      RetentionInDays: 14
-      LogGroupName: !Join ["", ["/aws/lambda/", !Ref LambdaEdge]]
-
   ##################### CloudFront
   CloudFrontOAI:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -91,48 +37,49 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
-        Aliases:
-          - !Ref Domain
-        DefaultCacheBehavior:
-          Compress: true
-          ForwardedValues:
-            QueryString: false
-            Headers:
-                - Origin
-            Cookies:
-              Forward: none
-          TargetOriginId: ui-bucket
-          ViewerProtocolPolicy: redirect-to-https
-          LambdaFunctionAssociations:
-            - EventType: origin-request
-              LambdaFunctionARN: !Ref LambdaEdge.Version
-        Enabled: true
-        HttpVersion: http2
         Origins:
           - DomainName: !ImportValue UiBucketDomainName
             Id: ui-bucket
             S3OriginConfig:
-              OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
-            OriginCustomHeaders:
-            - HeaderName: x-env-branch
-              HeaderValue: !Ref BranchName
+              # OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
+              OriginAccessIdentity: ''
+            DefaultRootObject: !Sub '${BranchName}/index.html'
+            Enabled: true
+            DefaultCacheBehavior:
+              TargetOriginId: ui-bucket
+              ViewerProtocolPolicy: redirect-to-https
+              ForwardedValues:
+                QueryString: false
+                Cookies:
+                  Forward: none
+        HttpVersion: http2
         Comment: The monster of the week cloud front distribution
-        ViewerCertificate:
-          AcmCertificateArn: !Ref CloudFronCert
-          MinimumProtocolVersion: TLSv1.1_2016
-          SslSupportMethod: sni-only
+        # ViewerCertificate:
+        #   AcmCertificateArn: !Ref CloudFronCert
+        #   MinimumProtocolVersion: TLSv1.1_2016
+        #   SslSupportMethod: sni-only
 
   ##################### DNS
   DnsName:
-    Type: AWS::Route53::RecordSetGroup
+    Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId: !Ref HostedZoneId
-      RecordSets:
-      - Name: !Ref Domain
-        Type: A
-        AliasTarget:
-          HostedZoneId: Z2FDTNDATAQYW2
-          DNSName: !GetAtt CloudFrontDistribution.DomainName
+      Comment: DNS record for SPA
+      Name: !Ref Domain
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+  # DnsName:
+  #   Type: AWS::Route53::RecordSetGroup
+  #   Properties:
+  #     HostedZoneId: !Ref HostedZoneId
+  #     RecordSets:
+  #     - Name: !Ref Domain
+  #       Type: A
+  #       AliasTarget:
+  #         HostedZoneId: Z2FDTNDATAQYW2
+  #         DNSName: !GetAtt CloudFrontDistribution.DomainName
 
   ##################### Bucket
   UiBucketPolicy:

@@ -22,6 +22,7 @@ Resources:
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
       FunctionName: !Sub TestGet_V1
+      AutoPublishAlias: prod
 
   Version:
     Type: AWS::Lambda::Version

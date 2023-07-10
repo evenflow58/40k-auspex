@@ -44,7 +44,7 @@ Resources:
         Credentials: !GetAtt ApiRole.Arn
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Version}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |
@@ -86,7 +86,7 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref Version
+      FunctionName: !Ref Function
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 

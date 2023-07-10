@@ -43,15 +43,15 @@ Resources:
             S3OriginConfig:
               # OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
               OriginAccessIdentity: ''
-            DefaultRootObject: !Sub '${BranchName}/index.html'
-            Enabled: true
-            DefaultCacheBehavior:
-              TargetOriginId: ui-bucket
-              ViewerProtocolPolicy: redirect-to-https
-              ForwardedValues:
-                QueryString: false
-                Cookies:
-                  Forward: none
+        DefaultRootObject: !Sub '${BranchName}/index.html'
+        Enabled: true
+        DefaultCacheBehavior:
+          TargetOriginId: ui-bucket
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
         HttpVersion: http2
         Comment: The monster of the week cloud front distribution
         # ViewerCertificate:

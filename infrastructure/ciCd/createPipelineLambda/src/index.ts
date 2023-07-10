@@ -33,5 +33,7 @@ export const handler = async (event: {
 
   console.log(`Creating environment for ${branchName}`);
 
-  return await client.send(command);
+  const result = await client.send(command);
+
+  console.log('Create environment result', result);
 };

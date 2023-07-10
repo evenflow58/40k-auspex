@@ -1,0 +1,120 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: The Monster of the Week api test get method
+
+Parameters:
+  ApiGatewayId:
+    Type: String
+    Description: The ID of the API Gateway this method should be attached to.
+  RootResourceId:
+    Type: String
+    Description: The ID of the root resource of the api gateway
+
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      MemorySize: 128
+      Architectures: ["arm64"]
+      Handler: bootstrap
+      Runtime: provided.al2
+      Timeout: 5
+      CodeUri: target/lambda/get
+      Role: !GetAtt LambdaRole.Arn
+      FunctionName: !Sub TestGet_V2
+
+  ApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ParentId: !Ref RootResourceId
+      PathPart: test 
+
+  Endpoint:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ResourceId: !Ref ApiGatewayResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+      Integration:
+        Type: AWS
+        Credentials: !GetAtt ApiRole.Arn
+        TimeoutInMillis: 29000
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
+        IntegrationResponses:
+          - ResponseTemplates:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                $inputRoot.body
+                #set($context.responseOverride.header = $inputRoot.headers)
+            StatusCode: 200
+        # IntegrationResponses:
+        #   - ResponseTemplates:
+        #       application/json: |
+        #       #set($inputRoot = $input.path('$'))
+        #       #set($context.responseOverride.status = $inputRoot.statusCode)
+        #       #end
+        #     # ResponseParameters:
+        #     #   method.response.header.X-Requested-With: "'*'"
+        #     #   method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with'"
+        #     #   method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+        #     #   method.response.header.Access-Control-Allow-Origin: "'*'"
+        #     StatusCode: 200
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ""
+            Effect: "Allow"
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+
+  Permission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref Function
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
+
+  ApiRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ""
+            Effect: "Allow"
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+  ApiPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "TestGetLmabdaAccess"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "lambda:*"
+            Resource: !GetAtt Function.Arn
+      Roles:
+        - !Ref ApiRole
+      

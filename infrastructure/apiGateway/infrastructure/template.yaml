@@ -3,20 +3,28 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway infrastructure
 
 Resources:
-  ApiGateway:
+  ApiGateway: 
     Type: AWS::ApiGateway::RestApi
     Properties:
       Description: The Monster of the Week API
-      DisableExecuteApiEndpoint: true
+      # DisableExecuteApiEndpoint: true
       EndpointConfiguration:
         Types:
           - REGIONAL
       Name: !Sub ${AWS::StackName}-ApiGateway
 
-  TestGet:
+  V1:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: ../../../api/test/get/template.yaml
+      TemplateURL: ../../../api/v1/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGateway
+        RootResourceId: !GetAtt ApiGateway.RootResourceId
+
+  V2:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ../../../api/v2/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId

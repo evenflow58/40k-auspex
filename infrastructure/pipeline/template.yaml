@@ -34,6 +34,28 @@ Resources:
       Source:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
+            #         BranchName: !Ref GitHubBranch
+
+Resources:
+  BuildRunner:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub ${AWS::StackName}-BuildRunner
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        ComputeType: BUILD_GENERAL1_MEDIUM
+        Image: aws/codebuild/standard:6.0
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:
+          - Name: BUILD_OUTPUT_BUCKET
+            Value: !ImportValue ArtifactBucketId
+          - Name: S3_BUCKET
+            Value: !ImportValue ArtifactBucketId
+      ServiceRole: !ImportValue BuildExecutionRoleArn
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: infrastructure/pipeline/buildspec-build.yaml
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -47,20 +69,21 @@ Resources:
       Stages:
         - Name: Source
           Actions:
-            - Name: GithubSource
+            - Name: Source
               InputArtifacts: []
               OutputArtifacts:
                 - Name: SourceCode
               ActionTypeId:
                 Category: Source
-                Owner: AWS
+                Owner: ThirdParty
                 Version: 1
-                Provider: CodeStarSourceConnection
+                Provider: GitHub
               Configuration:
-                ConnectionArn: arn:aws:codestar-connections:us-east-2:625961017727:connection/760e3889-f416-44aa-9c62-001a92098608
-                FullRepositoryId: "evenflow58/monster-of-week"
-                BranchName: !If [IsProduction, 'master', !Ref GitHubBranch]
-                OutputArtifactFormat: "CODE_ZIP"
+                Owner: "{{resolve:secretsmanager:Github:SecretString:owner}}"
+                Repo: !Ref GitHubRepo
+                Branch: !Ref GitHubBranch
+                PollForSourceChanges: false
+                OAuthToken: "{{resolve:secretsmanager:Github:SecretString:token}}"
               RunOrder: 1
         - Name: Build
           Actions:
@@ -79,7 +102,6 @@ Resources:
               - Name: lambdaEdgeBuildOutput
               - Name: apiGatewayBuildOutput
               - Name: apiGatewayDeploymentBuildOutput
-              - Name: testGetBuildOutput
             RunOrder: 1
         - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
           Actions:
@@ -117,7 +139,7 @@ Resources:
               InputArtifacts:
                 - Name: lambdaEdgeBuildOutput
               RunOrder: 1
-            - Name: CreateApiChangeSet
+            - Name: DeployApi
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -126,14 +148,13 @@ Resources:
               InputArtifacts:
                 - Name: apiGatewayBuildOutput
               Configuration:
-                ActionMode: CHANGE_SET_REPLACE
+                ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                StackName: !Sub '${AWS::StackName}-Stack-Api'
-                ChangeSetName: api
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                StackName: !Sub '${AWS::StackName}-Stack-API'
               RunOrder: 1
-            - Name: CreateApiDeploymentChangeSet
+            - Name: DeployApiStage
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -142,30 +163,14 @@ Resources:
               InputArtifacts:
                 - Name: apiGatewayDeploymentBuildOutput
               Configuration:
-                ActionMode: CHANGE_SET_REPLACE
+                ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
-                ChangeSetName: api-deployment
                 TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
                 ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}", "StageName": "${StageName}" } '
+                  - '{ "BasePathDomain": "${BasePathDomain}" }'
                   - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
-                    StageName: !If [IsProduction, 'staging', 'prod']
-              RunOrder: 1
-            - Name: ExecuteApiChangeSet
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: 1
-              Configuration:
-                ActionMode: CHANGE_SET_EXECUTE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                StackName: !Sub '${AWS::StackName}-Stack-Api'
-                ChangeSetName: api
-              OutputArtifacts:
-                - Name: !Sub '${AWS::StackName}-ChangeSet-Api-Deploy'
               RunOrder: 2
             - Name: ExecuteUIChangeSet
               ActionTypeId:
@@ -180,21 +185,7 @@ Resources:
                 ChangeSetName: ui
               OutputArtifacts:
                 - Name: !Sub '${AWS::StackName}-ChangeSet-UI-Deploy'
-              RunOrder: 3
-            - Name: ExecuteApiDeploymentChangeSet
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: 1
-              Configuration:
-                ActionMode: CHANGE_SET_EXECUTE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
-                ChangeSetName: api-deployment
-              OutputArtifacts:
-                - Name: !Sub '${AWS::StackName}-ChangeSet-Api-Deployment-Deploy'
-              RunOrder: 3
+              RunOrder: 2
         - !If
           - IsProduction
           - Name: DeploymentApproval
@@ -274,7 +265,6 @@ Resources:
                   ChangeSetName: api-deployment
                   TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
                   Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                  ParameterOverrides: '{ "StageName": "prod" }'
                 RunOrder: 1
               - Name: ExecuteApiChangeSet
                 ActionTypeId:

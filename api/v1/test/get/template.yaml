@@ -21,30 +21,30 @@ Resources:
       Timeout: 5
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
+      FunctionName: !Sub TestGet_V1
 
-  Resource:
+  ApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !Ref RootResourceId
-      PathPart: test
       RestApiId: !Ref ApiGatewayId
+      ParentId: !Ref RootResourceId
+      PathPart: test 
 
   Endpoint:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGatewayId
-      ResourceId: !Ref Resource
+      ResourceId: !Ref ApiGatewayResource
       HttpMethod: GET
       AuthorizationType: NONE
       MethodResponses:
         - StatusCode: 200
       Integration:
         Type: AWS
+        Credentials: !GetAtt ApiRole.Arn
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub
-          - 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations'
-          - lambdaArn: !GetAtt Function.Arn
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |
@@ -86,9 +86,9 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt Function.Arn
+      FunctionName: !Ref Function
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 
   ApiRole:
     Type: AWS::IAM::Role

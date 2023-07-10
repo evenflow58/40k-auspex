@@ -1,0 +1,17 @@
+{
+  "name": "v1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "npm-run-all --parallel build:* && cd ../",
+    "build:test": "cd test && npm run build",
+    "package": "npm-run-all --parallel package:*",
+    "package:test": "cd test && npm run package"
+  },
+  "author": "",
+  "license": "ISC"
+}

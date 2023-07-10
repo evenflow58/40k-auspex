@@ -3,10 +3,6 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: The Monster of the Week api gateway deployment
 
 Parameters:
-  StageName:
-    Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
-    Default: prod
   BasePathDomain:
     Type: String
     Default: ''
@@ -15,24 +11,11 @@ Parameters:
     Default: Z0953270AK2JGXA33JIB
 
 Resources:
-  Deployment:
+  ProdDeployment:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !ImportValue ApiGatewayId
-
-  Stage:
-    Type: AWS::ApiGateway::Stage
-    Properties:
-      StageName: !Ref StageName
-      RestApiId: !ImportValue ApiGatewayId
-      DeploymentId: !Ref Deployment
-
-  BasePathMapping:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      DomainName: !Ref ApiGatewayDomainName
-      RestApiId: !ImportValue ApiGatewayId
-      Stage: !Ref Stage
+      StageName: prod
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName
@@ -42,6 +25,14 @@ Resources:
       EndpointConfiguration:
         Types:
           - REGIONAL
+
+  ApiGatewayDomainMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      Stage: prod
+      DomainName: !Ref ApiGatewayDomainName
+      RestApiId: !ImportValue ApiGatewayId
+    DependsOn: ApiGatewayDomainName
 
   RecordSet:
     Type: AWS::Route53::RecordSet

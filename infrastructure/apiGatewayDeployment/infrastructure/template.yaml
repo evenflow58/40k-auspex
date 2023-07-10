@@ -11,13 +11,21 @@ Parameters:
     Default: Z0953270AK2JGXA33JIB
 
 Resources:
-  ProdDeployment:
-    Type: AWS::ApiGateway::Deployment
-    Properties:
-      RestApiId: !ImportValue ApiGatewayId
-      StageName: prod
-      DeploymentCanarySettings:
-        PercentTraffic: 50
+  # ProdDeployment:
+  #   Type: AWS::ApiGateway::Deployment
+  #   Properties:
+  #     RestApiId: !ImportValue ApiGatewayId
+  #     StageName: prod
+      # DeploymentCanarySettings:
+      #   PercentTraffic: 90
+
+  # CanaryDeployment:
+  #   Type: AWS::ApiGateway::Deployment
+  #   Properties:
+  #     RestApiId: !ImportValue ApiGatewayId
+  #     StageName: canary
+  #     DeploymentCanarySettings:
+  #       PercentTraffic: 10
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName

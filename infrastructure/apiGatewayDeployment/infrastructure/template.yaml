@@ -16,8 +16,6 @@ Resources:
     Properties:
       RestApiId: !ImportValue ApiGatewayId
       StageName: prod
-      DeploymentCanarySettings:
-        PercentTraffic: 50
 
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName

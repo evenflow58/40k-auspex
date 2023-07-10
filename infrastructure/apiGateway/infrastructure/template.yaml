@@ -7,11 +7,33 @@ Resources:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Description: The Monster of the Week API
-      # DisableExecuteApiEndpoint: true
       EndpointConfiguration:
         Types:
           - REGIONAL
       Name: !Sub ${AWS::StackName}-ApiGateway
+
+  GoogleClientSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: GoogleCredentials
+
+  GoogleClientId:
+    Type: AWS::SecretsManager::SecretValue
+    Properties:
+      SecretId: !Ref GoogleClientSecret
+      VersionId: "{{resolve:secretsmanager:GoogleCredentials:SecretString:client_id}}"
+
+  AuthorizerFunction:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      RestApiId: !Ref ApiGateway
+      Name: GoogleAuthorizer
+      Type: COGNITO_USER_POOLS
+      IdentitySource: method.request.header.Authorization
+      AuthorizerResultTtlInSeconds: 300
+      ProviderARNs:
+        - arn:aws:cognito-idp:us-east-1:625961017727:userpool/us-east-1_Ivg0PFznF
+      AuthorizerCredentials: !Ref GoogleClientId
 
   V1:
     Type: AWS::CloudFormation::Stack

@@ -22,7 +22,9 @@ Resources:
       CodeUri: target/lambda/get
       Role: !GetAtt LambdaRole.Arn
       FunctionName: !Sub TestGet_V1
-      AutoPublishAlias: true
+
+  Version:
+    FunctionName: !Ref Function
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource
@@ -45,7 +47,7 @@ Resources:
         Credentials: !GetAtt ApiRole.Arn
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Version}/invocations'
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |
@@ -87,7 +89,7 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref Function
+      FunctionName: !Ref Version
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 

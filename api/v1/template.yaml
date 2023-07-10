@@ -9,6 +9,9 @@ Parameters:
   RootResourceId:
     Type: String
     Description: The ID of the root resource of the api gateway
+  AuthorizerId:
+    Type: String
+    Description: The ID of the authorizer
 
 Resources:
   V1Path:
@@ -25,3 +28,4 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
         RootResourceId: !Ref V1Path
+        AuthorizerId: !Ref AuthorizerId

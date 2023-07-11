@@ -54,10 +54,10 @@ Resources:
               Forward: none
         HttpVersion: http2
         Comment: The monster of the week cloud front distribution
-        # ViewerCertificate:
-        #   AcmCertificateArn: !Ref CloudFronCert
-        #   MinimumProtocolVersion: TLSv1.1_2016
-        #   SslSupportMethod: sni-only
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CloudFronCert
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
 
   ##################### DNS
   DnsName:

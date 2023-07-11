@@ -89,6 +89,6 @@ Resources:
               - BucketArn: !ImportValue UiBucketArn
             Principal:
               Service: cloudfront.amazonaws.com
-              AwS: !Sub
+              AWS: !Sub
                 - 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${OAI}'
                 - OAI: !Ref CloudFrontOAI

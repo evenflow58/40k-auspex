@@ -40,7 +40,10 @@ Resources:
         Aliases:
           - !Ref DomainName
         Origins:
-          - DomainName: !ImportValue UiBucketDomainName
+          - DomainName: !Sub
+            - '${BranchName}/${UiBucketDomainName}'
+            - BranchName: !Ref BranchName
+              UiBucketDomainName: !ImportValue UiBucketDomainName
             Id: ui-bucket
             S3OriginConfig:
               OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
@@ -89,3 +92,6 @@ Resources:
               - BucketArn: !ImportValue UiBucketArn
             Principal:
               Service: cloudfront.amazonaws.com
+              AwS: !Sub
+                - 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${OAI}'
+                - OAI: !Ref CloudFrontOAI

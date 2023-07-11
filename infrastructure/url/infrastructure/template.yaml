@@ -40,10 +40,7 @@ Resources:
         Aliases:
           - !Ref DomainName
         Origins:
-          - DomainName: !Sub
-            - '${BranchName}/${UiBucketDomainName}'
-            - BranchName: !Ref BranchName
-              UiBucketDomainName: !ImportValue UiBucketDomainName
+          - DomainName: !Ref BranchName
             Id: ui-bucket
             S3OriginConfig:
               OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]

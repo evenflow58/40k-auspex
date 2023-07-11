@@ -40,7 +40,7 @@ Resources:
         Aliases:
           - !Ref DomainName
         Origins:
-          - DomainName: !Ref DomainName
+          - DomainName: !ImportValue UiBucketDomainName
             Id: ui-bucket
             S3OriginConfig:
               OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]

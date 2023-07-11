@@ -37,19 +37,22 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        Aliases:
+          - !Ref DomainName
         Origins:
           - DomainName: !ImportValue UiBucketDomainName
             Id: ui-bucket
             S3OriginConfig:
-              # OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
-              OriginAccessIdentity: ''
+              OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
         DefaultRootObject: !Sub '${BranchName}/index.html'
         Enabled: true
+        IPV6Enabled: true
         DefaultCacheBehavior:
+          Compress: true
           TargetOriginId: ui-bucket
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
-            QueryString: false
+            QueryString: true
             Cookies:
               Forward: none
         HttpVersion: http2
@@ -61,25 +64,15 @@ Resources:
 
   ##################### DNS
   DnsName:
-    Type: AWS::Route53::RecordSet
+    Type: AWS::Route53::RecordSetGroup
     Properties:
       HostedZoneId: !Ref HostedZoneId
-      Comment: DNS record for SPA
-      Name: !Ref Domain
-      Type: A
-      AliasTarget:
-        HostedZoneId: Z2FDTNDATAQYW2
-        DNSName: !GetAtt CloudFrontDistribution.DomainName
-  # DnsName:
-  #   Type: AWS::Route53::RecordSetGroup
-  #   Properties:
-  #     HostedZoneId: !Ref HostedZoneId
-  #     RecordSets:
-  #     - Name: !Ref Domain
-  #       Type: A
-  #       AliasTarget:
-  #         HostedZoneId: Z2FDTNDATAQYW2
-  #         DNSName: !GetAtt CloudFrontDistribution.DomainName
+      RecordSets:
+      - Name: !Ref Domain
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: !GetAtt CloudFrontDistribution.DomainName
 
   ##################### Bucket
   UiBucketPolicy:

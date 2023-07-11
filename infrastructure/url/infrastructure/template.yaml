@@ -40,11 +40,14 @@ Resources:
         Aliases:
           - !Ref DomainName
         Origins:
-          - DomainName: !ImportValue UiBucketDomainName
+          - DomainName: !Sub
+            - '${BucketDomainName}/${Branch}'
+            - BucketDomainName: !ImportValue UiBucketDomainName
+              Branch: !Ref BranchName
             Id: ui-bucket
             S3OriginConfig:
               OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
-        DefaultRootObject: !Sub '${BranchName}/index.html'
+        DefaultRootObject: index.html
         Enabled: true
         IPV6Enabled: true
         DefaultCacheBehavior:

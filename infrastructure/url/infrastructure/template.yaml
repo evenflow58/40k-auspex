@@ -40,10 +40,7 @@ Resources:
         Aliases:
           - !Ref DomainName
         Origins:
-          - DomainName: !Sub
-            - '${BucketDomainName}/${Branch}'
-            - BucketDomainName: !ImportValue UiBucketDomainName
-              Branch: !Ref BranchName
+          - DomainName: !ImportValue UiBucketDomainName
             Id: ui-bucket
             S3OriginConfig:
               OriginAccessIdentity: !Join ["", ["origin-access-identity/cloudfront/", !Ref CloudFrontOAI]]
@@ -76,6 +73,7 @@ Resources:
         AliasTarget:
           HostedZoneId: Z2FDTNDATAQYW2
           DNSName: !GetAtt CloudFrontDistribution.DomainName
+          EvaluateTargetHealth: false
 
   ##################### Bucket
   UiBucketPolicy:
@@ -91,7 +89,4 @@ Resources:
               - "${BucketArn}/*"
               - BucketArn: !ImportValue UiBucketArn
             Principal:
-              Service: cloudfront.amazonaws.com
-              AWS: !Sub
-                - 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${OAI}'
-                - OAI: !Ref CloudFrontOAI
+              CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId

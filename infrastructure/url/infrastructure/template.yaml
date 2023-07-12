@@ -75,6 +75,12 @@ Resources:
           HostedZoneId: Z2FDTNDATAQYW2
           DNSName: !GetAtt CloudFrontDistribution.DomainName
           EvaluateTargetHealth: false
+      - Name: !Ref Domain
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: !Sub '*.${BranchName}.${DomainName}'
+          EvaluateTargetHealth: false
 
   ##################### Bucket
   UiBucketPolicy:

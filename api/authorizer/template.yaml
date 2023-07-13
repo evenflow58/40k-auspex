@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: The Monster of the Week api gateway authorizer
+
+Parameters:
+  ApiGatewayId:
+    Type: String
+    Description: The ID of the API Gateway this method should be attached to.
+
+Resources:
+  GatewayAuthorizerLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: GatewayAuthorizer
+      MemorySize: 128
+      Architectures: ["arm64"]
+      Handler: bootstrap
+      Runtime: provided.al2
+      Timeout: 5
+      CodeUri: target/lambda/authorizer
+      # Role: !GetAtt LambdaRole.Arn
+
+  ApiGatewayAuthorizer:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      Name: SocialAuthorizer
+      Type: TOKEN
+      IdentitySource: method.request.header.Authorization
+      AuthorizerUri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GatewayAuthorizerLambda.Arn}/invocations
+      AuthorizerResultTtlInSeconds: 3600
+
+Outputs:
+  ApiAuthorizerId:
+    Value: !Ref ApiGatewayAuthorizer
+    Description: The id of the api gateway authorizer

@@ -1,20 +1,27 @@
 <script>
 	import Header from './Header.svelte';
+	import jwt_decode from 'jwt-decode';
 	import './styles.css';
 
-	// const handleGoogleCallback = ({ credential }) => {
-	// 	debugger
-	// }
-
-	// google.accounts.id.initialize({
-	// 	client_id: '181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com',
-	// 	callback: handleGoogleCallback
-	// });
-	// google.accounts.id.prompt();
+	const initGoogle = () => {
+		debugger
+		const handleGoogleCallback = ({ credential }) => {
+			debugger
+			const test = jwt_decode(credential);
+			console.log(test);
+		}
+		
+		google.accounts.id.initialize({
+			client_id: '181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com',
+			auto_select: true,
+			callback: handleGoogleCallback
+		});
+		google.accounts.id.prompt(	);
+	}
 </script>
 
 <svelte:head>
-	<script src="https://accounts.google.com/gsi/client" async></script>
+	<script src="https://accounts.google.com/gsi/client" async on:load={initGoogle}></script>
 </svelte:head>
 
 <div class="app">

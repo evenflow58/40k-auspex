@@ -20,8 +20,8 @@ Resources:
       Type: COGNITO_USER_POOLS
       IdentitySource: method.request.header.Authorization
       AuthorizerResultTtlInSeconds: 300
-      ProviderARNs:
-        - arn:aws:cognito-idp:us-east-1:625961017727:userpool/us-east-1_Ivg0PFznF
+      # ProviderARNs:
+      #   - arn:aws:cognito-idp:us-east-1:625961017727:userpool/us-east-1_Ivg0PFznF
       # AuthorizerCredentials: '{{resolve:secretsmanager:GoogleCredentials:SecretString:client_id}}'
 
   V1:

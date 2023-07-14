@@ -3,17 +3,33 @@ version: 0.2
 env:
   shell: bash
 batch: 
-  build-matrix:
-    static:
-      env:
-        type: LINUX_CONTAINER
-    dynamic:
+  build-list:
+    - identifier: authorizer
       env:
         variables:
-          LOCATION:
-            - authorizer
-            - v1
-            - v2
+          LOCATION: authorizer
+      ignore-failure: false
+    - identifier: v1
+      env:
+        variables:
+          LOCATION: v1
+      ignore-failure: false
+    - identifier: v2
+      env:
+        variables:
+          LOCATION: v2
+      ignore-failure: false
+  # build-matrix:
+  #   static:
+  #     env:
+  #       type: LINUX_CONTAINER
+  #   dynamic:
+  #     env:
+  #       variables:
+  #         LOCATION:
+  #           - authorizer
+  #           - v1
+  #           - v2
   
 phases:
   install:
@@ -23,11 +39,8 @@ phases:
       - echo "installing base packages"
       - npm i
 
-      - echo "navigating to $LOCATION"
-      - echo $LOCATION
-      - cd api/$LOCATION
-
-      - pwd
+      - echo "navigating to api"
+      - cd api
 
       - echo "installing rust dependencies"
       - curl https://sh.rustup.rs -sSf | bash -s -- -y
@@ -35,6 +48,10 @@ phases:
       - pip3 install cargo-lambda
   build:
     commands:
+      - echo "navigating to $LOCATION"
+      - cd api/$LOCATION
+      - pwd
+
       - echo "building $LOCATION"
       - npm run build
 

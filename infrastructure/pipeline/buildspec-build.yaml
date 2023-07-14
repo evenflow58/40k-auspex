@@ -24,10 +24,10 @@ batch:
       env:
         variables:
           LOCATION: v1
-    - identifier: all
-      buildspec: infrastructure/pipeline/project-build.yaml
-      ignore-failure: false
-      debug-session: true
-      depend-on:
-        - authorizer
-        - v1
+    # - identifier: all
+    #   buildspec: infrastructure/pipeline/project-build.yaml
+    #   ignore-failure: false
+    #   debug-session: true
+    #   depend-on:
+    #     - authorizer
+    #     - v1

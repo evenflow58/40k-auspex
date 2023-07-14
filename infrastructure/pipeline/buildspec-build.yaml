@@ -4,12 +4,11 @@ env:
   shell: bash
 
 batch:
-  fast-fail: false
+  fast-fail: true
   build-graph:
     - identifer: api
-      buildspec: api/buildspec-build.yaml
-      debug-session: true
+      buildspec: ../../api/buildspec-build.yaml
     - identifer: all
-      buildspec: ./buildspec-build.yaml
+      buildspec: ../buildspec-build.yaml
       depend-on:
         - api

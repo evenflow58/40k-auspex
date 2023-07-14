@@ -7,11 +7,11 @@ batch:
   fast-fail: true
   build-graph:
     - identifer: api
-      buildspec: api-build.yaml
+      buildspec: infrastructure/pipeline/api-build.yaml
       ignore-failure: false
       debug-session: true
     - identifer: all
-      buildspec: project-build.yaml
+      buildspec: infrastructure/pipeline/project-build.yaml
       ignore-failure: false
       debug-session: true
       depend-on:

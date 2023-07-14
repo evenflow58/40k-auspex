@@ -20,8 +20,8 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
-      - echo "navigating to $LOCATION"
-      - cd $LOCATION
+      - echo "navigating to ${LOCATION}"
+      - cd api/$LOCATION
 
       - echo "installing base packages"
       - npm i

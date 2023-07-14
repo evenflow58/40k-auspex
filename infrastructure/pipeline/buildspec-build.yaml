@@ -6,11 +6,12 @@ env:
 batch:
   fast-fail: true
   build-graph:
+    debug-session: true
     - identifer: api
-      buildspec: api/api-build.yaml
+      buildspec: .api/api-build.yaml
       ignore-failure: false
     - identifer: all
-      buildspec: infrastructure/project-build.yaml
+      buildspec: .infrastructure/project-build.yaml
       ignore-failure: false
       depend-on:
         - api

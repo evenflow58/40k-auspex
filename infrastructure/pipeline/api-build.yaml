@@ -27,8 +27,7 @@ phases:
       - echo $LOCATION
       - cd api/$LOCATION
 
-      - echo "installing base packages"
-      - npm i
+      - pwd
 
       - echo "installing rust dependencies"
       - curl https://sh.rustup.rs -sSf | bash -s -- -y

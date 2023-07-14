@@ -1,0 +1,39 @@
+version: 0.2
+
+# env:
+#   shell: bash
+  
+phases:
+  pre_build:
+    commands:
+      - pwd
+      - ls -l
+      - printenv
+      - echo "$LOCATION"
+  # install:
+  #   runtime-versions:
+  #     nodejs: 16
+  #   commands:
+  #     - echo "installing base packages"
+  #     - npm i
+
+  #     - echo "navigating to api"
+  #     - cd api
+
+  #     - echo "installing rust dependencies"
+  #     - curl https://sh.rustup.rs -sSf | bash -s -- -y
+  #     - source $HOME/.cargo/env
+  #     - pip3 install cargo-lambda
+  # build:
+  #   commands:
+  #     - printenv
+  #     - pwd
+  #     - echo "navigating to ${LOCATION}"
+  #     - cd ${LOCATION}
+  #     - pwd
+
+  #     - echo "building ${LOCATION}"
+  #     - npm run build
+
+  #     - echo "packaging ${LOCATION} packages"
+  #     - npm run package

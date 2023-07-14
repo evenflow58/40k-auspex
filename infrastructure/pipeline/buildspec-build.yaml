@@ -7,8 +7,10 @@ batch:
   fast-fail: true
   build-graph:
     - identifer: api
-      buildspec: ../../api/buildspec-build.yaml
+      buildspec: api/api-build.yaml
+      ignore-failure: false
     - identifer: all
-      buildspec: ../buildspec-build.yaml
+      buildspec: infrastructure/project-build.yaml
+      ignore-failure: false
       depend-on:
         - api

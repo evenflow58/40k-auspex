@@ -4,15 +4,26 @@ env:
   shell: bash
 
 batch:
-  fast-fail: true
+  fast-fail: false
   build-graph:
-    - identifer: api
-      buildspec: infrastructure/pipeline/api-build.yaml
-      ignore-failure: false
-      debug-session: true
-    - identifer: all
-      buildspec: infrastructure/pipeline/project-build.yaml
-      ignore-failure: false
-      debug-session: true
-      depend-on:
-        - api
+    # - identifer: api
+    #   buildspec: infrastructure/pipeline/api-build.yaml
+    #   ignore-failure: false
+    #   debug-session: true
+    # - identifer: all
+    #   buildspec: infrastructure/pipeline/project-build.yaml
+    #   ignore-failure: false
+    #   debug-session: true
+    #   depend-on:
+    #     - api
+    - identifer: build
+      buildspec: |
+        version: 0.2
+
+        env:
+          shell: bash
+          
+        phases:
+          build:
+            commands:
+              - echo "nested build"

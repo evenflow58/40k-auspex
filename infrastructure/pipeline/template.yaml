@@ -34,6 +34,9 @@ Resources:
       Source:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
+      BuildBatchConfig:
+        CombineArtifacts: true
+        ServiceRole: !ImportValue BuildExecutionRoleArn
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline

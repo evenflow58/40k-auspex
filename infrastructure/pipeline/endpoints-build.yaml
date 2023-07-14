@@ -1,39 +1,42 @@
 version: 0.2
 
-# env:
-#   shell: bash
+env:
+  shell: bash
   
 phases:
-  pre_build:
+  install:
+    runtime-versions:
+      nodejs: 16
     commands:
-      - pwd
-      - ls -l
+      - echo "installing base packages"
+      - npm i
+
+      - echo "navigating to api"
+      - cd api
+
+      - echo "installing rust dependencies"
+      - curl https://sh.rustup.rs -sSf | bash -s -- -y
+      - source $HOME/.cargo/env
+      - pip3 install cargo-lambda
+  build:
+    commands:
       - printenv
-      - echo "$LOCATION"
-  # install:
-  #   runtime-versions:
-  #     nodejs: 16
-  #   commands:
-  #     - echo "installing base packages"
-  #     - npm i
+      - pwd
+      - echo "navigating to $LOCATION"
+      - cd ./$LOCATION
+      - pwd
 
-  #     - echo "navigating to api"
-  #     - cd api
+      - echo "building $LOCATION"
+      - npm run build
 
-  #     - echo "installing rust dependencies"
-  #     - curl https://sh.rustup.rs -sSf | bash -s -- -y
-  #     - source $HOME/.cargo/env
-  #     - pip3 install cargo-lambda
-  # build:
-  #   commands:
-  #     - printenv
-  #     - pwd
-  #     - echo "navigating to ${LOCATION}"
-  #     - cd ${LOCATION}
-  #     - pwd
+      - echo "packaging $LOCATION packages"
+      - npm run package
 
-  #     - echo "building ${LOCATION}"
-  #     - npm run build
-
-  #     - echo "packaging ${LOCATION} packages"
-  #     - npm run package
+artifacts:
+  files:
+    - '*'
+  secondary-artifacts:
+    api:
+      base-directory: api/$LOCATION/target/lambda
+      files:
+        - '**/*'

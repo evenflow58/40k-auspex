@@ -6,13 +6,28 @@ env:
 batch:
   fast-fail: false
   build-graph:
-    - identifier: api
-      buildspec: infrastructure/pipeline/api-build.yaml
+    # - identifier: api
+    #   buildspec: infrastructure/pipeline/api-build.yaml
+    #   ignore-failure: false
+    #   debug-session: true
+    - identifier: authorizer
+      buildspec: infrastructure/pipeline/endpoints-build.yaml
       ignore-failure: false
       debug-session: true
+      env:
+        variables:
+          LOCATION: authorizer
+    - identifier: v1
+      buildspec: infrastructure/pipeline/endpoints-build.yaml
+      ignore-failure: false
+      debug-session: true
+      env:
+        variables:
+          LOCATION: v1
     - identifier: all
       buildspec: infrastructure/pipeline/project-build.yaml
       ignore-failure: false
       debug-session: true
       depend-on:
-        - api
+        - authorizer
+        - v1

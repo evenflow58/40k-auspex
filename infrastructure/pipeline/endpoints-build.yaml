@@ -34,6 +34,6 @@ artifacts:
     - '*'
   secondary-artifacts:
     api:
-      base-directory: api/$LOCATION/target/lambda
+      base-directory: api
       files:
         - '**/*'

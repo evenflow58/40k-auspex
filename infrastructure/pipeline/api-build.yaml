@@ -20,6 +20,9 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
+      - echo "installing base packages"
+      - npm i
+
       - echo "navigating to $LOCATION"
       - echo $LOCATION
       - cd api/$LOCATION
@@ -33,9 +36,6 @@ phases:
       - pip3 install cargo-lambda
   build:
     commands:
-      - echo "navigating to $LOCATION"
-      - cd api/$LOCATION
-
       - echo "building $LOCATION"
       - npm run build
 

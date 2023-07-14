@@ -48,6 +48,7 @@ phases:
       - pip3 install cargo-lambda
   build:
     commands:
+      - pwd
       - echo "navigating to $LOCATION"
       - cd api/$LOCATION
       - pwd

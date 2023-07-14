@@ -1,9 +1,13 @@
 version: 0.2
 
+env:
+  shell: bash
+
 batch: 
   build-list:
     - identifier: authorizer
       env:
+        shell: bash
         variables:
           LOCATION: authorizer
       ignore-failure: false
@@ -34,8 +38,6 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
-      - printenv
-      - echo $LOCATION
       - echo "installing base packages"
       - npm i
 
@@ -48,6 +50,7 @@ phases:
       - pip3 install cargo-lambda
   build:
     commands:
+      - printenv
       - pwd
       - echo "navigating to ${LOCATION}"
       - cd ${LOCATION}

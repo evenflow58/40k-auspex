@@ -3,47 +3,18 @@ version: 0.2
 env:
   shell: bash
 
-phases:
-  install:
-    runtime-versions:
-      nodejs: 16
-    commands:
-      - echo "installing base packages"
-      - npm i
-
-      - echo "installing packages"
-      - npm run install-all
-
-      - echo "installing rust dependencies"
-      - curl https://sh.rustup.rs -sSf | bash -s -- -y
-      - source $HOME/.cargo/env
-      - pip3 install cargo-lambda
-  build:
-    commands:
-      - echo "building packages"
-      - npm run build-all
-
-      - echo "packaging packages"
-      - npm run package-all
-
-artifacts:
-  files:
-    - '*'
-  secondary-artifacts:
-    # uiBuildOutput:
-    #   base-directory: ui/build
-    #   files:
-    #     - '**/*'
-    lambdaEdgeBuildOutput:
-      base-directory: infrastructure/url
-      files:
-        - '**/*'
-    apiGatewayBuildOutput:
-      base-directory: infrastructure/apiGateway
-      files:
-        - '**/*'
-    apiGatewayDeploymentBuildOutput:
-      base-directory: infrastructure/apiGatewayDeployment
-      files:
-        - '**/*'
-    
+batch:
+  fast-fail: true
+  build-graph:
+    - identifer: authorizer
+      base-directory: api/authorizer
+      buildspec: buildspec-build.yaml
+    - identifer: v1
+      base-directory: api/v1
+      buildspec: buildspec-build.yaml
+    - identifer: v2
+      base-directory: api/v2
+      buildspec: buildspec-build.yaml
+    - identifer: all
+      base-directory: infrastructure
+      buildspec: buildspec-build.yaml

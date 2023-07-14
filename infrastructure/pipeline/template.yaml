@@ -34,28 +34,6 @@ Resources:
       Source:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
-            #         BranchName: !Ref GitHubBranch
-
-Resources:
-  BuildRunner:
-    Type: AWS::CodeBuild::Project
-    Properties:
-      Name: !Sub ${AWS::StackName}-BuildRunner
-      Artifacts:
-        Type: CODEPIPELINE
-      Environment:
-        ComputeType: BUILD_GENERAL1_MEDIUM
-        Image: aws/codebuild/standard:6.0
-        Type: LINUX_CONTAINER
-        EnvironmentVariables:
-          - Name: BUILD_OUTPUT_BUCKET
-            Value: !ImportValue ArtifactBucketId
-          - Name: S3_BUCKET
-            Value: !ImportValue ArtifactBucketId
-      ServiceRole: !ImportValue BuildExecutionRoleArn
-      Source:
-        Type: CODEPIPELINE
-        BuildSpec: infrastructure/pipeline/buildspec-build.yaml
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline

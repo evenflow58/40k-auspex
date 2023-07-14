@@ -2,17 +2,29 @@ version: 0.2
 
 env:
   shell: bash
+
+build-matrix:
+  static:
+    env:
+      type: LINUX_CONTAINER
+  dynamic:
+    env:
+      variables:
+        LOCATION:
+          - authorizer
+          - v1
+          -v2
   
 phases:
   install:
     runtime-versions:
       nodejs: 16
     commands:
+      - echo "navigating to $LOCATION"
+      - cd $LOCATION
+
       - echo "installing base packages"
       - npm i
-
-      - echo "installing packages"
-      - npm run install-all
 
       - echo "installing rust dependencies"
       - curl https://sh.rustup.rs -sSf | bash -s -- -y
@@ -20,8 +32,8 @@ phases:
       - pip3 install cargo-lambda
   build:
     commands:
-      - echo "building v2"
+      - echo "building $LOCATION"
       - npm run build
 
-      - echo "packaging v2 packages"
+      - echo "packaging $LOCATION packages"
       - npm run package

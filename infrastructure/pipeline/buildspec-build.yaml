@@ -4,16 +4,10 @@ env:
   shell: bash
 
 batch:
-  fast-fail: true
+  fast-fail: false
   build-graph:
-    - identifer: authorizer
-      base-directory: api/authorizer
-      buildspec: buildspec-build.yaml
-    - identifer: v1
-      base-directory: api/v1
-      buildspec: buildspec-build.yaml
-    - identifer: v2
-      base-directory: api/v2
+    - identifer: api
+      base-directory: api
       buildspec: buildspec-build.yaml
     - identifer: all
       base-directory: infrastructure

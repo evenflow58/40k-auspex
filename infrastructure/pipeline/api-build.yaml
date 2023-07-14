@@ -2,18 +2,18 @@ version: 0.2
 
 env:
   shell: bash
-
-build-matrix:
-  static:
-    env:
-      type: LINUX_CONTAINER
-  dynamic:
-    env:
-      variables:
-        LOCATION:
-          - authorizer
-          - v1
-          - v2
+batch: 
+  build-matrix:
+    static:
+      env:
+        type: LINUX_CONTAINER
+    dynamic:
+      env:
+        variables:
+          LOCATION:
+            - authorizer
+            - v1
+            - v2
   
 phases:
   install:

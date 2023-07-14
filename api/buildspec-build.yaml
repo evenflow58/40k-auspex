@@ -13,7 +13,7 @@ build-matrix:
         LOCATION:
           - authorizer
           - v1
-          -v2
+          - v2
   
 phases:
   install:

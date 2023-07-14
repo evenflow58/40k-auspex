@@ -7,8 +7,9 @@ batch:
   fast-fail: false
   build-graph:
     - identifer: api
-      base-directory: api
-      buildspec: buildspec-build.yaml
+      buildspec: api/buildspec-build.yaml
+      debug-session: true
     - identifer: all
-      base-directory: infrastructure
-      buildspec: buildspec-build.yaml
+      buildspec: ./buildspec-build.yaml
+      depend-on:
+        - api

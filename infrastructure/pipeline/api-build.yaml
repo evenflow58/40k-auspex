@@ -36,7 +36,7 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
-      - printenv > .env
+      - printenv
       - echo $LOCATION
       - echo "installing base packages"
       - npm i

@@ -50,7 +50,7 @@ phases:
     commands:
       - pwd
       - echo "navigating to $LOCATION"
-      - cd api/$LOCATION
+      - cd $LOCATION
       - pwd
 
       - echo "building $LOCATION"

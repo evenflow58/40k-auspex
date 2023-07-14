@@ -76,11 +76,12 @@ Resources:
               Provider: CodeBuild
             Configuration:
               ProjectName: !Ref BuildRunner
+              BatchEnabled: true
             InputArtifacts:
               - Name: SourceCode
             OutputArtifacts:
               # - Name: uiBuildOutput
-              - Name: lambdaEdgeBuildOutput
+              # - Name: lambdaEdgeBuildOutput
               - Name: apiGatewayBuildOutput
               - Name: apiGatewayDeploymentBuildOutput
             RunOrder: 1

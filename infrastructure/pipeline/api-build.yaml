@@ -49,12 +49,12 @@ phases:
   build:
     commands:
       - pwd
-      - echo "navigating to $LOCATION"
-      - cd $LOCATION
+      - echo "navigating to ${LOCATION}"
+      - cd ${LOCATION}
       - pwd
 
-      - echo "building $LOCATION"
+      - echo "building ${LOCATION}"
       - npm run build
 
-      - echo "packaging $LOCATION packages"
+      - echo "packaging ${LOCATION} packages"
       - npm run package

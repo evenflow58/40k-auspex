@@ -20,11 +20,8 @@ phases:
       - pip3 install cargo-lambda
   build:
     commands:
-      - printenv
-      - pwd
       - echo "navigating to $LOCATION"
       - cd ./$LOCATION
-      - pwd
 
       - echo "building $LOCATION"
       - npm run build

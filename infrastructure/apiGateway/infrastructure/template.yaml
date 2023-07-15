@@ -12,17 +12,13 @@ Resources:
           - REGIONAL
       Name: !Sub ${AWS::StackName}-ApiGateway
 
-  AuthorizerFunction:
-    Type: AWS::ApiGateway::Authorizer
+  Authorizer:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      RestApiId: !Ref ApiGateway
-      Name: GoogleAuthorizer
-      Type: COGNITO_USER_POOLS
-      IdentitySource: method.request.header.Authorization
-      AuthorizerResultTtlInSeconds: 300
-      # ProviderARNs:
-      #   - arn:aws:cognito-idp:us-east-1:625961017727:userpool/us-east-1_Ivg0PFznF
-      # AuthorizerCredentials: '{{resolve:secretsmanager:GoogleCredentials:SecretString:client_id}}'
+      TemplateURL: ../../../api/authorizer/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGateway
+      DependsOn: Authorizer
 
   V1:
     Type: AWS::CloudFormation::Stack
@@ -31,7 +27,8 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
-        AuthorizerId: !Ref AuthorizerFunction
+        AuthorizerId: !ImportValue ApiAuthorizerId
+      DependsOn: Authorizer
 
   V2:
     Type: AWS::CloudFormation::Stack
@@ -40,6 +37,7 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
+        AuthorizerId: !ImportValue ApiAuthorizerId
 
 Outputs:
   ApiGatewayId:

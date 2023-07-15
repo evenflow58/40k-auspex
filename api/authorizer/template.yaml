@@ -18,7 +18,6 @@ Resources:
       Runtime: provided.al2
       Timeout: 5
       CodeUri: target/lambda/authorizer
-      # Role: !GetAtt LambdaRole.Arn
 
   ApiGatewayAuthorizer:
     Type: AWS::ApiGateway::Authorizer

@@ -33,6 +33,6 @@ artifacts:
   files:
     - '*'
   secondary-artifacts:
-    output:
+    buildOutput:
       files:
         - '**/*'

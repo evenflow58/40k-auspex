@@ -31,10 +31,8 @@ phases:
 
 artifacts:
   files:
-    - '**/*'
-    # - '*'
-  # secondary-artifacts:
-  #   api:
-  #     base-directory: api
-  #     files:
-  #       - '**/*'
+    - '*'
+  secondary-artifacts:
+    output:
+      files:
+        - '**/*'

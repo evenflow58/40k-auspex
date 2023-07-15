@@ -36,4 +36,5 @@ artifacts:
     buildOutput:
       base-directory: api/$LOCATION
       files:
-        - '**/*'
+        - 'target/**/*'
+        - 'template.package.yaml'

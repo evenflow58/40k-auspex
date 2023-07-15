@@ -34,9 +34,9 @@ Resources:
       Source:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
-      BuildBatchConfig:
-        CombineArtifacts: true
-        ServiceRole: !ImportValue BuildExecutionRoleArn
+      # BuildBatchConfig:
+      #   CombineArtifacts: true
+      #   ServiceRole: !ImportValue BuildExecutionRoleArn
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -76,16 +76,16 @@ Resources:
               Provider: CodeBuild
             Configuration:
               ProjectName: !Ref BuildRunner
-              BatchEnabled: true
+              # BatchEnabled: true
             InputArtifacts:
               - Name: SourceCode
             OutputArtifacts:
-              - Name: authorizer_buildOutput
-              - Name: v1_buildOutput
-            #   - Name: uiBuildOutput
-            #   - Name: lambdaEdgeBuildOutput
-            #   - Name: apiGatewayBuildOutput
-            #   - Name: apiGatewayDeploymentBuildOutput
+              # - Name: authorizer_buildOutput
+              # - Name: v1_buildOutput
+              - Name: uiBuildOutput
+              # - Name: lambdaEdgeBuildOutput
+              - Name: apiGatewayBuildOutput
+              - Name: apiGatewayDeploymentBuildOutput
             RunOrder: 1
         # - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
         #   Actions:

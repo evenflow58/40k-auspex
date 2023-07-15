@@ -5,7 +5,7 @@ env:
 
 batch:
   fast-fail: false
-  build-graph:
+  build-list:
     - identifier: authorizer
       buildspec: infrastructure/pipeline/endpoints-build.yaml
       ignore-failure: false
@@ -24,9 +24,6 @@ batch:
       buildspec: infrastructure/pipeline/project-build.yaml
       ignore-failure: false
       debug-session: true
-      depend-on:
-        - authorizer
-        - v1
 
 # artifacts:
 #   files:

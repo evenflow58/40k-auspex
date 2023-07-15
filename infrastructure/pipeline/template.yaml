@@ -35,7 +35,7 @@ Resources:
         Type: CODEPIPELINE
         BuildSpec: infrastructure/pipeline/buildspec-build.yaml
       BuildBatchConfig:
-        CombineArtifacts: false
+        CombineArtifacts: true
         ServiceRole: !ImportValue BuildExecutionRoleArn
 
   Pipeline:
@@ -79,7 +79,8 @@ Resources:
               BatchEnabled: true
             InputArtifacts:
               - Name: SourceCode
-            # OutputArtifacts:
+            OutputArtifacts:
+              - Name: buildOutput
             #   - Name: uiBuildOutput
             #   - Name: lambdaEdgeBuildOutput
             #   - Name: apiGatewayBuildOutput

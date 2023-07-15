@@ -34,5 +34,6 @@ artifacts:
     - '*'
   secondary-artifacts:
     buildOutput:
+      base-directory: api/$LOCATION
       files:
         - '**/*'

@@ -1,20 +1,12 @@
 version: 0.2
 
 phases:
-  # install:
-  #   runtime-versions:
-  #     nodejs: 16
-  #   commands:
-  #     - echo "installing base packages"
-  #     - npm i
-
-  #     - echo "installing packages"
-  #     - npm run install-all
-
-  #     - echo "installing rust dependencies"
-  #     - curl https://sh.rustup.rs -sSf | bash -s -- -y
-  #     - source $HOME/.cargo/env
-  #     - pip3 install cargo-lambda
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - echo "installing base packages"
+      - npm i
   build:
     commands:
       - echo "packaging packages"

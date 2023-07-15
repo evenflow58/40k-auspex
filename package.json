@@ -12,15 +12,16 @@
   "scripts": {
     "lint-all": "prettier --check packages/**/**/*.ts && prettier --check packages/**/**/*.json",
     "install-all": "npm-run-all --parallel install:* && cd ../",
-    "install:edge": "cd infrastructure/url && npm i",
+    "install:ui": "cd ui && npm i",
     "build-all": "npm-run-all --parallel build:* && cd ../",
     "build:api": "cd api && npm run build",
-    "build:edge": "cd infrastructure/url && npm run build",
+    "build:ui": "cd ui && npm run build",
     "test-all": "npm-run-all --parallel test:*",
     "package-all": "npm-run-all --parallel package:*",
     "package:api": "cd api && npm run package",
     "package:api-gateway": "cd infrastructure/apiGateway && npm run package",
-    "package:api-gateway-deployment": "cd infrastructure/apiGatewayDeployment && npm run package"
+    "package:api-gateway-deployment": "cd infrastructure/apiGatewayDeployment && npm run package",
+    "package:edge": "cd infrastructure/url && npm run package"
   },
   "repository": {
     "type": "git",

@@ -31,3 +31,11 @@ batch:
     #   depend-on:
     #     - authorizer
     #     - v1
+
+  artifacts:
+  files:
+    - '*'
+  secondary-artifacts:
+    all:
+      files:
+        - '**/*'

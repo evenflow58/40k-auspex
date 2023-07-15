@@ -27,8 +27,7 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
-        AuthorizerId: !ImportValue ApiAuthorizerId
-      DependsOn: Authorizer
+        AuthorizerId: !GetAtt Authorizer.Outputs.ApiAuthorizerId
 
   V2:
     Type: AWS::CloudFormation::Stack
@@ -37,7 +36,7 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
-        AuthorizerId: !ImportValue ApiAuthorizerId
+        AuthorizerId: !GetAtt Authorizer.Outputs.ApiAuthorizerId
 
 Outputs:
   ApiGatewayId:

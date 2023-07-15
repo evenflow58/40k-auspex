@@ -1,14 +1,10 @@
 version: 0.2
 
-# env:
-#   shell: bash
-
 batch: 
-  build-list:
+  build-graph:
     - identifier: authorizer
       buildspec: infrastructure/pipeline/endpoints-build.yaml
       env:
-        # shell: bash
         variables:
           LOCATION: authorizer
       ignore-failure: false
@@ -24,14 +20,3 @@ batch:
         variables:
           LOCATION: v2
       ignore-failure: false
-  # build-matrix:
-  #   static:
-  #     env:
-  #       type: LINUX_CONTAINER
-  #   dynamic:
-  #     env:
-  #       variables:
-  #         LOCATION:
-  #           - authorizer
-  #           - v1
-  #           - v2

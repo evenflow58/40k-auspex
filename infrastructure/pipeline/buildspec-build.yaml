@@ -32,10 +32,11 @@ batch:
     #     - authorizer
     #     - v1
 
-  artifacts:
+artifacts:
   files:
-    - '*'
-  secondary-artifacts:
-    buildOutput:
-      files:
-        - '**/*'
+    - '**/*'
+    # - '*'
+  # secondary-artifacts:
+  #   buildOutput:
+  #     files:
+  #       - '**/*'

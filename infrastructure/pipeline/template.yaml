@@ -80,7 +80,8 @@ Resources:
             InputArtifacts:
               - Name: SourceCode
             OutputArtifacts:
-              - Name: buildOutput
+              - Name: authorizer_buildOutput
+              - Name: v1_buildOutput
             #   - Name: uiBuildOutput
             #   - Name: lambdaEdgeBuildOutput
             #   - Name: apiGatewayBuildOutput

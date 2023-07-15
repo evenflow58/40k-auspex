@@ -7,12 +7,13 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"package:sam": " sam package --s3-bucket $S3_BUCKET"
+		"package": " sam package --s3-bucket $S3_BUCKET"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-static": "^2.0.2",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/cookie": "^0.5.1",
 		"svelte": "^4.0.5",

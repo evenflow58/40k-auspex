@@ -21,7 +21,8 @@
     "package:api": "cd api && npm run package",
     "package:api-gateway": "cd infrastructure/apiGateway && npm run package",
     "package:api-gateway-deployment": "cd infrastructure/apiGatewayDeployment && npm run package",
-    "package:edge": "cd infrastructure/url && npm run package"
+    "package:edge": "cd infrastructure/url && npm run package",
+    "package:ui": "cd ui && npm run package"
   },
   "repository": {
     "type": "git",

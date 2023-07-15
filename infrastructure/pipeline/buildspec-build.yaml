@@ -3,35 +3,84 @@ version: 0.2
 env:
   shell: bash
 
-batch:
-  fast-fail: false
-  build-graph:
-    - identifier: authorizer
-      buildspec: infrastructure/pipeline/endpoints-build.yaml
-      ignore-failure: false
-      debug-session: true
-      env:
-        variables:
-          LOCATION: authorizer
-    # - identifier: v1
-    #   buildspec: infrastructure/pipeline/endpoints-build.yaml
-    #   ignore-failure: false
-    #   debug-session: true
-    #   env:
-    #     variables:
-    #       LOCATION: v1
-    - identifier: all
-      buildspec: infrastructure/pipeline/project-build.yaml
-      ignore-failure: false
-      debug-session: true
-      depend-on:
-        - authorizer
-        # - v1
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - echo "installing base packages"
+      - npm i
 
-# artifacts:
-#   files:
-#     - '*'
-#   secondary-artifacts:
-#     buildOutput:
-#       files:
-#         - '**/*'
+      - echo "installing packages"
+      - npm run install-all
+
+      - echo "installing rust dependencies"
+      - curl https://sh.rustup.rs -sSf | bash -s -- -y
+      - source $HOME/.cargo/env
+      - pip3 install cargo-lambda
+  build:
+    commands:
+      - echo "building packages"
+      - npm run build-all
+
+      - echo "packaging packages"
+      - npm run package-all
+
+artifacts:
+  files:
+    - '*'
+  secondary-artifacts:
+    uiBuildOutput:
+      base-directory: ui/build
+      files:
+        - '**/*'
+    lambdaEdgeBuildOutput:
+      base-directory: infrastructure/url
+      files:
+        - '**/*'
+    apiGatewayBuildOutput:
+      base-directory: infrastructure/apiGateway
+      files:
+        - '**/*'
+    apiGatewayDeploymentBuildOutput:
+      base-directory: infrastructure/apiGatewayDeployment
+      files:
+        - '**/*'
+        
+# version: 0.2
+
+# env:
+#   shell: bash
+
+# batch:
+#   fast-fail: false
+#   build-graph:
+#     - identifier: authorizer
+#       buildspec: infrastructure/pipeline/endpoints-build.yaml
+#       ignore-failure: false
+#       debug-session: true
+#       env:
+#         variables:
+#           LOCATION: authorizer
+#     # - identifier: v1
+#     #   buildspec: infrastructure/pipeline/endpoints-build.yaml
+#     #   ignore-failure: false
+#     #   debug-session: true
+#     #   env:
+#     #     variables:
+#     #       LOCATION: v1
+#     - identifier: all
+#       buildspec: infrastructure/pipeline/project-build.yaml
+#       ignore-failure: false
+#       debug-session: true
+#       depend-on:
+#         - authorizer
+#         # - v1
+
+# # artifacts:
+# #   files:
+# #     - '*'
+# #   secondary-artifacts:
+# #     buildOutput:
+# #       files:
+# #         - '**/*'

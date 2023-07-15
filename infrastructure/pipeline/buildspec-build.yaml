@@ -13,20 +13,20 @@ batch:
       env:
         variables:
           LOCATION: authorizer
-    - identifier: v1
-      buildspec: infrastructure/pipeline/endpoints-build.yaml
-      ignore-failure: false
-      debug-session: true
-      env:
-        variables:
-          LOCATION: v1
+    # - identifier: v1
+    #   buildspec: infrastructure/pipeline/endpoints-build.yaml
+    #   ignore-failure: false
+    #   debug-session: true
+    #   env:
+    #     variables:
+    #       LOCATION: v1
     - identifier: all
       buildspec: infrastructure/pipeline/project-build.yaml
       ignore-failure: false
       debug-session: true
       depend-on:
         - authorizer
-        - v1
+        # - v1
 
 # artifacts:
 #   files:

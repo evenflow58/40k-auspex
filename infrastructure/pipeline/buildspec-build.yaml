@@ -34,9 +34,8 @@ batch:
 
 artifacts:
   files:
-    - '**/*'
-    # - '*'
-  # secondary-artifacts:
-  #   buildOutput:
-  #     files:
-  #       - '**/*'
+    - '*'
+  secondary-artifacts:
+    buildOutput:
+      files:
+        - '**/*'

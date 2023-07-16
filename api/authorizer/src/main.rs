@@ -43,7 +43,7 @@ async fn function_handler(
         .await?;
 
     info!("Google res {:#?}", res);
-    info!("Google response {:#?}", res.text().await?);
+    info!("Google response {:#?}", res.json::<GoogleAuthResponse>().await?);
 
     // let method_arn_array: Vec<&str> = event.payload.method_arn.split(":").collect();
     // let api_gateway_arn_tmp: Vec<&str> = method_arn_array[5].split("/").collect();
@@ -101,16 +101,21 @@ async fn main() -> Result<(), Error> {
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
 struct GoogleAuthResponse {
-    aud: String,
-    exp: i64,
-    iat: i64,
     iss: String,
+    nbf: String,
+    aud: String,
     sub: String,
     email: String,
     email_verified: String,
+    azp: String,
     name: String,
     picture: String,
     given_name: String,
     family_name: String,
-    locale: String,
+    iat: String,
+    exp: String,
+    jti: String,
+    alg: String,
+    kid: String,
+    typ: String,
 }

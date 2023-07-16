@@ -9,7 +9,7 @@ Parameters:
 
 Resources:
   GatewayAuthorizerLambda:
-    Type: AWS::Lambda::Function
+    Type: AWS::Serverless::Function
     Properties:
       FunctionName: GatewayAuthorizer
       MemorySize: 128
@@ -18,7 +18,7 @@ Resources:
       Runtime: provided.al2
       Timeout: 5
       CodeUri: target/lambda/authorizer
-      Role: !Ref ApiRole
+      Role: !GetAtt LambdaRole.Arn
 
   ApiGatewayAuthorizer:
     Type: AWS::ApiGateway::Authorizer
@@ -30,7 +30,7 @@ Resources:
       AuthorizerUri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GatewayAuthorizerLambda.Arn}/invocations
       AuthorizerResultTtlInSeconds: 3600
 
-  ApiRole:
+  LambdaRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -40,24 +40,20 @@ Resources:
             Effect: "Allow"
             Principal:
               Service:
-                - apigateway.amazonaws.com
+                - lambda.amazonaws.com
             Action:
               - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
 
-  ApiPolicy:
-    Type: AWS::IAM::Policy
+  Permission:
+    Type: AWS::Lambda::Permission
     Properties:
-      PolicyName: "AuthorizerLmabdaAccess"
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action: "lambda:*"
-            Resource: !GetAtt GatewayAuthorizerLambda.Arn
-      Roles:
-        - !Ref ApiRole
-      
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref GatewayAuthorizerLambda
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 
 Outputs:
   ApiAuthorizerId:

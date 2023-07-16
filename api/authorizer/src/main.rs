@@ -37,12 +37,13 @@ async fn function_handler(
             "https://oauth2.googleapis.com/tokeninfo?id_token={}",
             event.payload.authorization_token
         ))
-        .await?
-        .json()
+        // .await?
+        // .json()
         // .json::<GoogleAuthResponse>()
         .await?;
 
-    info!("Google response {:#?}", res);
+    info!("Google res {:#?}", res);
+    info!("Google response {:#?}", res.json().await?);
 
     // let method_arn_array: Vec<&str> = event.payload.method_arn.split(":").collect();
     // let api_gateway_arn_tmp: Vec<&str> = method_arn_array[5].split("/").collect();

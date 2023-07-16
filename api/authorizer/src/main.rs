@@ -43,7 +43,7 @@ async fn function_handler(
         .await?;
 
     info!("Google res {:#?}", res);
-    info!("Google response {:#?}", res.json().await?);
+    info!("Google response {:#?}", res.text().await?);
 
     // let method_arn_array: Vec<&str> = event.payload.method_arn.split(":").collect();
     // let api_gateway_arn_tmp: Vec<&str> = method_arn_array[5].split("/").collect();

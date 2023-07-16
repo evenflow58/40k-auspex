@@ -39,7 +39,7 @@ Resources:
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
       HttpMethod: GET
-      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizationType: CUSTOM
       AuthorizerId: !Ref AuthorizerId
       MethodResponses:
         - StatusCode: 200

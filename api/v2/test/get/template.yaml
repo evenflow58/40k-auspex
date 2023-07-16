@@ -9,6 +9,9 @@ Parameters:
   RootResourceId:
     Type: String
     Description: The ID of the root resource of the api gateway
+  AuthorizerId:
+    Type: String
+    Description: The ID of the authorizer
 
 Resources:
   Function:
@@ -36,7 +39,8 @@ Resources:
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
       HttpMethod: GET
-      AuthorizationType: NONE
+      AuthorizationType: CUSTOM
+      AuthorizerId: !Ref AuthorizerId
       MethodResponses:
         - StatusCode: 200
       Integration:

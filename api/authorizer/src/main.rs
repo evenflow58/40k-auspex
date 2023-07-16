@@ -18,7 +18,7 @@ struct APIGatewayCustomAuthorizerRequest {
     method_arn: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct APIGatewayCustomAuthorizerResponse {
     principal_id: String,
@@ -94,7 +94,7 @@ async fn main() -> Result<(), Error> {
 }
 
 // Create a struct for the Google auth response
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
 struct GoogleAuthResponse {
     aud: String,

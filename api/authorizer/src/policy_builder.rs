@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
+use std::fmt::{Debug};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
 pub struct APIGatewayCustomAuthorizerPolicy {
     Version: String,
@@ -9,7 +10,7 @@ pub struct APIGatewayCustomAuthorizerPolicy {
 
 static POLICY_VERSION: &str = "2012-10-17"; // override if necessary
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum Method {
     #[serde(rename = "GET")]
     Get,
@@ -29,13 +30,13 @@ pub enum Method {
     All,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum Effect {
     Allow,
     Deny,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
 struct IAMPolicyStatement {
     Action: Vec<String>,
@@ -43,6 +44,7 @@ struct IAMPolicyStatement {
     Resource: Vec<String>,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct PolicyBuilder {
     region: String,
     aws_account_id: String,

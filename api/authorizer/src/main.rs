@@ -38,8 +38,8 @@ async fn function_handler(
             event.payload.authorization_token
         ))
         .await?
-        .json::<GoogleAuthResponse>()
-        .await?;
+        // .json::<GoogleAuthResponse>()
+        // .await?;
 
     info!("Google response {:#?}", res);
 

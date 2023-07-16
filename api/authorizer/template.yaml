@@ -18,6 +18,7 @@ Resources:
       Runtime: provided.al2
       Timeout: 5
       CodeUri: target/lambda/authorizer
+      Role: !Ref ApiRole
 
   ApiGatewayAuthorizer:
     Type: AWS::ApiGateway::Authorizer
@@ -28,6 +29,35 @@ Resources:
       IdentitySource: method.request.header.Authorization
       AuthorizerUri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GatewayAuthorizerLambda.Arn}/invocations
       AuthorizerResultTtlInSeconds: 3600
+
+  ApiRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ""
+            Effect: "Allow"
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+  ApiPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "AuthorizerLmabdaAccess"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "lambda:*"
+            Resource: !GetAtt GatewayAuthorizerLambda.Arn
+      Roles:
+        - !Ref ApiRole
+      
 
 Outputs:
   ApiAuthorizerId:

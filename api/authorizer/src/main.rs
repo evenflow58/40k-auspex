@@ -37,9 +37,10 @@ async fn function_handler(
             "https://oauth2.googleapis.com/tokeninfo?id_token={}",
             event.payload.authorization_token
         ))
-        .await?;
+        .await?
+        .json()
         // .json::<GoogleAuthResponse>()
-        // .await?;
+        .await?;
 
     info!("Google response {:#?}", res);
 

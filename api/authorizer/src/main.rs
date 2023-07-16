@@ -1,8 +1,8 @@
 #![allow(dead_code)]
 
 use serde_derive::{Deserialize, Serialize};
-use log::info;
 use serde_json::json;
+use log::info;
 use lambda_runtime::{run, service_fn, LambdaEvent, Error};
 use reqwest;
 
@@ -103,7 +103,7 @@ struct GoogleAuthResponse {
     iss: String,
     sub: String,
     email: String,
-    email_verified: bool,
+    email_verified: String,
     name: String,
     picture: String,
     given_name: String,

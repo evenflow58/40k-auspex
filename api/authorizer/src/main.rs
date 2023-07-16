@@ -37,58 +37,52 @@ async fn function_handler(
             "https://oauth2.googleapis.com/tokeninfo?id_token={}",
             event.payload.authorization_token
         ))
-        // .await?
-        // .json()
-        // .json::<GoogleAuthResponse>()
+        .await?
+        .json::<GoogleAuthResponse>()
         .await?;
 
-    info!("Google res {:#?}", res);
-    info!("Google response {:#?}", res.json::<GoogleAuthResponse>().await?);
+    let method_arn_array: Vec<&str> = event.payload.method_arn.split(":").collect();
+    let api_gateway_arn_tmp: Vec<&str> = method_arn_array[5].split("/").collect();
 
-    // let method_arn_array: Vec<&str> = event.payload.method_arn.split(":").collect();
-    // let api_gateway_arn_tmp: Vec<&str> = method_arn_array[5].split("/").collect();
+    let policy_builder = PolicyBuilder::new(
+        method_arn_array[3],
+        method_arn_array[4],
+        api_gateway_arn_tmp[0],
+        api_gateway_arn_tmp[1],
+    );
 
-    // let policy_builder = PolicyBuilder::new(
-    //     method_arn_array[3],
-    //     method_arn_array[4],
-    //     api_gateway_arn_tmp[0],
-    //     api_gateway_arn_tmp[1],
-    // );
+    info!("policy_builder: {:#?}", policy_builder);
 
-    // info!("policy_builder: {:#?}", policy_builder);
+    // Make sure the aud is 181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com
+    // and the iss is https://accounts.google.com
+    if res.aud == "181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com"
+        && res.iss == "https://accounts.google.com"
+    {
+        let response = APIGatewayCustomAuthorizerResponse {
+            principal_id: res.sub,
+            policy_document: policy_builder.allow_all_methods().build(),
+            context: json!({
+                "email": res.email,
+                "email_verified": res.email_verified,
+                "name": res.name,
+                "picture": res.picture,
+                "given_name": res.given_name,
+                "family_name": res.family_name,
+                "locale": res.locale,
+            }),
+        };
 
-    // // Make sure the aud is 181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com
-    // // and the iss is https://accounts.google.com
-    // if res.aud == "181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com"
-    //     && res.iss == "https://accounts.google.com"
-    // {
-    //     let response = APIGatewayCustomAuthorizerResponse {
-    //         principal_id: res.sub,
-    //         policy_document: policy_builder.allow_all_methods().build(),
-    //         context: json!({
-    //             "email": res.email,
-    //             "email_verified": res.email_verified,
-    //             "name": res.name,
-    //             "picture": res.picture,
-    //             "given_name": res.given_name,
-    //             "family_name": res.family_name,
-    //             "locale": res.locale,
-    //         }),
-    //     };
+        info!("Positive response being sent {:#?}", response);
+        return Ok(response);
+    }
 
-    //     info!("Positive response being sent {:#?}", response);
-    //     return Ok(response);
-    // }
-
-    // let response = APIGatewayCustomAuthorizerResponse {
-    //     principal_id: "".to_string(),
-    //     policy_document: policy_builder.deny_all_methods().build(),
-    //     context: json!({}),
-    // };
-    // info!("Negative response being sent {:#?}", response);
-    // return Ok(response);
-
-    panic!("Ooops");
+    let response = APIGatewayCustomAuthorizerResponse {
+        principal_id: "".to_string(),
+        policy_document: policy_builder.deny_all_methods().build(),
+        context: json!({}),
+    };
+    info!("Negative response being sent {:#?}", response);
+    return Ok(response);
 }
 
 #[tokio::main]

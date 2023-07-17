@@ -10,6 +10,8 @@ Parameters:
 Resources:
   GatewayAuthorizerLambda:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: rust-cargolambda
     Properties:
       FunctionName: GatewayAuthorizer
       MemorySize: 128
@@ -17,7 +19,7 @@ Resources:
       Handler: bootstrap
       Runtime: provided.al2
       Timeout: 5
-      CodeUri: target/lambda/authorizer
+      CodeUri: ./
       Role: !GetAtt LambdaRole.Arn
 
   ApiGatewayAuthorizer:

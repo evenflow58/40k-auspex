@@ -33,10 +33,10 @@ async fn function_handler(
 
     // Make a get request to https://oauth2.googleapis.com/tokeninfo?id_token={token}
     // to validate the token. This should return a GoogleAuthResponse struct.
-    let res = reqwest::get(&format!(
-            "https://oauth2.googleapis.com/tokeninfo?id_token={}",
-            event.payload.authorization_token
-        ))
+    let client = reqwest::Client::new();
+    let res = client.get("https://oauth2.googleapis.com/tokeninfo")
+        .query(&[("id_token", event.payload.authorization_token)])
+        .send()
         .await?
         .json::<GoogleAuthResponse>()
         .await?;

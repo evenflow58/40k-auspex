@@ -68,7 +68,6 @@ async fn function_handler(
                 "picture": res.picture,
                 "given_name": res.given_name,
                 "family_name": res.family_name,
-                "locale": res.locale,
             }),
         };
 

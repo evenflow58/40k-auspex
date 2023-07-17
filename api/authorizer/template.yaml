@@ -19,7 +19,7 @@ Resources:
       Handler: bootstrap
       Runtime: provided.al2
       Timeout: 5
-      CodeUri: ./
+      CodeUri: ./rust_app
       Role: !GetAtt LambdaRole.Arn
 
   ApiGatewayAuthorizer:

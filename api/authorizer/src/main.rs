@@ -29,7 +29,7 @@ struct APIGatewayCustomAuthorizerResponse {
 async fn function_handler(
     event: LambdaEvent<APIGatewayCustomAuthorizerRequest>
 ) -> Result<APIGatewayCustomAuthorizerResponse, Error> {
-    info!("Event: {:#?}", event);
+    info!("Event: {:?}", event);
 
     // Make a get request to https://oauth2.googleapis.com/tokeninfo?id_token={token}
     // to validate the token. This should return a GoogleAuthResponse struct.

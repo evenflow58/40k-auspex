@@ -87,8 +87,10 @@ impl PolicyBuilder {
             &self.aws_account_id,
             &self.rest_api_id,
             &self.stage,
-            serde_json::to_string(&method).unwrap(),
-            resource.into().trim_start_matches("/")
+            "*",
+            "*"
+            // serde_json::to_string(&method).unwrap(),
+            // resource.into().trim_start_matches("/")
         );
 
         let stmt = IAMPolicyStatement {

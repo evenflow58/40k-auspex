@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug};
+use log::info;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
@@ -72,12 +73,14 @@ impl PolicyBuilder {
         }
     }
 
-    pub fn add_method<T: Into<String>>(
+    pub fn add_method<T: Into<String> + std::fmt::Debug>(
         mut self,
         effect: Effect,
         method: Method,
         resource: T,
     ) -> Self {
+        info!("method: {:?}", method);
+        info!("resource: {:?}", resource);
         let resource_arn = format!(
             "arn:aws:execute-api:{}:{}:{}/{}/{}/{}",
             &self.region,

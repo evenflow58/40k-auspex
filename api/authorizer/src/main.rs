@@ -51,8 +51,6 @@ async fn function_handler(
         api_gateway_arn_tmp[1],
     );
 
-    info!("policy_builder: {:#?}", policy_builder);
-
     // Make sure the aud is 181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com
     // and the iss is https://accounts.google.com
     if res.aud == "181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com"

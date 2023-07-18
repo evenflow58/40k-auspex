@@ -21,7 +21,7 @@ Resources:
       Architectures:
         - arm64
       Timeout: 5
-      CodeUri: ./rust_app
+      CodeUri: target/lambda/authorizer
       Role: !GetAtt LambdaRole.Arn
 
   ApiGatewayAuthorizer:

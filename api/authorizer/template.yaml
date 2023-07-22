@@ -25,7 +25,7 @@ Resources:
       Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:
-          GoogleAud: '{{resolve:ssm-secure:GoogleAudience}}'
+          GoogleAud: 'GoogleAudience'
           GoogleIss: https://accounts.google.com
 
   ApiGatewayAuthorizer:
@@ -44,13 +44,16 @@ Resources:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Sid: ""
-            Effect: "Allow"
+          - Effect: "Allow"
             Principal:
               Service:
                 - lambda.amazonaws.com
             Action:
               - sts:AssumeRole
+          - Effect: Allow
+            Action:
+              - ssm:GetParameters
+            Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /

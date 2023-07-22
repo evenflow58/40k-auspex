@@ -5,6 +5,7 @@ use serde_json::json;
 use log::info;
 use envmnt;
 use lambda_runtime::{run, service_fn, LambdaEvent, Error};
+use aws_sdk_ssm;
 use reqwest;
 
 mod policy_builder;
@@ -52,10 +53,24 @@ async fn function_handler(
         api_gateway_arn_tmp[1],
     );
 
-    // Make sure the aud is 181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com
-    // and the iss is https://accounts.google.com
-    if res.aud == envmnt::get_or_panic("GoogleAud")
-        && res.iss == envmnt::get_or_panic("GoogleIss")
+    // Make sure the aud is retrieved from SSM
+    // and the iss is retreived as an ENV VAR
+    let config = ::aws_config::load_from_env().await;
+    let client = aws_sdk_ssm::Client::new(&config);
+    let response = 
+    client
+        .get_parameter()
+        .set_name(Some(envmnt::get_or_panic("GoogleAud")))
+        .with_decryption(false)
+        .send()
+        .await?;
+    let google_audience = response
+        .parameter()
+        .expect("Could not unwarp SSM resposne.")
+        .value()
+        .expect("Value could not be retrieved.");
+
+    if res.aud == google_audience && res.iss == envmnt::get_or_panic("GoogleIss")
     {
         let response = APIGatewayCustomAuthorizerResponse {
             principal_id: res.sub,

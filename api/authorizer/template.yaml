@@ -24,8 +24,9 @@ Resources:
       CodeUri: target/lambda/authorizer
       Role: !GetAtt LambdaRole.Arn
       Environment:
-        GoogleAud: '{{resolve:ssm-secure:GoogleAudience}}'
-        GoogleIss: https://accounts.google.com
+        Variables:
+          GoogleAud: '{{resolve:ssm-secure:GoogleAudience}}'
+          GoogleIss: https://accounts.google.com
 
   ApiGatewayAuthorizer:
     Type: AWS::ApiGateway::Authorizer

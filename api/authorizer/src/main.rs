@@ -61,7 +61,7 @@ async fn function_handler(
     client
         .get_parameter()
         .set_name(Some(envmnt::get_or_panic("GoogleAud")))
-        .with_decryption(false)
+        .with_decryption(true)
         .send()
         .await?;
     let google_audience = response

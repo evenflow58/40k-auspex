@@ -43,6 +43,8 @@ async fn function_handler(
         .json::<GoogleAuthResponse>()
         .await?;
 
+    info!("Received Token Info");
+
     let method_arn_array: Vec<&str> = event.payload.method_arn.split(":").collect();
     let api_gateway_arn_tmp: Vec<&str> = method_arn_array[5].split("/").collect();
 
@@ -53,17 +55,21 @@ async fn function_handler(
         api_gateway_arn_tmp[1],
     );
 
+    info!("Created policy");
+
     // Make sure the aud is retrieved from SSM
     // and the iss is retreived as an ENV VAR
     let config = ::aws_config::load_from_env().await;
     let client = aws_sdk_ssm::Client::new(&config);
-    let response = 
-    client
+    let response = client
         .get_parameter()
         .set_name(Some(envmnt::get_or_panic("GoogleAud")))
         .with_decryption(true)
         .send()
         .await?;
+
+    info!("Retrieved parameter response");
+
     let google_audience = response
         .parameter()
         .expect("Could not unwarp SSM resposne.")

@@ -57,7 +57,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - ssm:GetParameters
+                  - ssm:GetParameter
                 Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole

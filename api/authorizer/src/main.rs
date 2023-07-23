@@ -76,8 +76,6 @@ async fn function_handler(
         .value()
         .expect("Value could not be retrieved.");
 
-    info!("audience: {:?}", google_audience);
-
     if res.aud == google_audience && res.iss == envmnt::get_or_panic("GoogleIss")
     {
         let response = APIGatewayCustomAuthorizerResponse {

@@ -16,13 +16,15 @@ Parameters:
 Resources:
   Function:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: rust-cargolambda
     Properties:
       MemorySize: 128
       Architectures: ["arm64"]
       Handler: bootstrap
       Runtime: provided.al2
       Timeout: 5
-      CodeUri: target/lambda/get
+      CodeUri: ./app
       Role: !GetAtt LambdaRole.Arn
       FunctionName: !Sub TestGet_V1
 

@@ -21,7 +21,7 @@ Resources:
       Architectures:
         - arm64
       Timeout: 5
-      CodeUri: target/lambda/authorizer
+      CodeUri: ./app
       Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:
@@ -37,6 +37,7 @@ Resources:
       IdentitySource: method.request.header.Authorization
       AuthorizerUri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GatewayAuthorizerLambda.Arn}/invocations
       AuthorizerResultTtlInSeconds: 3600
+    DependsOn: Permission
 
   LambdaRole:
     Type: AWS::IAM::Role

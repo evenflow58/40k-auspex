@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cargo lambda build --release --arm64",
+    "build": "cargo lambda build --release --arm64 --manifest-path ./app/Cargo.toml",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "sam package --template-file template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml",
     "deploy": "npm run build && sam deploy"

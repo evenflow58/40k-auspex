@@ -12,6 +12,10 @@ Parameters:
   AuthorizerId:
     Type: String
     Description: The ID of the authorizer
+  CodeUri:
+    Type: String
+    Description: The location of the code
+    Default: target/lambda/get
 
 Resources:
   Function:
@@ -22,7 +26,7 @@ Resources:
       Handler: bootstrap
       Runtime: provided.al2
       Timeout: 5
-      CodeUri: target/lambda/get
+      CodeUri: !Ref CodeUri
       Role: !GetAtt LambdaRole.Arn
       FunctionName: !Sub TestGet_V2
 

@@ -19,7 +19,7 @@ Resources:
       Architectures:
         - arm64
       Timeout: 5
-      CodeUri: target/lambda/get
+      CodeUri: target/lambda/authorizer
       Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:

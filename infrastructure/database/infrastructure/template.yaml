@@ -2,10 +2,10 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: The Monster of the Week Database
 
 Resources:
-  MyDynamoDBTable:
+  MonsterOfTheWeekTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: MyDynamoTable
+      TableName: MonsterOfTheWeekTable
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: N

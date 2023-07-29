@@ -97,6 +97,21 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-API'
               RunOrder: 1
+            - Name: DeployDatabase
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: databaseBuildOutput
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                TemplatePath: databaseBuildOutput::infrastructure/template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                StackName: !Sub '${AWS::StackName}-Stack-Database'
+              RunOrder: 1
             - Name: DeployUiCode
               ActionTypeId:
                 Category: Deploy

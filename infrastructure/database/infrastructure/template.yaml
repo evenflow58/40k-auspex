@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: The Monster of the Week Database
+
+Resources:
+  MyDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: MyDynamoTable
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: N
+        - AttributeName: type
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: RANGE
+        - AttributeName: type
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5

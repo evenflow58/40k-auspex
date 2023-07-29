@@ -7,11 +7,17 @@ Resources:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Description: The Monster of the Week API
-      # DisableExecuteApiEndpoint: true
       EndpointConfiguration:
         Types:
           - REGIONAL
       Name: !Sub ${AWS::StackName}-ApiGateway
+
+  Authorizer:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ../../../api/authorizer/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGateway
 
   V1:
     Type: AWS::CloudFormation::Stack
@@ -20,6 +26,8 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
+        AuthorizerId: !GetAtt Authorizer.Outputs.ApiAuthorizerId
+    DependsOn: Authorizer
 
   V2:
     Type: AWS::CloudFormation::Stack
@@ -28,6 +36,8 @@ Resources:
       Parameters:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
+        AuthorizerId: !GetAtt Authorizer.Outputs.ApiAuthorizerId
+    DependsOn: Authorizer
 
 Outputs:
   ApiGatewayId:

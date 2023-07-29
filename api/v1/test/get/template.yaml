@@ -9,17 +9,23 @@ Parameters:
   RootResourceId:
     Type: String
     Description: The ID of the root resource of the api gateway
+  AuthorizerId:
+    Type: String
+    Description: The ID of the authorizer
 
 Resources:
   Function:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: rust-cargolambda
     Properties:
       MemorySize: 128
       Architectures: ["arm64"]
       Handler: bootstrap
       Runtime: provided.al2
       Timeout: 5
-      CodeUri: target/lambda/get
+      CodeUri: app/target/lambda/get
+      # CodeUri: ./app
       Role: !GetAtt LambdaRole.Arn
       FunctionName: !Sub TestGet_V1
 
@@ -36,7 +42,8 @@ Resources:
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
       HttpMethod: GET
-      AuthorizationType: NONE
+      AuthorizationType: CUSTOM
+      AuthorizerId: !Ref AuthorizerId
       MethodResponses:
         - StatusCode: 200
       Integration:

@@ -46,4 +46,41 @@ artifacts:
       base-directory: infrastructure/apiGatewayDeployment
       files:
         - '**/*'
-    
+        
+# version: 0.2
+
+# env:
+#   shell: bash
+
+# batch:
+#   fast-fail: false
+#   build-graph:
+#     - identifier: authorizer
+#       buildspec: infrastructure/pipeline/endpoints-build.yaml
+#       ignore-failure: false
+#       debug-session: true
+#       env:
+#         variables:
+#           LOCATION: authorizer
+#     # - identifier: v1
+#     #   buildspec: infrastructure/pipeline/endpoints-build.yaml
+#     #   ignore-failure: false
+#     #   debug-session: true
+#     #   env:
+#     #     variables:
+#     #       LOCATION: v1
+#     - identifier: all
+#       buildspec: infrastructure/pipeline/project-build.yaml
+#       ignore-failure: false
+#       debug-session: true
+#       depend-on:
+#         - authorizer
+#         # - v1
+
+# # artifacts:
+# #   files:
+# #     - '*'
+# #   secondary-artifacts:
+# #     buildOutput:
+# #       files:
+# #         - '**/*'

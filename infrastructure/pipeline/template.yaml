@@ -78,6 +78,7 @@ Resources:
             OutputArtifacts:
               - Name: uiBuildOutput
               - Name: apiGatewayBuildOutput
+              - Name: databaseBuildOutput
               - Name: apiGatewayDeploymentBuildOutput
             RunOrder: 1
         - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
@@ -111,6 +112,21 @@ Resources:
               InputArtifacts:
                 - Name: uiBuildOutput
               Region: us-east-1
+            - Name: DeployDatabase
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: databaseBuildOutput
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                TemplatePath: databaseBuildOutput::infrastructure/template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                StackName: !Sub '${AWS::StackName}-Stack-Database'
+              RunOrder: 2
             - Name: DeployApiStage
               ActionTypeId:
                 Category: Deploy

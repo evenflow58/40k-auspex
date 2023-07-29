@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: The Monster of the Week Database
+
+Resources:
+  MonsterOfTheWeekTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: MonsterOfTheWeekTable
+      AttributeDefinitions:
+        - AttributeName: type
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: N
+      KeySchema:
+        - AttributeName: type
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+Outputs:
+  DbTableName:
+    Value: !Ref MonsterOfTheWeekTable
+    Description: The table name for Monster of the Week
+    Export:
+      Name: DbTableName

@@ -19,3 +19,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+
+Outputs:
+  DbTableName:
+    Value: !Ref MonsterOfTheWeekTable
+    Description: The table name for Monster of the Week
+    Export:
+      Name: DbTableName

@@ -23,6 +23,7 @@ Resources:
       Runtime: provided.al2
       Timeout: 5
       CodeUri: app/target/lambda/get
+      # CodeUri: ./app
       Role: !GetAtt LambdaRole.Arn
       FunctionName: !Sub TestGet_V2
 

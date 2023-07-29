@@ -15,7 +15,7 @@ Parameters:
   CodeUri:
     Type: String
     Description: The location of the code
-    Default: target/lambda/get
+    Default: app/target/lambda/get
 
 Resources:
   Function:

@@ -24,7 +24,7 @@ Resources:
       Handler: bootstrap
       Runtime: provided.al2
       Timeout: 5
-      CodeUri: !Sub "${CodeUri}"
+      CodeUri: app/target/lambda/get
       Role: !GetAtt LambdaRole.Arn
       FunctionName: !Sub TestGet_V1
 

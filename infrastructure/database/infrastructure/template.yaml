@@ -7,18 +7,29 @@ Resources:
     Properties:
       TableName: MonsterOfTheWeekTable
       AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
         - AttributeName: type
           AttributeType: S
-        - AttributeName: id
-          AttributeType: N
+        - AttributeName: data
+          AttributeType: S
       KeySchema:
-        - AttributeName: type
-          KeyType: HASH
         - AttributeName: id
+          KeyType: HASH
+        - AttributeName: type
           KeyType: RANGE
+        # - AttributeName: data
+        #   KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+
+  LambdaLoad:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: load-data/template.yaml
+      Parameters:
+        TableName: !Ref MonsterOfTheWeekTable
 
 Outputs:
   DbTableName:

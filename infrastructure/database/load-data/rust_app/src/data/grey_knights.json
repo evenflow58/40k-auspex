@@ -1,0 +1,13 @@
+{
+    "Units": [
+        {
+            "Name": "Kaldor Draigo",
+            "Movement": 5,
+            "Toughness": 5,
+            "Save": 2,
+            "WeaponSkill": 7,
+            "Leadership": 6,
+            "ObjectiveControl": 1
+        }
+    ]
+}

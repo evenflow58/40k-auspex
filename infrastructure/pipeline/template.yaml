@@ -127,6 +127,17 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Database'
               RunOrder: 2
+            - Name: SeedDatabase
+              Actions:
+                - Name: LoadData
+                  ActionTypeId:
+                    Category: Invoke
+                    Owner: AWS
+                    Version: 1
+                    Provider: Lambda
+                  Configuration:
+                    FunctionName: !ImportValue LoadDataFunctionName
+                  RunOrder: 3
             - Name: DeployApiStage
               ActionTypeId:
                 Category: Deploy

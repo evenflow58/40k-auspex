@@ -18,8 +18,8 @@ Resources:
           KeyType: HASH
         - AttributeName: type
           KeyType: RANGE
-        # - AttributeName: data
-        #   KeyType: RANGE
+        - AttributeName: data
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5

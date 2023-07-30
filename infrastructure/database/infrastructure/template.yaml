@@ -37,3 +37,9 @@ Outputs:
     Description: The table name for Monster of the Week
     Export:
       Name: DbTableName
+
+  LoadDataFunctionName:
+    Value: !GetAtt LambdaLoad.Outputs.LoadDataFunctionName
+    Description: The name of the load data lambda function
+    Export:
+      Name: LoadDataFunctionName

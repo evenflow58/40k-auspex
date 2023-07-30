@@ -119,13 +119,15 @@ Resources:
                 Provider: CloudFormation
                 Version: 1
               InputArtifacts:
-                - Name: databaseBuildOutput
+                - Name: deployDatabaseOutput
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: databaseBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Database'
+              OutputArtifacts:
+                - Name: LoadDataFunctionName
               RunOrder: 2
             - Name: SeedDatabase
               Actions:
@@ -135,8 +137,10 @@ Resources:
                     Owner: AWS
                     Version: 1
                     Provider: Lambda
+                  InputArtifacts:
+                    - Name: deployDatabaseOutput
                   Configuration:
-                    FunctionName: !ImportValue LoadDataFunctionName
+                    FunctionName: deployDatabaseOutput::LoadDataFunctionName
                   RunOrder: 3
             - Name: DeployApiStage
               ActionTypeId:

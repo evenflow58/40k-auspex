@@ -27,7 +27,7 @@ Resources:
   LambdaLoad:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: load-data/template.yaml
+      TemplateURL: ../load-data/template.yaml
       Parameters:
         TableName: !Ref MonsterOfTheWeekTable
 

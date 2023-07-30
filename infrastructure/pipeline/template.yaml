@@ -119,7 +119,7 @@ Resources:
                 Provider: CloudFormation
                 Version: 1
               InputArtifacts:
-                - Name: deployDatabaseOutput
+                - Name: databaseBuildOutput
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
@@ -130,18 +130,16 @@ Resources:
                 - Name: LoadDataFunctionName
               RunOrder: 2
             - Name: SeedDatabase
-              Actions:
-                - Name: LoadData
-                  ActionTypeId:
-                    Category: Invoke
-                    Owner: AWS
-                    Version: 1
-                    Provider: Lambda
-                  InputArtifacts:
-                    - Name: deployDatabaseOutput
-                  Configuration:
-                    FunctionName: deployDatabaseOutput::LoadDataFunctionName
-                  RunOrder: 3
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Version: 1
+                Provider: Lambda
+              InputArtifacts:
+                - Name: LoadDataFunctionName
+              Configuration:
+                FunctionName: LoadDataFunctionName
+              RunOrder: 3
             - Name: DeployApiStage
               ActionTypeId:
                 Category: Deploy

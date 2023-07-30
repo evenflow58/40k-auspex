@@ -164,6 +164,10 @@ Resources:
               Action:
                 - codestar-connections:UseConnection
               Resource: arn:aws:codestar-connections:us-east-2:625961017727:connection/760e3889-f416-44aa-9c62-001a92098608
+            - Action:
+                - lambda:InvokeFunction
+              Effect: Allow
+              Resource: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*'
             
   CloudFormationExecutionRole:
     Type: AWS::IAM::Role

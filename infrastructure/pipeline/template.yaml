@@ -127,7 +127,7 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Database'
               OutputArtifacts:
-                - Name: LoadDataFunctionName
+                - Name: LoadDataName
               RunOrder: 2
             - Name: SeedDatabase
               ActionTypeId:
@@ -136,9 +136,9 @@ Resources:
                 Version: 1
                 Provider: Lambda
               InputArtifacts:
-                - Name: LoadDataFunctionName
+                - Name: LoadDataName
               Configuration:
-                FunctionName: LoadDataFunctionName
+                FunctionName: LoadDataName
               RunOrder: 3
             - Name: DeployApiStage
               ActionTypeId:

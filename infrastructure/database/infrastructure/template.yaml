@@ -38,8 +38,8 @@ Outputs:
     Export:
       Name: DbTableName
 
-  LoadDataFunctionName:
+  LoadDataName:
     Value: !GetAtt LambdaLoad.Outputs.LoadDataFunctionName
     Description: The name of the load data lambda function
     Export:
-      Name: LoadDataFunctionName
+      Name: LoadDataName

@@ -21,7 +21,7 @@ Resources:
     Type: AWS::ApiGateway::DomainName
     Properties:
       DomainName: !Ref BasePathDomain
-      RegionalCertificateArn: arn:aws:acm:us-east-1:625961017727:certificate/edd15537-9b78-4e21-a100-9ce277ca42bf
+      RegionalCertificateArn: arn:aws:acm:us-east-1:625961017727:certificate/5be7a1f8-2259-4172-bb5e-00cbeb10d53d
       EndpointConfiguration:
         Types:
           - REGIONAL

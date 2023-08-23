@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+      "build": "cd ./load-data && npm install && npm run build",
       "package": "sam package --template-file ./infrastructure/template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./infrastructure/template.package.yaml"
     },
     "author": "",

@@ -16,6 +16,7 @@
     "build-all": "npm-run-all --parallel build:* && cd ../",
     "build:api": "cd api && npm run build",
     "build:ui": "cd ui && npm run build",
+    "build:database": "cd infrastructure/database && npm run build",
     "test-all": "npm-run-all --parallel test:*",
     "package-all": "npm-run-all --parallel package:*",
     "package:api": "cd api && npm run package",

@@ -8,10 +8,10 @@ Parameters:
     Default: 40kauspex.com
   HostedZoneId:
     Type: String
-    Default: Z0953270AK2JGXA33JIB
+    Default: Z0979474E2LBKBWMAJBG
   CloudFronCert:
     Type: String
-    Default: arn:aws:acm:us-east-1:625961017727:certificate/edd15537-9b78-4e21-a100-9ce277ca42bf
+    Default: arn:aws:acm:us-east-1:625961017727:certificate/5be7a1f8-2259-4172-bb5e-00cbeb10d53d
   Domain:
     Type: String
     AllowedPattern: (.*[.])*40kauspex.com

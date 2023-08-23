@@ -1,7 +1,7 @@
 use serde::{Deserialize};
 use std::collections::HashMap;
 use aws_sdk_dynamodb::{types::{AttributeValue}};
-use crate::models::Unit::Unit;
+use crate::models::unit::Unit;
 
 // Create a struct named Army that contains a list of Units
 #[derive(Deserialize, Debug)]

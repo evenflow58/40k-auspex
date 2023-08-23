@@ -1,4 +1,4 @@
-pub mod Unit;
-pub mod Army;
-pub mod Request;
-pub mod Response;
+pub mod unit;
+pub mod army;
+pub mod request;
+pub mod response;

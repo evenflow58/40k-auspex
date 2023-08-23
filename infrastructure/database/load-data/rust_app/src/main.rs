@@ -7,9 +7,9 @@ use std::fs::File;
 use std::io::BufReader;
 
 mod models;
-use crate::models::Army::Army;
-use crate::models::Request::Request;
-use crate::models::Response::Response;
+use crate::models::army::Army;
+use crate::models::request::Request;
+use crate::models::response::Response;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -26,7 +26,7 @@ async fn main() -> Result<(), Error> {
 
 // Create a function call function_handler that takes a LambdaEvent and returns a Result
 // with a Response or an Error
-async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
+async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Create a variable called file that opens the file data/grey_knights.json
     let file = File::open("data/grey_knights.json").unwrap();
     // Create a variable called reader that creates a BufReader from the file variable

@@ -6,7 +6,7 @@ Parameters:
   BasePathDomain:
     Type: String
     Default: ''
-  HostedZone Id:
+  HostedZoneId:
     Type: String
     Default: Z0979474E2LBKBWMAJBG
 

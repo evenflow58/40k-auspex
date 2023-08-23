@@ -1,14 +1,14 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The Monster of the Week api gateway deployment
+Description: The 40k Auspex api gateway deployment
 
 Parameters:
   BasePathDomain:
     Type: String
     Default: ''
-  HostedZoneId:
+  HostedZone Id:
     Type: String
-    Default: Z0953270AK2JGXA33JIB
+    Default: Z0979474E2LBKBWMAJBG
 
 Resources:
   ProdDeployment:

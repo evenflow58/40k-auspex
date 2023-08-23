@@ -1,12 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The Monster of the Week api gateway infrastructure
+Description: The 40k Auspex api gateway infrastructure
 
 Resources:
   ApiGateway: 
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Description: The Monster of the Week API
+      Description: The 40k Auspex API
       EndpointConfiguration:
         Types:
           - REGIONAL

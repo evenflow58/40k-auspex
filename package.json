@@ -1,7 +1,7 @@
 {
-  "name": "monster-of-week",
+  "name": "40k-auspex",
   "version": "1.0.0",
-  "description": "The monster of the week website",
+  "description": "The 40kauspex of the week website",
   "main": "index.js",
   "devDependencies": {
     "husky": "^4.2.5",
@@ -26,17 +26,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/evenflow58/monster-of-week.git"
+    "url": "git+https://github.com/evenflow58/40k-auspex.git"
   },
   "author": "Evan Johnson",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/evenflow58/monster-of-week/issues"
+    "url": "https://github.com/evenflow58/40k-auspex/issues"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged 'packages/**/{src,spec}/{*.ts,*.json}'"
     }
   },
-  "homepage": "https://github.com/evenflow58/monster-of-week#readme"
+  "homepage": "https://github.com/evenflow58/40k-auspex#readme"
 }

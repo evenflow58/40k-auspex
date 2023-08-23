@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week roles for the pipeline
+Description: The 40k Auspex roles for the pipeline
 
 Resources:
   BuildExecutionRole:

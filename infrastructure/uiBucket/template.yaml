@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week UI bucket
+Description: The 40k Auspex UI bucket
 
 Parameters:
   BucketName:
     Type: String
-    Default: monster-of-the-week-ui
+    Default: 40k-auspex-ui
 
 Resources:
   UiBucket:

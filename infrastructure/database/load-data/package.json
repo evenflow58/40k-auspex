@@ -1,0 +1,15 @@
+{
+    "name": "load-data",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "build": "cargo lambda build --release --arm64 --manifest-path ./rust_app/Cargo.toml",
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "package": "sam package --template-file template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml",
+      "deploy": "sam build --beta-features && sam deploy --no-confirm-changeset"
+    },
+    "author": "",
+    "license": "ISC"
+  }
+  

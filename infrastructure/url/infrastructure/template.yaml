@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The Monster of the Week site infrastructure
+Description: The 40k Auspex site infrastructure
 
 Parameters:
   DomainName:
     Type: String
-    Default: monsterplaybook.rip
+    Default: 40kauspex.com
   HostedZoneId:
     Type: String
     Default: Z0953270AK2JGXA33JIB
@@ -14,16 +14,16 @@ Parameters:
     Default: arn:aws:acm:us-east-1:625961017727:certificate/edd15537-9b78-4e21-a100-9ce277ca42bf
   Domain:
     Type: String
-    AllowedPattern: (.*[.])*monsterplaybook.rip
+    AllowedPattern: (.*[.])*40kauspex.com
   BranchName:
     Type: String
 
 Mappings:
   AliasMap:
     staging:
-      Alias: staging.monsterplaybook.rip
+      Alias: staging.40kauspex.com
     production:
-      Alias: monsterplaybook.rip
+      Alias: 40kauspex.com
 
 Resources:
   ##################### CloudFront
@@ -57,7 +57,7 @@ Resources:
             Cookies:
               Forward: none
         HttpVersion: http2
-        Comment: The monster of the week cloud front distribution
+        Comment: The 40k Auspex cloud front distribution
         ViewerCertificate:
           AcmCertificateArn: !Ref CloudFronCert
           MinimumProtocolVersion: TLSv1.1_2016

@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week Pipeline
+Description: The 40k Auspex Pipeline
 
 Parameters:
   GitHubRepo:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: monster-of-week
+    Default: 40k-auspex
   GitHubBranch:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
@@ -152,7 +152,7 @@ Resources:
                 StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
                 ParameterOverrides: !Sub
                   - '{ "BasePathDomain": "${BasePathDomain}" }'
-                  - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
+                  - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
               RunOrder: 2
         - !If
           - IsProduction
@@ -197,7 +197,7 @@ Resources:
                   ChangeSetName: ui
                   TemplatePath: lambdaEdgeBuildOutput::infrastructure/template.package.yaml
                   Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                  ParameterOverrides: '{ "Domain": "monsterplaybook.rip", "BranchName": "master" }'
+                  ParameterOverrides: '{ "Domain": "40kauspex.com", "BranchName": "master" }'
                 InputArtifacts:
                   - Name: lambdaEdgeBuildOutput
                 RunOrder: 1
@@ -216,7 +216,7 @@ Resources:
                   ChangeSetName: api
                   TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                   Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                  ParameterOverrides: '{ "BasePathDomain": "api.monsterplaybook.rip" }'
+                  ParameterOverrides: '{ "BasePathDomain": "api.40kauspex.com" }'
                 RunOrder: 1
               - Name: CreateApiDeploymentChangeSet
                 ActionTypeId:

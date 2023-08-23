@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The Monster of the Week V2 api gateway code
+Description: The 40k Auspex V2 api gateway code
 
 Parameters:
   ApiGatewayId:

@@ -16,8 +16,8 @@ phases:
 
       - echo "installing rust dependencies"
       - curl https://sh.rustup.rs -sSf | bash -s -- -y
-      - rustup target add aarch64-unknown-linux-gnu
       - source $HOME/.cargo/env
+      - rustup target add aarch64-unknown-linux-gnu
       - pip3 install cargo-lambda
   build:
     commands:

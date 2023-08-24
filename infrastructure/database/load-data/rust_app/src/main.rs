@@ -28,7 +28,7 @@ async fn main() -> Result<(), Error> {
 // with a Response or an Error
 async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Create a variable called file that opens the file data/grey_knights.json
-    let file = File::open("data/grey_knights.json").unwrap();
+    let file = File::open("./data/grey_knights.json").unwrap();
     // Create a variable called reader that creates a BufReader from the file variable
     let reader = BufReader::new(file);
     // Create a variable called grey_knights that is a Army struct that is created from

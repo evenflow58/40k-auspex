@@ -1,13 +1,13 @@
 {
-    "Units": [
+    "units": [
         {
-            "Name": "Kaldor Draigo",
-            "Movement": 5,
-            "Toughness": 5,
-            "Save": 2,
-            "WeaponSkill": 7,
-            "Leadership": 6,
-            "ObjectiveControl": 1
+            "name": "Kaldor Draigo",
+            "movement": 5,
+            "toughness": 5,
+            "save": 2,
+            "weapon_skill": 7,
+            "leadership": 6,
+            "objective_control": 1
         }
     ]
 }

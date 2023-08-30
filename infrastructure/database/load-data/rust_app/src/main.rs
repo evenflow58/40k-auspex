@@ -3,13 +3,8 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use aws_sdk_dynamodb::{Client};
 use aws_sdk_dynamodb::{types::{WriteRequest, PutRequest, AttributeValue}};
 use envmnt;
-use std::fs::File;
-use std::io::BufReader;
 
-mod models;
-use crate::models::army::Army;
-use crate::models::request::Request;
-use crate::models::response::Response;
+use load_data::models::{response::Response, request::Request, army::Army};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -28,12 +23,12 @@ async fn main() -> Result<(), Error> {
 // with a Response or an Error
 async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Create a variable called file that opens the file data/grey_knights.json
-    let file = File::open("./data/grey_knights.json").unwrap();
+    let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!("data/grey_knights.json")))?;
     // Create a variable called reader that creates a BufReader from the file variable
-    let reader = BufReader::new(file);
+    // let reader = BufReader::new(file);
     // Create a variable called grey_knights that is a Army struct that is created from
     // the reader variable
-    let grey_knights: Army = serde_json::from_reader(reader).unwrap();
+    // let grey_knights: Army = serde_json::from_reader(reader).unwrap();
 
     // Create a variable called config that is a aws_config::Config that is created from
     // the load_from_env() function

@@ -22,8 +22,11 @@ async fn main() -> Result<(), Error> {
 // Create a function call function_handler that takes a LambdaEvent and returns a Result
 // with a Response or an Error
 async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Error> {
+    debug!("Starting");
+
     // Create a variable called file that opens the file data/grey_knights.json
     let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!("data/grey_knights.json")))?;
+    debug!("Grey knights serialized {:?}", grey_knights);
     // Create a variable called reader that creates a BufReader from the file variable
     // let reader = BufReader::new(file);
     // Create a variable called grey_knights that is a Army struct that is created from
@@ -33,9 +36,11 @@ async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Erro
     // Create a variable called config that is a aws_config::Config that is created from
     // the load_from_env() function
     let config = ::aws_config::load_from_env().await;
+    debug!("Loaded config {:?}", config);
     // Create a variable called client that is a dynamodb::Client that is created from
     // the config variable
     let client = Client::new(&config);
+    debug!("Created client");
 
     // Create a variable called table_name that is a String that is created from the
     // TABLE_NAME environment variable

@@ -3,6 +3,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use aws_sdk_dynamodb::{Client};
 use aws_sdk_dynamodb::{types::{WriteRequest, PutRequest, AttributeValue}};
 use envmnt;
+use tracing::log::{debug};
 
 use load_data::models::{response::Response, request::Request, army::Army};
 

@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-// use aws_sdk_dynamodb::{Client};
-// use aws_sdk_dynamodb::{types::{WriteRequest, PutRequest, AttributeValue}};
+use aws_sdk_dynamodb::{Client};
+use aws_sdk_dynamodb::{types::{WriteRequest, PutRequest, AttributeValue}};
 use envmnt;
 use tracing::info;
 

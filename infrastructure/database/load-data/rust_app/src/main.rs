@@ -1,11 +1,14 @@
-use std::collections::HashMap;
-use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-use aws_sdk_dynamodb::{Client};
-use aws_sdk_dynamodb::{types::{WriteRequest, PutRequest, AttributeValue}};
+use aws_sdk_codepipeline::{Client as codepipeline_sdk_client};
+use aws_sdk_dynamodb::{
+    types::{AttributeValue, PutRequest, WriteRequest},
+    Client as dynamodb_sdk_client,
+};
 use envmnt;
+use lambda_runtime::{run, service_fn, Error, LambdaEvent};
+use std::collections::HashMap;
 use tracing::info;
 
-use load_data::models::{response::Response, request::Request, army::Army};
+use load_data::models::{army::Army, request::Request, response::Response};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -22,11 +25,13 @@ async fn main() -> Result<(), Error> {
 
 // Create a function call function_handler that takes a LambdaEvent and returns a Result
 // with a Response or an Error
-async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Error> {
-    info!("Starting");
+async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
+    info!("Starting {:?}", event);
 
     // Create a variable called file that opens the file data/grey_knights.json
-    let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!("data/grey_knights.json")))?;
+    let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!(
+        "data/grey_knights.json"
+    )))?;
     info!("Grey knights serialized {:?}", grey_knights);
     // Create a variable called reader that creates a BufReader from the file variable
     // let reader = BufReader::new(file);
@@ -40,51 +45,49 @@ async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Erro
     info!("Loaded config {:?}", config);
     // // Create a variable called client that is a dynamodb::Client that is created from
     // // the config variable
-    let client = Client::new(&config);
+    let dynamodb_client = dynamodb_sdk_client::new(&config);
     info!("Created client");
 
     // Create a variable called table_name that is a String that is created from the
     // TABLE_NAME environment variable
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
 
-    info!("Got table name {:?}", table_name);
-
     // Using the client variable call the batch_write_item() function with the
     // table_name variable and a HashMap with the id of "grey_knights" and the
     // type of "army" and the data of the grey_knights variable.
-    let result = client
+    let result = dynamodb_client
         .batch_write_item()
         .request_items(
             table_name,
-            vec![
-                WriteRequest::builder()
-                    .put_request(
-                        PutRequest::builder()
-                            .set_item(Some(HashMap::from(
-                                [
-                                    (
-                                        "id".to_string(),
-                                        AttributeValue::S("GreyKnights".to_string())
-                                    ),
-                                    (
-                                        "type".to_string(),
-                                        AttributeValue::S("Army".to_string())
-                                    ),
-                                    (
-                                        "data".to_string(),
-                                        AttributeValue::M(grey_knights.get_hash_map())
-                                    )
-                                ]
-                            )))
-                            .build()
-                    )
-                    .build()
-            ],
+            vec![WriteRequest::builder()
+                .put_request(
+                    PutRequest::builder()
+                        .set_item(Some(HashMap::from([
+                            (
+                                "id".to_string(),
+                                AttributeValue::S("GreyKnights".to_string()),
+                            ),
+                            ("type".to_string(), AttributeValue::S("Army".to_string())),
+                            (
+                                "data".to_string(),
+                                AttributeValue::M(grey_knights.get_hash_map()),
+                            ),
+                        ])))
+                        .build(),
+                )
+                .build()],
         )
         .send()
         .await?;
 
     info!("Finished writing. {:?}", result);
+
+    // let codepipeline_config = aws_sdk_codepipeline::config::Builder::from(&config).build();
+    // let codepipeline_client = codepipeline_sdk_client::new(&config);
+    // codepipeline_client.put_job_success_result()
+    //     .job_id("")
+    //     .send()
+    //     .await?;
 
     Ok(Response {})
 }

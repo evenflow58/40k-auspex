@@ -5,8 +5,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use envmnt;
 use tracing::info;
 
-// use load_data::models::{response::Response, request::Request, army::Army};
-use load_data::models::{response::Response, request::Request};
+use load_data::models::{response::Response, request::Request, army::Army};
 
 // aws-config = "0.55.3"
 // aws-sdk-dynamodb = "0.28.0"

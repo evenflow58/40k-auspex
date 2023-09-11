@@ -7,9 +7,6 @@ use tracing::info;
 
 use load_data::models::{response::Response, request::Request, army::Army};
 
-// aws-config = "0.55.3"
-// aws-sdk-dynamodb = "0.28.0"
-
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     tracing_subscriber::fmt()

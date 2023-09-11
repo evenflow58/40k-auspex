@@ -6,6 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+aws-config = "0.55.3"
+aws-sdk-dynamodb = "0.28.0"
 envmnt = "0.10.4"
 lambda_runtime = "0.6.1"
 serde = "1.0.136"

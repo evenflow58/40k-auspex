@@ -47,7 +47,7 @@ async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Erro
     // TABLE_NAME environment variable
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
 
-    info!("Got table name {}:?}", table_name);
+    info!("Got table name {:?}", table_name);
 
     // Using the client variable call the batch_write_item() function with the
     // table_name variable and a HashMap with the id of "grey_knights" and the

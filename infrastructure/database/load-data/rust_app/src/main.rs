@@ -34,10 +34,10 @@ async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Erro
     // the reader variable
     // let grey_knights: Army = serde_json::from_reader(reader).unwrap();
 
-    // // Create a variable called config that is a aws_config::Config that is created from
-    // // the load_from_env() function
-    // let config = ::aws_config::load_from_env().await;
-    // info!("Loaded config {:?}", config);
+    // Create a variable called config that is a aws_config::Config that is created from
+    // the load_from_env() function
+    let config = ::aws_config::load_from_env().await;
+    info!("Loaded config {:?}", config);
     // // Create a variable called client that is a dynamodb::Client that is created from
     // // the config variable
     // let client = Client::new(&config);

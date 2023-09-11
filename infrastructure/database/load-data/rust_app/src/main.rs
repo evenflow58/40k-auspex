@@ -29,14 +29,14 @@ async fn main() -> Result<(), Error> {
 async fn function_handler(_event: LambdaEvent<Request>) -> Result<Response, Error> {
     info!("Starting");
 
-    // // Create a variable called file that opens the file data/grey_knights.json
-    // let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!("data/grey_knights.json")))?;
-    // info!("Grey knights serialized {:?}", grey_knights);
-    // // Create a variable called reader that creates a BufReader from the file variable
-    // // let reader = BufReader::new(file);
-    // // Create a variable called grey_knights that is a Army struct that is created from
-    // // the reader variable
-    // // let grey_knights: Army = serde_json::from_reader(reader).unwrap();
+    // Create a variable called file that opens the file data/grey_knights.json
+    let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!("data/grey_knights.json")))?;
+    info!("Grey knights serialized {:?}", grey_knights);
+    // Create a variable called reader that creates a BufReader from the file variable
+    // let reader = BufReader::new(file);
+    // Create a variable called grey_knights that is a Army struct that is created from
+    // the reader variable
+    // let grey_knights: Army = serde_json::from_reader(reader).unwrap();
 
     // // Create a variable called config that is a aws_config::Config that is created from
     // // the load_from_env() function

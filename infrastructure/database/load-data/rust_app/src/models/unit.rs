@@ -1,6 +1,6 @@
 use serde::{Deserialize};
 use std::collections::HashMap;
-// use aws_sdk_dynamodb::{types::{AttributeValue}};
+use aws_sdk_dynamodb::{types::{AttributeValue}};
 
 // Create a struct named Unit that has the following fields
 // Name: String
@@ -22,16 +22,16 @@ pub struct Unit {
     objective_control: i32
 }
 
-// impl Unit {
-//     pub fn get_hash_map(&self) -> HashMap<String, AttributeValue> {
-//         let mut map = HashMap::new();
-//         map.insert("Name".to_string(), AttributeValue::S(self.name.clone()));
-//         map.insert("Movement".to_string(), AttributeValue::N(self.movement.to_string()));
-//         map.insert("Toughness".to_string(), AttributeValue::N(self.toughness.to_string()));
-//         map.insert("Save".to_string(), AttributeValue::N(self.save.to_string()));
-//         map.insert("WeaponSkill".to_string(), AttributeValue::N(self.weapon_skill.to_string()));
-//         map.insert("Leadership".to_string(), AttributeValue::N(self.leadership.to_string()));
-//         map.insert("ObjectiveControl".to_string(), AttributeValue::N(self.objective_control.to_string()));
-//         map
-//     }
-// }
+impl Unit {
+    pub fn get_hash_map(&self) -> HashMap<String, AttributeValue> {
+        let mut map = HashMap::new();
+        map.insert("Name".to_string(), AttributeValue::S(self.name.clone()));
+        map.insert("Movement".to_string(), AttributeValue::N(self.movement.to_string()));
+        map.insert("Toughness".to_string(), AttributeValue::N(self.toughness.to_string()));
+        map.insert("Save".to_string(), AttributeValue::N(self.save.to_string()));
+        map.insert("WeaponSkill".to_string(), AttributeValue::N(self.weapon_skill.to_string()));
+        map.insert("Leadership".to_string(), AttributeValue::N(self.leadership.to_string()));
+        map.insert("ObjectiveControl".to_string(), AttributeValue::N(self.objective_control.to_string()));
+        map
+    }
+}

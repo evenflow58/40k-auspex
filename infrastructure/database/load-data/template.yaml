@@ -36,6 +36,15 @@ Resources:
                 Action:
                   - dynamodb:BatchWriteItem
                 Resource: !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/40kAuspexTable"
+        - PolicyName: CodePipelinePermissions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - codePipeline:PutJobSuccessResult
+                  - codePipeline:PutJobFailureResult
+                Resource: *
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /

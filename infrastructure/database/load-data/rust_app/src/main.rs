@@ -1,4 +1,4 @@
-use aws_lambda_events::event::codepipeline_job::CodePipelineJob;
+// use aws_lambda_events::event::codepipeline_job::CodePipelineJob;
 use aws_sdk_codepipeline::{Client as codepipeline_sdk_client};
 use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
@@ -9,7 +9,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use std::collections::HashMap;
 use tracing::info;
 
-use load_data::models::{army::Army, response::Response};
+use load_data::models::{army::Army, request::Request, response::Response};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -26,9 +26,9 @@ async fn main() -> Result<(), Error> {
 
 // Create a function call function_handler that takes a LambdaEvent and returns a Result
 // with a Response or an Error
-async fn function_handler(event: LambdaEvent<CodePipelineJob>) -> Result<Response, Error> {
+async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
     info!("Starting {:?}", event);
-    info!("job id {:?}", event.payload.id);
+    info!("payload {:?}", event.payload);
 
     // Create a variable called file that opens the file data/grey_knights.json
     let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!(
@@ -84,11 +84,11 @@ async fn function_handler(event: LambdaEvent<CodePipelineJob>) -> Result<Respons
 
     info!("Finished writing. {:?}", result);
 
-    let codepipeline_client = codepipeline_sdk_client::new(&config);
-    codepipeline_client.put_job_success_result()
-        .job_id(event.payload.id.unwrap())
-        .send()
-        .await?;
+    // let codepipeline_client = codepipeline_sdk_client::new(&config);
+    // codepipeline_client.put_job_success_result()
+    //     .job_id(event.payload.id.unwrap())
+    //     .send()
+    //     .await?;
 
     Ok(Response {})
 }

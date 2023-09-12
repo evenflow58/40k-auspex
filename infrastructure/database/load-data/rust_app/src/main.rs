@@ -1,5 +1,5 @@
 use aws_lambda_events::event::codepipeline_job::CodePipelineJobEvent;
-use aws_sdk_codepipeline::{Client as codepipeline_sdk_client};
+use aws_sdk_codepipeline::Client as codepipeline_sdk_client;
 use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
     Client as dynamodb_sdk_client,
@@ -9,7 +9,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use std::collections::HashMap;
 use tracing::info;
 
-use load_data::models::{army::Army, request::Request, response::Response};
+use load_data::models::{army::Army, response::Response};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -28,25 +28,20 @@ async fn main() -> Result<(), Error> {
 // with a Response or an Error
 async fn function_handler(event: LambdaEvent<CodePipelineJobEvent>) -> Result<Response, Error> {
     info!("Starting {:?}", event);
-    info!("payload {:?}", event.payload);
 
     // Create a variable called file that opens the file data/grey_knights.json
     let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!(
         "data/grey_knights.json"
     )))?;
     info!("Grey knights serialized {:?}", grey_knights);
-    // Create a variable called reader that creates a BufReader from the file variable
-    // let reader = BufReader::new(file);
-    // Create a variable called grey_knights that is a Army struct that is created from
-    // the reader variable
-    // let grey_knights: Army = serde_json::from_reader(reader).unwrap();
-
+    
     // Create a variable called config that is a aws_config::Config that is created from
     // the load_from_env() function
     let config = ::aws_config::load_from_env().await;
     info!("Loaded config {:?}", config);
-    // // Create a variable called client that is a dynamodb::Client that is created from
-    // // the config variable
+    
+    // Create a variable called dynamodb-client that is a dynamodb::Client that is created from
+    // the config variable
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     info!("Created client");
 
@@ -84,11 +79,12 @@ async fn function_handler(event: LambdaEvent<CodePipelineJobEvent>) -> Result<Re
 
     info!("Finished writing. {:?}", result);
 
-    // let codepipeline_client = codepipeline_sdk_client::new(&config);
-    // codepipeline_client.put_job_success_result()
-    //     .job_id(event.payload.id.unwrap())
-    //     .send()
-    //     .await?;
+    let codepipeline_client = codepipeline_sdk_client::new(&config);
+    codepipeline_client
+        .put_job_success_result()
+        .job_id(event.payload.code_pipeline_job.id.unwrap())
+        .send()
+        .await?;
 
     Ok(Response {})
 }

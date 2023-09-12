@@ -44,7 +44,7 @@ Resources:
                 Action:
                   - codePipeline:PutJobSuccessResult
                   - codePipeline:PutJobFailureResult
-                Resource: *
+                Resource: "*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /

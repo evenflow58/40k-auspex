@@ -28,7 +28,7 @@ async fn main() -> Result<(), Error> {
 // with a Response or an Error
 async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
     info!("Starting {:?}", event);
-    info!("payload {:?}", event.payload);
+    info!("payload {:?}", serde_json::ser::to_string(&event.payload));
 
     // Create a variable called file that opens the file data/grey_knights.json
     let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!(

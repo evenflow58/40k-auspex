@@ -1,4 +1,4 @@
-// use aws_lambda_events::event::codepipeline_job::CodePipelineJob;
+use aws_lambda_events::event::codepipeline_job::CodePipelineJobEvent;
 use aws_sdk_codepipeline::{Client as codepipeline_sdk_client};
 use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
@@ -26,9 +26,9 @@ async fn main() -> Result<(), Error> {
 
 // Create a function call function_handler that takes a LambdaEvent and returns a Result
 // with a Response or an Error
-async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
+async fn function_handler(event: LambdaEvent<CodePipelineJobEvent>) -> Result<Response, Error> {
     info!("Starting {:?}", event);
-    info!("payload {:?}", serde_json::ser::to_string(&event.payload));
+    info!("payload {:?}", event.payload);
 
     // Create a variable called file that opens the file data/grey_knights.json
     let grey_knights: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!(

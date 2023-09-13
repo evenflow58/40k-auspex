@@ -8,7 +8,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use std::collections::HashMap;
 use tracing::info;
 
-use load_data::{models::{army::Army, response::Response},data::services::data::serialize_and_load_data};
+use load_data::{models::{army::Army, response::Response},services::data::serialize_and_load_data};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {

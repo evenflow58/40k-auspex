@@ -80,10 +80,11 @@ Resources:
               - Name: apiGatewayBuildOutput
               - Name: databaseBuildOutput
               - Name: apiGatewayDeploymentBuildOutput
+              - Name: processingBuildOutput
             RunOrder: 1
         - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
           Actions:
-            - Name: DeployProcessingLambda
+            - Name: DeployDataProcessing
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS

@@ -1,0 +1,12 @@
+{
+  "name": "processing",
+  "version": "1.0.0",
+  "description": "Processing lambda",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd load-data && npm run build",
+    "package": "sam package --template-file ./load-data/template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -83,6 +83,21 @@ Resources:
             RunOrder: 1
         - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
           Actions:
+            - Name: DeployProcessingLambda
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: processingBuildOutput
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                StackName: !Sub '${AWS::StackName}-Stack-API'
+              RunOrder: 1
             - Name: DeployApi
               ActionTypeId:
                 Category: Deploy
@@ -127,15 +142,6 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Database'
               RunOrder: 2
-            - Name: SeedDatabase
-              ActionTypeId:
-                Category: Invoke
-                Owner: AWS
-                Version: 1
-                Provider: Lambda
-              Configuration:
-                FunctionName: LoadDataFunction
-              RunOrder: 3
             - Name: DeployApiStage
               ActionTypeId:
                 Category: Deploy

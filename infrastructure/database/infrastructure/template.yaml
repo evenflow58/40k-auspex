@@ -24,22 +24,9 @@ Resources:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
-  LambdaLoad:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: ../load-data/template.yaml
-      Parameters:
-        TableName: !Ref 40kAuspexTable
-
 Outputs:
   DbTableName:
     Value: !Ref 40kAuspexTable
     Description: The table name for 40k Auspex
     Export:
       Name: DbTableName
-
-  LoadDataName:
-    Value: !GetAtt LambdaLoad.Outputs.LoadDataFunctionName
-    Description: The name of the load data lambda function
-    Export:
-      Name: LoadDataName

@@ -36,15 +36,6 @@ Resources:
                 Action:
                   - dynamodb:BatchWriteItem
                 Resource: !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/40kAuspexTable"
-        - PolicyName: CodePipelinePermissions
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - codePipeline:PutJobSuccessResult
-                  - codePipeline:PutJobFailureResult
-                Resource: "*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
@@ -64,6 +55,31 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref TableName
+
+  LoadDataFunctionAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      Description: The live version to process data uploads for seeding the database
+      FunctionName: !Ref LoadDataFunction
+      FunctionVersion: '$LATEST'
+      Name: live
+
+  DataSns:
+    Types: AWS::SNS::Topic
+    Properties:
+      TopicName: DataSns
+      Subscription:
+        - Endpoint: !Ref LoadDataFunctionAlias
+          Protocol: lambda
+
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: auspex-data
+      NotificationConfiguration:
+        TopicConfigurations:
+          - Topic: !Ref DataSns
+            Event: s3:ObjectCreated:*
 
 Outputs:
   LoadDataFunctionName:

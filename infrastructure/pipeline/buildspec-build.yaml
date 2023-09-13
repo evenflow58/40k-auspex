@@ -51,3 +51,7 @@ artifacts:
       base-directory: infrastructure/database
       files:
         - '**/*'
+    processingBuildOutput:
+      base-directory: processing
+      files:
+        - '**/*'

@@ -77,7 +77,7 @@ Resources:
     Properties:
       BucketName: auspex-data
       NotificationConfiguration:
-        TopicConfiguration:
+        TopicConfigurations:
           - Topic: !Ref DataSns
             Event: 's3:ObjectCreated:*'
 

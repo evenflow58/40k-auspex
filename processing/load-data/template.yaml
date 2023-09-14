@@ -72,6 +72,21 @@ Resources:
         - Endpoint: !Ref LoadDataFunctionAlias
           Protocol: lambda
 
+  DataSnsPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - s3.amazonaws.com
+            Action: sns:Publish
+            Resource: !Ref DataSns
+      Topics:
+        - !Ref DataSns
+
   DataBucket:
     Type: AWS::S3::Bucket
     Properties:

@@ -79,7 +79,7 @@ Resources:
       NotificationConfiguration:
         TopicConfiguration:
           - Topic: !Ref DataSns
-            Event: s3:ObjectCreated:*
+            Event: 's3:ObjectCreated:*'
 
 Outputs:
   LoadDataFunctionName:

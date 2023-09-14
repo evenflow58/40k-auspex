@@ -161,8 +161,8 @@ Resources:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: processingBuildOutput::template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                StackName: !Sub '${AWS::StackName}-Stack-API'
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
+                StackName: !Sub '${AWS::StackName}-Stack-Data-Processing'
                 ParameterOverrides: !Sub
                   - '{ "TableName": "${TableName}" }'
                   - TableName: databaseDeployOutput.DbTableName

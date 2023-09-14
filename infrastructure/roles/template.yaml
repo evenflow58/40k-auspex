@@ -291,6 +291,21 @@ Resources:
                   - dynamodb:DeleteTable
                 Effect: Allow
                 Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*'
+              - Action:
+                  - SNS:GetTopicAttributes
+                  - SNS:CreateTopic
+                  - SNS:Subscribe
+                  - SNS:DeleteTopic
+                Effect: Allow
+                Resource: !Sub 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:*'
+              - Effect: Allow
+                Action:
+                  - s3:CreateBucket
+                  - s3:DeleteBucket
+                  - s3:PutBucketVersioning
+                  - s3:PutBucketAcl
+                  - s3:PutBucketNotification
+                Resource: arn:aws:s3:::*
 
   InfrastructureRole:
     Type: AWS::IAM::Role

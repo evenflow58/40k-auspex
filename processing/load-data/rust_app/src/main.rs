@@ -31,6 +31,14 @@ async fn main() -> Result<(), Error> {
 async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Error> {
     info!("Starting {:?}", event);
 
+    event.records.iter().for_each(|record| {
+        info!("Record {:?}", record);
+
+        record.sns.message_attributes.iter().for_each(|(key, value)| {
+            info!("Key {:?} Value {:?}", key, value);
+        });
+    });
+
     // Create a variable called config that is a aws_config::Config that is created from
     // the load_from_env() function
     let config = ::aws_config::load_from_env().await;

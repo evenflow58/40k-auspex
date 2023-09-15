@@ -64,6 +64,14 @@ Resources:
       FunctionVersion: '$LATEST'
       Name: live
 
+  LoadDataPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda.invokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref DataSns
+      FunctionName: !Ref LoadDataFunctionAlias
+
   DataSns:
     Type: AWS::SNS::Topic
     Properties:

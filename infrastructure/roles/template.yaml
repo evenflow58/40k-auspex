@@ -293,6 +293,7 @@ Resources:
                 Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*'
               - Action:
                   - SNS:GetTopicAttributes
+                  - SNS:SetTopicAttributes
                   - SNS:CreateTopic
                   - SNS:Subscribe
                   - SNS:DeleteTopic

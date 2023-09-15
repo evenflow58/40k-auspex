@@ -1,3 +1,4 @@
+use crate::models::effect::Effect;
 use aws_sdk_dynamodb::types::AttributeValue;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -31,12 +32,30 @@ impl Weapon {
     pub fn get_hash_map(&self) -> HashMap<String, AttributeValue> {
         let mut map = HashMap::new();
         map.insert("Name".to_string(), AttributeValue::S(self.name.clone()));
-        map.insert("Range".to_string(), AttributeValue::N(self.range));
-        map.insert("Attacks".to_string(), AttributeValue::N(self.attacks));
-        map.insert("Skill".to_string(), AttributeValue::N(self.skill));
-        map.insert("Strength".to_string(), AttributeValue::N(self.strength));
-        map.insert("ArmorPenetration".to_string(), AttributeValue::N(self.armor_penetration));
-        map.insert("Damage".to_string(), AttributeValue::N(self.damage));
+        map.insert(
+            "Range".to_string(),
+            AttributeValue::N(self.range.to_string()),
+        );
+        map.insert(
+            "Attacks".to_string(),
+            AttributeValue::N(self.attacks.to_string()),
+        );
+        map.insert(
+            "Skill".to_string(),
+            AttributeValue::N(self.skill.to_string()),
+        );
+        map.insert(
+            "Strength".to_string(),
+            AttributeValue::N(self.strength.to_string()),
+        );
+        map.insert(
+            "ArmorPenetration".to_string(),
+            AttributeValue::N(self.armor_penetration.to_string()),
+        );
+        map.insert(
+            "Damage".to_string(),
+            AttributeValue::N(self.damage.to_string()),
+        );
         map.insert(
             "Effects".to_string(),
             AttributeValue::L(

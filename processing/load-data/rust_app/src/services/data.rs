@@ -2,11 +2,16 @@ use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
     Client as dynamodb_sdk_client,
 };
-use tracing::info;
 use std::fs::File;
 use std::io::Read;
+use tracing::info;
 
-pub async fn serialize_and_load_data(dynamodb_client: dynamodb_sdk_client, table_name: &str, army_name: &str, file_location: &str) {
+pub async fn serialize_and_load_data(
+    dynamodb_client: dynamodb_sdk_client,
+    table_name: &str,
+    army_name: &str,
+    file_location: &str,
+) {
     // Create a variable called file that opens the file data/grey_knights.json
     // let army: Army = serde_json::from_str(&String::from_utf8_lossy(include_bytes!(
     //     file_location

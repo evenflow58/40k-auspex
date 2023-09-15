@@ -1,3 +1,4 @@
+use crate::models::weapon::Weapon;
 use aws_sdk_dynamodb::types::AttributeValue;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -13,7 +14,7 @@ use std::collections::HashMap;
 // and that's it
 #[derive(Deserialize, Debug)]
 pub struct Unit {
-    name: str,
+    name: String,
     movement: i32,
     toughness: i32,
     save: i32,
@@ -51,11 +52,21 @@ impl Unit {
         );
         map.insert(
             "RangedWeapons".to_string(),
-            AttributeValue::M(self.ranged_weapons.get_hash_map()),
+            AttributeValue::L(
+                self.ranged_weapons
+                    .iter()
+                    .map(|weapon| AttributeValue::M(weapon.get_hash_map()))
+                    .collect(),
+            ),
         );
         map.insert(
             "MeleeWeapons".to_string(),
-            AttributeValue::M(self.melee_weapons.get_hash_map()),
+            AttributeValue::L(
+                self.melee_weapons
+                    .iter()
+                    .map(|weapon| AttributeValue::M(weapon.get_hash_map()))
+                    .collect(),
+            ),
         );
         map
     }

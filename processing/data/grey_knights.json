@@ -19,15 +19,15 @@
                     "damage": 2,
                     "effects": [
                         {
-                            "type": "anti",
+                            "effect_type": "anti",
                             "target": "demon",
                             "amount": 2
                         },
                         {
-                            "type": "ignores cover"
+                            "effect_type": "ignores cover"
                         },
                         {
-                            "type": "psychic"
+                            "effect_type": "psychic"
                         }
                     ]
                 },
@@ -41,7 +41,7 @@
                     "damage": 1,
                     "effects": [
                         {
-                            "type": "rapid fire",
+                            "effect_type": "rapid fire",
                             "amount": 2
                         }
                     ]
@@ -58,12 +58,12 @@
                     "damage": 3,
                     "effects": [
                         {
-                            "type": "anti",
+                            "effect_type": "anti",
                             "target": "demon",
                             "amount": 2
                         },
                         {
-                            "type": "psychic"
+                            "effect_type": "psychic"
                         }
                     ]
                 }

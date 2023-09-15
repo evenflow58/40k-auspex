@@ -8,7 +8,10 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use std::collections::HashMap;
 use tracing::info;
 
-use load_data::{models::{army::Army, response::Response},services::data::serialize_and_load_data};
+use load_data::{
+    models::{army::Army, response::Response},
+    services::data::serialize_and_load_data,
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -32,7 +35,7 @@ async fn function_handler(event: LambdaEvent<S3BatchJobEvent>) -> Result<Respons
     // the load_from_env() function
     let config = ::aws_config::load_from_env().await;
     info!("Loaded config {:?}", config);
-    
+
     // Create a variable called dynamodb-client that is a dynamodb::Client that is created from
     // the config variable
     let dynamodb_client = dynamodb_sdk_client::new(&config);

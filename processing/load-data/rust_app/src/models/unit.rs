@@ -13,13 +13,15 @@ use std::collections::HashMap;
 // and that's it
 #[derive(Deserialize, Debug)]
 pub struct Unit {
-    name: String,
+    name: str,
     movement: i32,
     toughness: i32,
     save: i32,
     weapon_skill: i32,
     leadership: i32,
     objective_control: i32,
+    ranged_weapons: Option<Weapon>,
+    melee_weapons: Option<Weapon>,
 }
 
 impl Unit {
@@ -46,6 +48,14 @@ impl Unit {
         map.insert(
             "ObjectiveControl".to_string(),
             AttributeValue::N(self.objective_control.to_string()),
+        );
+        map.insert(
+            "RangedWeapons".to_string(),
+            AttributeValue::M(self.ranged_weapons.get_hash_map()),
+        );
+        map.insert(
+            "MeleeWeapons".to_string(),
+            AttributeValue::M(self.melee_weapons.get_hash_map()),
         );
         map
     }

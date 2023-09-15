@@ -1,4 +1,4 @@
-use aws_lambda_events::event::s3::batch_job::S3BatchJobEvent;
+use aws_lambda_events::event::sns::SnsEvent;
 use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
     Client as dynamodb_sdk_client,
@@ -28,7 +28,7 @@ async fn main() -> Result<(), Error> {
 
 // Create a function call function_handler that takes a LambdaEvent and returns a Result
 // with a Response or an Error
-async fn function_handler(event: LambdaEvent<S3BatchJobEvent>) -> Result<Response, Error> {
+async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Error> {
     info!("Starting {:?}", event);
 
     // Create a variable called config that is a aws_config::Config that is created from

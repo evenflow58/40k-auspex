@@ -31,7 +31,7 @@ async fn main() -> Result<(), Error> {
 async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Error> {
     info!("Starting {:?}", event);
 
-    event.records.iter().for_each(|record| {
+    event.payload.records.iter().for_each(|record| {
         info!("Record {:?}", record);
 
         record.sns.message_attributes.iter().for_each(|(key, value)| {

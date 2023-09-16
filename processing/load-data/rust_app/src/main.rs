@@ -1,4 +1,5 @@
 use aws_lambda_events::event::sns::SnsEvent;
+use aws_lambda_events::event::s3::S3Event;
 use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
     Client as dynamodb_sdk_client,
@@ -34,9 +35,8 @@ async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Erro
     event.payload.records.iter().for_each(|record| {
         info!("Record {:?}", record);
 
-        record.sns.message_attributes.iter().for_each(|(key, value)| {
-            info!("Key {:?} Value {:?}", key, value);
-        });
+        let message = serde_json::from_str::<S3Event>(&record.sns.message);
+        info!("Message {:?}", message);
     });
 
     // Create a variable called config that is a aws_config::Config that is created from

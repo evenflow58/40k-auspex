@@ -30,13 +30,21 @@ async fn main() -> Result<(), Error> {
 // Create a function call function_handler that takes a LambdaEvent and returns a Result
 // with a Response or an Error
 async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Error> {
-    info!("Starting {:?}", event);
+    info!("Event {:?}", event);
 
     event.payload.records.iter().for_each(|record| {
-        info!("Record {:?}", record);
-
-        let message = serde_json::from_str::<S3Event>(&record.sns.message);
+        let message = serde_json::from_str::<S3Event>(&record.sns.message).unwrap();
         info!("Message {:?}", message);
+
+        message.records.iter().for_each(|s3_record| {
+            info!("Record {:?}", s3_record);
+
+            let bucket = s3_record.s3.bucket.name.clone();
+            info!("Bucket {:?}", bucket);
+
+            let object = s3_record.s3.object.key.clone();
+            info!("Object {:?}", object);
+        });
     });
 
     // Create a variable called config that is a aws_config::Config that is created from

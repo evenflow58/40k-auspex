@@ -1,16 +1,16 @@
 use aws_lambda_events::event::sns::SnsEvent;
 use aws_lambda_events::event::s3::S3Event;
 use aws_sdk_dynamodb::{
-    types::{AttributeValue, PutRequest, WriteRequest},
     Client as dynamodb_sdk_client,
 };
+use aws_sdk_s3::{Client as s3_sdk_client};
 use envmnt;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-use std::collections::HashMap;
 use tracing::info;
+use futures::future::join_all;
 
 use load_data::{
-    models::{army::Army, response::Response},
+    models::response::Response,
     services::data::serialize_and_load_data,
 };
 
@@ -32,21 +32,6 @@ async fn main() -> Result<(), Error> {
 async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Error> {
     info!("Event {:?}", event);
 
-    event.payload.records.iter().for_each(|record| {
-        let message = serde_json::from_str::<S3Event>(&record.sns.message).unwrap();
-        info!("Message {:?}", message);
-
-        message.records.iter().for_each(|s3_record| {
-            info!("Record {:?}", s3_record);
-
-            let bucket = s3_record.s3.bucket.name.clone();
-            info!("Bucket {:?}", bucket);
-
-            let object = s3_record.s3.object.key.clone();
-            info!("Object {:?}", object);
-        });
-    });
-
     // Create a variable called config that is a aws_config::Config that is created from
     // the load_from_env() function
     let config = ::aws_config::load_from_env().await;
@@ -55,13 +40,35 @@ async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Erro
     // Create a variable called dynamodb-client that is a dynamodb::Client that is created from
     // the config variable
     let dynamodb_client = dynamodb_sdk_client::new(&config);
-    info!("Created client");
+    let s3_client = s3_sdk_client::new(&config);
+    info!("Created clients");
 
     // Create a variable called table_name that is a String that is created from the
     // TABLE_NAME environment variable
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
 
-    // serialize_and_load_data(&dynamodb_client, table_name, "Grey Knights", "data/grey_knights.json").await?;
+    let mut futures = Vec::new();
+
+    // Create a vector of futures by iterating through the records in the payload of the event.
+    // For each record, iterate through the messages in the record. For each message, deserialize
+    // the message into a S3Event. For each record in the S3Event, create a future with
+    // serialize_and_load_data and append it to the vector of futures.
+    for record in event.payload.records {
+        let s3_event: S3Event = serde_json::from_str(&record.sns.message).unwrap();
+        for record in s3_event.records {
+            let bucket = record.s3.bucket.name.unwrap();
+            let file = record.s3.object.key.unwrap();
+            futures.push(serialize_and_load_data(
+                &dynamodb_client,
+                &s3_client,
+                &table_name,
+                bucket,
+                file,
+            ));
+        }
+    }
+
+    join_all(futures).await;
 
     Ok(Response {})
 }

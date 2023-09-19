@@ -6,7 +6,7 @@ use std::collections::HashMap;
 // Create a struct named Army that contains a list of Units
 #[derive(Deserialize, Debug)]
 pub struct Army {
-    // #[serde(deserialize_with = "get_hash_map")]
+    pub name: String,
     units: Vec<Unit>,
 }
 

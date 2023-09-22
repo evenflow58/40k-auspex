@@ -1,0 +1,121 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Loads base data into the database
+
+Parameters:
+  TableName:
+    Type: String
+    Description: The name of the table to load data into
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LoadDataRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: S3Permissions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub "arn:aws:s3:::auspex-data/*"
+        - PolicyName: DynamoPermissions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:BatchWriteItem
+                Resource: !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/40kAuspexTable"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+
+  LoadDataFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Metadata:
+      BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
+    Properties:
+      FunctionName: LoadDataFunction
+      CodeUri: rust_app/target/lambda/load-data
+      # CodeUri: rust_app
+      Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
+      Runtime: provided.al2
+      Architectures:
+        - arm64
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TableName
+
+  LoadDataFunctionAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      Description: The live version to process data uploads for seeding the database
+      FunctionName: !Ref LoadDataFunction
+      FunctionVersion: '$LATEST'
+      Name: live
+
+  LoadDataPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref DataSns
+      FunctionName: !Ref LoadDataFunctionAlias
+
+  DataSns:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: DataSns
+      Subscription:
+        - Endpoint: !Ref LoadDataFunctionAlias
+          Protocol: lambda
+
+  DataSnsPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - s3.amazonaws.com
+            Action: sns:Publish
+            Resource: !Ref DataSns
+      Topics:
+        - !Ref DataSns
+
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: auspex-data
+      NotificationConfiguration:
+        TopicConfigurations:
+          - Topic: !Ref DataSns
+            Event: 's3:ObjectCreated:*'
+
+Outputs:
+  LoadDataFunctionName:
+    Value: !Ref LoadDataFunction
+    Description: The name of the load data lambda function
+    Export:
+      Name: LoadDataFunctionName

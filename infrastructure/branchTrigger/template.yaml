@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week trigger to create pipelines
+Description: The 40k Auspex trigger to create pipelines
 
 Resources:
   CodeBuildRole:

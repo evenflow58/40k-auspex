@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week roles for the pipeline
+Description: The 40k Auspex roles for the pipeline
 
 Resources:
   BuildExecutionRole:
@@ -164,6 +164,10 @@ Resources:
               Action:
                 - codestar-connections:UseConnection
               Resource: arn:aws:codestar-connections:us-east-2:625961017727:connection/760e3889-f416-44aa-9c62-001a92098608
+            - Action:
+                - lambda:InvokeFunction
+              Effect: Allow
+              Resource: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*'
             
   CloudFormationExecutionRole:
     Type: AWS::IAM::Role
@@ -284,8 +288,25 @@ Resources:
               - Action:
                   - dynamodb:DescribeTable
                   - dynamodb:CreateTable
+                  - dynamodb:DeleteTable
                 Effect: Allow
                 Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/*'
+              - Action:
+                  - SNS:GetTopicAttributes
+                  - SNS:SetTopicAttributes
+                  - SNS:CreateTopic
+                  - SNS:Subscribe
+                  - SNS:DeleteTopic
+                Effect: Allow
+                Resource: !Sub 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:*'
+              - Effect: Allow
+                Action:
+                  - s3:CreateBucket
+                  - s3:DeleteBucket
+                  - s3:PutBucketVersioning
+                  - s3:PutBucketAcl
+                  - s3:PutBucketNotification
+                Resource: arn:aws:s3:::*
 
   InfrastructureRole:
     Type: AWS::IAM::Role

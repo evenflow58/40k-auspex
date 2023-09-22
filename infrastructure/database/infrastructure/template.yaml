@@ -1,28 +1,32 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week Database
+Description: The 40k Auspex Database
 
 Resources:
-  MonsterOfTheWeekTable:
+  40kAuspexTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: MonsterOfTheWeekTable
+      TableName: 40kAuspexTable
       AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
         - AttributeName: type
           AttributeType: S
-        - AttributeName: id
-          AttributeType: N
+        # - AttributeName: data
+        #   AttributeType: S
       KeySchema:
-        - AttributeName: type
-          KeyType: HASH
         - AttributeName: id
+          KeyType: HASH
+        - AttributeName: type
           KeyType: RANGE
+        # - AttributeName: data
+        #   KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
 Outputs:
   DbTableName:
-    Value: !Ref MonsterOfTheWeekTable
-    Description: The table name for Monster of the Week
+    Value: !Ref 40kAuspexTable
+    Description: The table name for 40k Auspex
     Export:
       Name: DbTableName

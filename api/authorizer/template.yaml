@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The Monster of the Week api gateway authorizer
+Description: The 40k Auspex api gateway authorizer
 
 Parameters:
   ApiGatewayId:

@@ -30,11 +30,11 @@ Resources:
           - Effect: Allow
             Action:
               - iam:*
-            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/monster-of-the-week-roles-*"
+            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/40k-auspex-roles-*"
           - Effect: Allow
             Action:
               - codebuild:DeleteProject
-            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/monster-week-*"
+            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/40k-auspex-*"
           - Effect: Allow
             Action:
               - codepipeline:*

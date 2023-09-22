@@ -1,0 +1,20 @@
+[package]
+name = "load-data"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+aws-config = "0.56.1"
+aws-sdk-dynamodb = "0.30.0"
+aws-sdk-s3 = "0.30.0"
+aws_lambda_events = { version = "0.11.1", features = ["s3", "s3_batch_job", "sns"], default-features = false }
+envmnt = "0.10.4"
+futures = "0.3.28"
+lambda_runtime = "0.6.1"
+serde = "1.0.136"
+serde_json = "1.0.104"
+tokio = { version = "1", features = ["full"] }
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }

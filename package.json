@@ -1,7 +1,7 @@
 {
-  "name": "monster-of-week",
+  "name": "40k-auspex",
   "version": "1.0.0",
-  "description": "The monster of the week website",
+  "description": "The 40kauspex of the week website",
   "main": "index.js",
   "devDependencies": {
     "husky": "^4.2.5",
@@ -16,27 +16,29 @@
     "build-all": "npm-run-all --parallel build:* && cd ../",
     "build:api": "cd api && npm run build",
     "build:ui": "cd ui && npm run build",
+    "build:processing": "cd processing && npm run build",
     "test-all": "npm-run-all --parallel test:*",
     "package-all": "npm-run-all --parallel package:*",
     "package:api": "cd api && npm run package",
     "package:api-gateway": "cd infrastructure/apiGateway && npm run package",
     "package:api-gateway-deployment": "cd infrastructure/apiGatewayDeployment && npm run package",
     "package:database": "cd infrastructure/database && npm run package",
+    "package:processing": "cd processing && npm run package",
     "package:edge": "cd infrastructure/url && npm run package"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/evenflow58/monster-of-week.git"
+    "url": "git+https://github.com/evenflow58/40k-auspex.git"
   },
   "author": "Evan Johnson",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/evenflow58/monster-of-week/issues"
+    "url": "https://github.com/evenflow58/40k-auspex/issues"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged 'packages/**/{src,spec}/{*.ts,*.json}'"
     }
   },
-  "homepage": "https://github.com/evenflow58/monster-of-week#readme"
+  "homepage": "https://github.com/evenflow58/40k-auspex#readme"
 }

@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week S3 bucket for code
+Description: The 40k Auspex S3 bucket for code
 
 Resources:
   ArtifactBucket:
@@ -12,6 +12,6 @@ Resources:
 Outputs:
   ArtifactBucketId:
     Value: !Ref ArtifactBucket
-    Description: The id of the build repository for the Monster of the Week appliation.
+    Description: The id of the build repository for the 40k Auspex appliation.
     Export:
       Name: ArtifactBucketId

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The Monster of the Week api gateway deployment
+Description: The 40k Auspex api gateway deployment
 
 Parameters:
   BasePathDomain:
@@ -8,7 +8,7 @@ Parameters:
     Default: ''
   HostedZoneId:
     Type: String
-    Default: Z0953270AK2JGXA33JIB
+    Default: Z0979474E2LBKBWMAJBG
 
 Resources:
   ProdDeployment:
@@ -21,7 +21,7 @@ Resources:
     Type: AWS::ApiGateway::DomainName
     Properties:
       DomainName: !Ref BasePathDomain
-      RegionalCertificateArn: arn:aws:acm:us-east-1:625961017727:certificate/edd15537-9b78-4e21-a100-9ce277ca42bf
+      RegionalCertificateArn: arn:aws:acm:us-east-1:625961017727:certificate/5be7a1f8-2259-4172-bb5e-00cbeb10d53d
       EndpointConfiguration:
         Types:
           - REGIONAL

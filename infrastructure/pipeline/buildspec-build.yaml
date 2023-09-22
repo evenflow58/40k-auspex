@@ -17,6 +17,7 @@ phases:
       - echo "installing rust dependencies"
       - curl https://sh.rustup.rs -sSf | bash -s -- -y
       - source $HOME/.cargo/env
+      - rustup target add aarch64-unknown-linux-gnu
       - pip3 install cargo-lambda
   build:
     commands:
@@ -48,5 +49,9 @@ artifacts:
         - '**/*'
     databaseBuildOutput:
       base-directory: infrastructure/database
+      files:
+        - '**/*'
+    processingBuildOutput:
+      base-directory: processing
       files:
         - '**/*'

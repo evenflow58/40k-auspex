@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The Monster of the Week Pipeline
+Description: The 40k Auspex Pipeline
 
 Parameters:
   GitHubRepo:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: monster-of-week
+    Default: 40k-auspex
   GitHubBranch:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
@@ -80,6 +80,7 @@ Resources:
               - Name: apiGatewayBuildOutput
               - Name: databaseBuildOutput
               - Name: apiGatewayDeploymentBuildOutput
+              - Name: processingBuildOutput
             RunOrder: 1
         - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
           Actions:
@@ -120,11 +121,13 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: databaseBuildOutput
+              OutputArtifacts:
+                - Name: databaseDeployOutput
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: databaseBuildOutput::infrastructure/template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Database'
               RunOrder: 2
             - Name: DeployApiStage
@@ -143,8 +146,27 @@ Resources:
                 StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
                 ParameterOverrides: !Sub
                   - '{ "BasePathDomain": "${BasePathDomain}" }'
-                  - BasePathDomain: !If [IsProduction, 'api.monsterplaybook.rip', !Sub 'api-${GitHubBranch}.monsterplaybook.rip']
+                  - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
               RunOrder: 2
+            - Name: DeployDataProcessing
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: processingBuildOutput
+                - Name: databaseDeployOutput
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                TemplatePath: processingBuildOutput::template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
+                StackName: !Sub '${AWS::StackName}-Stack-Data-Processing'
+                ParameterOverrides: !Sub
+                  - '{ "TableName": "${TableName}" }'
+                  - TableName: databaseDeployOutput.DbTableName
+              RunOrder: 3
         - !If
           - IsProduction
           - Name: DeploymentApproval
@@ -188,7 +210,7 @@ Resources:
                   ChangeSetName: ui
                   TemplatePath: lambdaEdgeBuildOutput::infrastructure/template.package.yaml
                   Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                  ParameterOverrides: '{ "Domain": "monsterplaybook.rip", "BranchName": "master" }'
+                  ParameterOverrides: '{ "Domain": "40kauspex.com", "BranchName": "master" }'
                 InputArtifacts:
                   - Name: lambdaEdgeBuildOutput
                 RunOrder: 1
@@ -207,7 +229,7 @@ Resources:
                   ChangeSetName: api
                   TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                   Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                  ParameterOverrides: '{ "BasePathDomain": "api.monsterplaybook.rip" }'
+                  ParameterOverrides: '{ "BasePathDomain": "api.40kauspex.com" }'
                 RunOrder: 1
               - Name: CreateApiDeploymentChangeSet
                 ActionTypeId:

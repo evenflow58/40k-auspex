@@ -17,12 +17,12 @@ use std::collections::HashMap;
 pub struct Weapon {
     name: String,
     range: i32,
-    attacks: i32,
+    attacks: String,
     skill: i32,
     strength: i32,
-    armor_penetration: i32,
-    damage: i32,
-    effects: Vec<Effect>,
+    armor_penetration: Option<i32>,
+    damage: String,
+    effects: Option<Vec<Effect>>,
 }
 
 // Create an implementation for Weapon that has a function called get_hash_map that returns a HashMap<String, AttributeValue>
@@ -38,7 +38,7 @@ impl Weapon {
         );
         map.insert(
             "Attacks".to_string(),
-            AttributeValue::N(self.attacks.to_string()),
+            AttributeValue::S(self.attacks.clone()),
         );
         map.insert(
             "Skill".to_string(),
@@ -48,23 +48,30 @@ impl Weapon {
             "Strength".to_string(),
             AttributeValue::N(self.strength.to_string()),
         );
-        map.insert(
-            "ArmorPenetration".to_string(),
-            AttributeValue::N(self.armor_penetration.to_string()),
-        );
-        map.insert(
-            "Damage".to_string(),
-            AttributeValue::N(self.damage.to_string()),
-        );
-        map.insert(
-            "Effects".to_string(),
-            AttributeValue::L(
-                self.effects
-                    .iter()
-                    .map(|effect| AttributeValue::M(effect.get_hash_map()))
-                    .collect(),
-            ),
-        );
+        match self.armor_penetration {
+            Some(armor_penetration) => {
+                map.insert(
+                    "ArmorPenetration".to_string(),
+                    AttributeValue::N(armor_penetration.to_string()),
+                );
+            }
+            None => {}
+        }
+        map.insert("Damage".to_string(), AttributeValue::S(self.damage.clone()));
+        match &self.effects {
+            Some(effects) => {
+                map.insert(
+                    "Effects".to_string(),
+                    AttributeValue::L(
+                        effects
+                            .iter()
+                            .map(|effect| AttributeValue::M(effect.get_hash_map()))
+                            .collect(),
+                    ),
+                );
+            }
+            None => {}
+        }
         map
     }
 }

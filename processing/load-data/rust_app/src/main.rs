@@ -1,18 +1,13 @@
-use aws_lambda_events::event::sns::SnsEvent;
 use aws_lambda_events::event::s3::S3Event;
-use aws_sdk_dynamodb::{
-    Client as dynamodb_sdk_client,
-};
-use aws_sdk_s3::{Client as s3_sdk_client};
+use aws_lambda_events::event::sns::SnsEvent;
+use aws_sdk_dynamodb::Client as dynamodb_sdk_client;
+use aws_sdk_s3::Client as s3_sdk_client;
 use envmnt;
+use futures::future::join_all;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use tracing::info;
-use futures::future::join_all;
 
-use load_data::{
-    models::response::Response,
-    services::data::serialize_and_load_data,
-};
+use load_data::{models::response::Response, services::data::serialize_and_load_data};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -68,7 +63,11 @@ async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Erro
         }
     }
 
+    info!("Built futures");
+
     join_all(futures).await;
+
+    info!("Joined futures");
 
     Ok(Response {})
 }

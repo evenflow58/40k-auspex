@@ -1,13 +1,14 @@
 use aws_sdk_dynamodb::types::AttributeValue;
 use serde::Deserialize;
 use std::collections::HashMap;
+use crate::enums::target::Target;
 
 // Create a struct named effect that contains a type, target and amount
 #[derive(Deserialize, Debug)]
 pub struct Effect {
     effect_type: String,
-    target: String,
-    amount: i32,
+    target: Option<Target>,
+    amount: Option<i32>,
 }
 
 impl Effect {
@@ -17,11 +18,19 @@ impl Effect {
             "Type".to_string(),
             AttributeValue::S(self.effect_type.clone()),
         );
-        map.insert("Target".to_string(), AttributeValue::S(self.target.clone()));
-        map.insert(
-            "Amount".to_string(),
-            AttributeValue::N(self.amount.to_string()),
-        );
+        match &self.target {
+            Some(target) => {
+                map.insert("Target".to_string(), AttributeValue::S(target.to_string()));
+            }
+            None => {}
+        };
+        match self.amount {
+            Some(amount) => {
+                map.insert("Amount".to_string(), AttributeValue::N(amount.to_string()));
+            }
+            None => {}
+        };
+
         map
     }
 }

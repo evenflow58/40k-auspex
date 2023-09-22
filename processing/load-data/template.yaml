@@ -28,6 +28,14 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
+        - PolicyName: S3Permissions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub "arn:aws:s3:::auspex-data/*"
         - PolicyName: DynamoPermissions
           PolicyDocument:
             Version: 2012-10-17
@@ -47,6 +55,7 @@ Resources:
     Properties:
       FunctionName: LoadDataFunction
       CodeUri: rust_app/target/lambda/load-data
+      # CodeUri: rust_app
       Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
       Runtime: provided.al2
       Architectures:

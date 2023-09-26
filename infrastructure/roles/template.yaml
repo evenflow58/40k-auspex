@@ -168,6 +168,12 @@ Resources:
                 - lambda:InvokeFunction
               Effect: Allow
               Resource: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*'
+            - Effect: Allow
+              Action:
+                - codebuild:StartBuild
+                - codebuild:BatchGetBuilds
+                - codebuild:StartBuildBatch
+              Resource: !Sub "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:*"
             
   CloudFormationExecutionRole:
     Type: AWS::IAM::Role

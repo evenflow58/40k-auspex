@@ -8,18 +8,13 @@ batch:
   build-list:
     - identifier: uiBuild
       buildspec: ./ui-build.yaml
-      env:
-        variables:
-          BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
-          S3_BUCKET: S3_BUCKET
+      # env:
+      #   variables:
+      #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
+      #     S3_BUCKET: S3_BUCKET
     - identifier: apiBuild
       buildspec: ./api-build.yaml
-      env:
-        variables:
-          BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
-          S3_BUCKET: S3_BUCKET
-
-phases:
-  build:
-    commands:
-      - echo "building"
+      # env:
+      #   variables:
+      #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
+      #     S3_BUCKET: S3_BUCKET

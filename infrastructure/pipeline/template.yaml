@@ -21,6 +21,8 @@ Resources:
       Name: !Sub ${AWS::StackName}-BuildRunner
       Artifacts:
         Type: CODEPIPELINE
+      BuildBatchConfig:
+        ServiceRole: !ImportValue BuildExecutionRoleArn
       Environment:
         ComputeType: BUILD_GENERAL1_MEDIUM
         Image: aws/codebuild/standard:6.0
@@ -133,11 +135,12 @@ Resources:
               Provider: CodeBuild
             Configuration:
               ProjectName: !Ref BuildRunner
+              BatchEnabled: true
             InputArtifacts:
               - Name: SourceCode
-            OutputArtifacts:
-              - Name: uiBuildOutput
-              - Name: lambdaEdgeBuildOutput
+            # OutputArtifacts:
+            #   - Name: uiBuildOutput
+            #   - Name: lambdaEdgeBuildOutput
             RunOrder: 1
           # - Name: BuildApi
           #   ActionTypeId:

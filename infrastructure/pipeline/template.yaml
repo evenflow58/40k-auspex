@@ -15,10 +15,10 @@ Conditions:
   IsProduction: !Equals [!Ref GitHubBranch, "master"]
 
 Resources:
-  UiBuildRunner:
+  BuildRunner:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub ${AWS::StackName}-UiBuildRunner
+      Name: !Sub ${AWS::StackName}-BuildRunner
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -33,47 +33,67 @@ Resources:
       ServiceRole: !ImportValue BuildExecutionRoleArn
       Source:
         Type: CODEPIPELINE
-        BuildSpec: infrastructure/pipeline/buildspecs/ui-build.yaml
+        BuildSpec: infrastructure/pipeline/buildspecs/build.yaml
 
-  ApiBuildRunner:
-    Type: AWS::CodeBuild::Project
-    Properties:
-      Name: !Sub ${AWS::StackName}-ApiBuildRunner
-      Artifacts:
-        Type: CODEPIPELINE
-      Environment:
-        ComputeType: BUILD_GENERAL1_MEDIUM
-        Image: aws/codebuild/standard:6.0
-        Type: LINUX_CONTAINER
-        EnvironmentVariables:
-          - Name: BUILD_OUTPUT_BUCKET
-            Value: !ImportValue ArtifactBucketId
-          - Name: S3_BUCKET
-            Value: !ImportValue ArtifactBucketId
-      ServiceRole: !ImportValue BuildExecutionRoleArn
-      Source:
-        Type: CODEPIPELINE
-        BuildSpec: infrastructure/pipeline/buildspecs/api-build.yaml
+  # UiBuildRunner:
+  #   Type: AWS::CodeBuild::Project
+  #   Properties:
+  #     Name: !Sub ${AWS::StackName}-UiBuildRunner
+  #     Artifacts:
+  #       Type: CODEPIPELINE
+  #     Environment:
+  #       ComputeType: BUILD_GENERAL1_MEDIUM
+  #       Image: aws/codebuild/standard:6.0
+  #       Type: LINUX_CONTAINER
+  #       EnvironmentVariables:
+  #         - Name: BUILD_OUTPUT_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #         - Name: S3_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #     ServiceRole: !ImportValue BuildExecutionRoleArn
+  #     Source:
+  #       Type: CODEPIPELINE
+  #       BuildSpec: infrastructure/pipeline/buildspecs/ui-build.yaml
 
-  DataBuildRunner:
-    Type: AWS::CodeBuild::Project
-    Properties:
-      Name: !Sub ${AWS::StackName}-DataBuildRunner
-      Artifacts:
-        Type: CODEPIPELINE
-      Environment:
-        ComputeType: BUILD_GENERAL1_MEDIUM
-        Image: aws/codebuild/standard:6.0
-        Type: LINUX_CONTAINER
-        EnvironmentVariables:
-          - Name: BUILD_OUTPUT_BUCKET
-            Value: !ImportValue ArtifactBucketId
-          - Name: S3_BUCKET
-            Value: !ImportValue ArtifactBucketId
-      ServiceRole: !ImportValue BuildExecutionRoleArn
-      Source:
-        Type: CODEPIPELINE
-        BuildSpec: infrastructure/pipeline/buildspecs/data-build.yaml
+  # ApiBuildRunner:
+  #   Type: AWS::CodeBuild::Project
+  #   Properties:
+  #     Name: !Sub ${AWS::StackName}-ApiBuildRunner
+  #     Artifacts:
+  #       Type: CODEPIPELINE
+  #     Environment:
+  #       ComputeType: BUILD_GENERAL1_MEDIUM
+  #       Image: aws/codebuild/standard:6.0
+  #       Type: LINUX_CONTAINER
+  #       EnvironmentVariables:
+  #         - Name: BUILD_OUTPUT_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #         - Name: S3_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #     ServiceRole: !ImportValue BuildExecutionRoleArn
+  #     Source:
+  #       Type: CODEPIPELINE
+  #       BuildSpec: infrastructure/pipeline/buildspecs/api-build.yaml
+
+  # DataBuildRunner:
+  #   Type: AWS::CodeBuild::Project
+  #   Properties:
+  #     Name: !Sub ${AWS::StackName}-DataBuildRunner
+  #     Artifacts:
+  #       Type: CODEPIPELINE
+  #     Environment:
+  #       ComputeType: BUILD_GENERAL1_MEDIUM
+  #       Image: aws/codebuild/standard:6.0
+  #       Type: LINUX_CONTAINER
+  #       EnvironmentVariables:
+  #         - Name: BUILD_OUTPUT_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #         - Name: S3_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #     ServiceRole: !ImportValue BuildExecutionRoleArn
+  #     Source:
+  #       Type: CODEPIPELINE
+  #       BuildSpec: infrastructure/pipeline/buildspecs/data-build.yaml
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline

@@ -3,20 +3,23 @@ version: 0.2
 env:
   shell: bash
 
+batch:
+  fast-fail: false
+  build-list:
+    - identifier: uiBuild
+      buildspec: ui-build.yaml
+      env:
+        variables:
+          BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
+          S3_BUCKET: S3_BUCKET
+    - identifier: apiBuild
+      buildspec: api-build.yaml
+      env:
+        variables:
+          BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
+          S3_BUCKET: S3_BUCKET
+
 phases:
   build:
-    batch:
-      fast-fail: false
-      build-list:
-        - identifier: uiBuild
-          buildspec: ui-build.yaml
-          env:
-            variables:
-              BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
-              S3_BUCKET: S3_BUCKET
-        - identifier: apiBuild
-          buildspec: api-build.yaml
-          env:
-            variables:
-              BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
-              S3_BUCKET: S3_BUCKET
+    commands:
+      - echo "building"

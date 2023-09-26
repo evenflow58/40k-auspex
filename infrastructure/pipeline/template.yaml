@@ -23,6 +23,8 @@ Resources:
         Type: CODEPIPELINE
       BuildBatchConfig:
         ServiceRole: !ImportValue BuildExecutionRoleArn
+        Restrictions:
+          MaximumBuildsAllowed: 5
       Environment:
         ComputeType: BUILD_GENERAL1_MEDIUM
         Image: aws/codebuild/standard:6.0

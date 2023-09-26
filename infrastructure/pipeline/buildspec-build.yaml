@@ -32,7 +32,7 @@ artifacts:
     - '*'
   secondary-artifacts:
     uiBuildOutput:
-      base-directory: ui/build
+      base-directory: ui/www
       files:
         - '**/*'
     lambdaEdgeBuildOutput:

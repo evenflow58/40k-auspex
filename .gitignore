@@ -6,5 +6,6 @@ env.*
 samconfig.toml
 
 dist
+ios
 
 template.package.yaml

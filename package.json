@@ -16,6 +16,7 @@
     "build-all": "npm-run-all --parallel build:* && cd ../",
     "build:api": "cd api && npm run build",
     "build:ui": "cd ui && npm run build",
+    "build:url": "cd infrastructure/url && npm run build",
     "build:processing": "cd processing && npm run build",
     "test-all": "npm-run-all --parallel test:*",
     "package-all": "npm-run-all --parallel package:*",
@@ -24,7 +25,8 @@
     "package:api-gateway-deployment": "cd infrastructure/apiGatewayDeployment && npm run package",
     "package:database": "cd infrastructure/database && npm run package",
     "package:processing": "cd processing && npm run package",
-    "package:edge": "cd infrastructure/url && npm run package"
+    "package:edge": "cd infrastructure/url && npm run package",
+    "package:url": "cd infrastructure/url && npm run package"
   },
   "repository": {
     "type": "git",

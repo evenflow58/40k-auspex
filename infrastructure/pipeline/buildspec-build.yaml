@@ -35,6 +35,10 @@ artifacts:
       base-directory: ui/www
       files:
         - '**/*'
+    urlBuildOutput:
+      base-directory: infrastructure/url
+      files:
+        - '**/*'
     lambdaEdgeBuildOutput:
       base-directory: infrastructure/url
       files:

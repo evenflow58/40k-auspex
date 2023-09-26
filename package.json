@@ -13,8 +13,9 @@
     "lint-all": "prettier --check packages/**/**/*.ts && prettier --check packages/**/**/*.json",
     "install-all": "npm-run-all --parallel install:* && cd ../",
 
-    "install:ui": "cd ui && npm i",
-    "install:ui:ui": "npm-run-all --parallel install:ui:* && cd ../../",
+    "install:ui": "npm-run-all --parallel install:ui:* && cd ../../",
+    "install:ui:ui": "cd ui && npm i",
+    "install:ui:url": "cd infrastructure/url && npm i",
 
     "build-all": "npm-run-all --parallel build:* && cd ../",
 

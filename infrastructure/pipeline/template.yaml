@@ -132,7 +132,7 @@ Resources:
             OutputArtifacts:
               - Name: apiGatewayBuildOutput
               - Name: apiGatewayDeploymentBuildOutput
-            RunOrder: 1
+            RunOrder: 2
           - Name: BuildData
             ActionTypeId:
               Category: Build
@@ -146,7 +146,7 @@ Resources:
             OutputArtifacts:
               - Name: databaseBuildOutput
               - Name: processingBuildOutput
-            RunOrder: 1
+            RunOrder: 3
         - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
           Actions:
             - Name: DeployApi

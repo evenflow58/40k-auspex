@@ -140,8 +140,8 @@ Resources:
               BatchEnabled: true
             InputArtifacts:
               - Name: SourceCode
-            # OutputArtifacts:
-            #   - Name: uiBuildOutput
+            OutputArtifacts:
+              - Name: uiBuild_uiBuildOutput
             #   - Name: lambdaEdgeBuildOutput
             RunOrder: 1
           # - Name: BuildApi

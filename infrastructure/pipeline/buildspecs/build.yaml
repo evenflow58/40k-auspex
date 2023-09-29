@@ -23,3 +23,11 @@ batch:
       #   variables:
       #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
       #     S3_BUCKET: S3_BUCKET
+
+artifacts:
+  files:
+    - '*'
+  # secondary_artifacts:
+  #   uiBuildOutput:
+  #     files:
+  #       - '*'

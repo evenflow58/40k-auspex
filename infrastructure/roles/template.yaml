@@ -175,6 +175,7 @@ Resources:
                 - codebuild:RetryBuild
                 - codebuild:BatchGetBuilds
                 - codebuild:StartBuildBatch
+                - codebuild:BatchGetBuildBatches
               Resource: !Sub "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:*"
             
   CloudFormationExecutionRole:

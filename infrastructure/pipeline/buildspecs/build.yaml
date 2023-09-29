@@ -13,12 +13,12 @@ batch:
   build-list:
     - identifier: uiBuild
       buildspec: infrastructure/pipeline/buildspecs/ui-build.yaml
-      # env:
-      #   variables:
-      #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
-      #     S3_BUCKET: S3_BUCKET
-    - identifier: apiBuild
-      buildspec: infrastructure/pipeline/buildspecs/api-build.yaml
+      env:
+        variables:
+          BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
+          S3_BUCKET: S3_BUCKET
+    # - identifier: apiBuild
+    #   buildspec: infrastructure/pipeline/buildspecs/api-build.yaml
       # env:
       #   variables:
       #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET

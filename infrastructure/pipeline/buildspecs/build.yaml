@@ -27,7 +27,7 @@ batch:
 artifacts:
   files:
     - '*'
-  # secondary_artifacts:
-  #   uiBuildOutput:
-  #     files:
-  #       - '*'
+  secondary_artifacts:
+    uiBuildOutput:
+      files:
+        - '*'

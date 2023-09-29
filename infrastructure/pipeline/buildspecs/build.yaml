@@ -12,13 +12,13 @@ batch:
   fast-fail: false
   build-list:
     - identifier: uiBuild
-      buildspec: ui-build.yaml
+      buildspec: infrastructure/pipeline/buildspecs/ui-build.yaml
       # env:
       #   variables:
       #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
       #     S3_BUCKET: S3_BUCKET
     - identifier: apiBuild
-      buildspec: api-build.yaml
+      buildspec: infrastructure/pipeline/buildspecs/api-build.yaml
       # env:
       #   variables:
       #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET

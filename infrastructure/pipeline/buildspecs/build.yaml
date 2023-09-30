@@ -1,0 +1,24 @@
+version: 0.2
+
+env:
+  shell: bash
+
+batch:
+  fast-fail: false
+  build-list:
+    - identifier: uiBuild
+      buildspec: infrastructure/pipeline/buildspecs/ui-build.yaml
+    # - identifier: apiBuild
+    #   buildspec: infrastructure/pipeline/buildspecs/api-build.yaml
+      # env:
+      #   variables:
+      #     BUILD_OUTPUT_BUCKET: BUILD_OUTPUT_BUCKET
+      #     S3_BUCKET: S3_BUCKET
+
+artifacts:
+  files:
+    - '*'
+  secondary_artifacts:
+    uiBuildOutput:
+      files:
+        - '*'

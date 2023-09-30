@@ -1,0 +1,6 @@
+<ion-app>
+  <ion-router-outlet *ngIf="isLoggedIn | async; else elseBlock"></ion-router-outlet>
+  <ng-template #elseBlock>
+    One moment while we log you in...
+  </ng-template>
+</ion-app>

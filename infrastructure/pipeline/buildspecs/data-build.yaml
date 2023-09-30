@@ -1,0 +1,38 @@
+version: 0.2
+
+env:
+  shell: bash
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - echo "installing base packages"
+      - npm i
+
+      - echo "installing rust dependencies"
+      - curl https://sh.rustup.rs -sSf | bash -s -- -y
+      - source $HOME/.cargo/env
+      - rustup target add aarch64-unknown-linux-gnu
+      - pip3 install cargo-lambda
+  build:
+    commands:
+      - echo "building packages"
+      - npm run build:data
+
+      - echo "packaging packages"
+      - npm run package:data
+
+artifacts:
+  files:
+    - '*'
+  secondary-artifacts:
+    databaseBuildOutput:
+      base-directory: infrastructure/database
+      files:
+        - '**/*'
+    processingBuildOutput:
+      base-directory: processing
+      files:
+        - '**/*'

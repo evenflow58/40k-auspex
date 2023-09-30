@@ -43,7 +43,7 @@ async fn function_handler(
         .json::<GoogleAuthResponse>()
         .await?;
 
-    info!("Received Token Info");
+    info!("Received Token Info: {:?}", res);
 
     let method_arn_array: Vec<&str> = event.payload.method_arn.split(":").collect();
     let api_gateway_arn_tmp: Vec<&str> = method_arn_array[5].split("/").collect();

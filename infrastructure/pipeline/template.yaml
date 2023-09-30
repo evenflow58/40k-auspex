@@ -15,16 +15,36 @@ Conditions:
   IsProduction: !Equals [!Ref GitHubBranch, "master"]
 
 Resources:
-  BuildRunner:
+  # BuildRunner:
+  #   Type: AWS::CodeBuild::Project
+  #   Properties:
+  #     Name: !Sub ${AWS::StackName}-BuildRunner
+  #     Artifacts:
+  #       Type: CODEPIPELINE
+  #     BuildBatchConfig:
+  #       ServiceRole: !ImportValue BuildExecutionRoleArn
+  #       Restrictions:
+  #         MaximumBuildsAllowed: 5
+  #     Environment:
+  #       ComputeType: BUILD_GENERAL1_MEDIUM
+  #       Image: aws/codebuild/standard:6.0
+  #       Type: LINUX_CONTAINER
+  #       EnvironmentVariables:
+  #         - Name: BUILD_OUTPUT_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #         - Name: S3_BUCKET
+  #           Value: !ImportValue ArtifactBucketId
+  #     ServiceRole: !ImportValue BuildExecutionRoleArn
+  #     Source:
+  #       Type: CODEPIPELINE
+  #       BuildSpec: infrastructure/pipeline/buildspecs/build.yaml
+
+  UiBuildRunner:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub ${AWS::StackName}-BuildRunner
+      Name: !Sub ${AWS::StackName}-UiBuildRunner
       Artifacts:
         Type: CODEPIPELINE
-      BuildBatchConfig:
-        ServiceRole: !ImportValue BuildExecutionRoleArn
-        Restrictions:
-          MaximumBuildsAllowed: 5
       Environment:
         ComputeType: BUILD_GENERAL1_MEDIUM
         Image: aws/codebuild/standard:6.0
@@ -37,67 +57,47 @@ Resources:
       ServiceRole: !ImportValue BuildExecutionRoleArn
       Source:
         Type: CODEPIPELINE
-        BuildSpec: infrastructure/pipeline/buildspecs/build.yaml
+        BuildSpec: infrastructure/pipeline/buildspecs/ui-build.yaml
 
-  # UiBuildRunner:
-  #   Type: AWS::CodeBuild::Project
-  #   Properties:
-  #     Name: !Sub ${AWS::StackName}-UiBuildRunner
-  #     Artifacts:
-  #       Type: CODEPIPELINE
-  #     Environment:
-  #       ComputeType: BUILD_GENERAL1_MEDIUM
-  #       Image: aws/codebuild/standard:6.0
-  #       Type: LINUX_CONTAINER
-  #       EnvironmentVariables:
-  #         - Name: BUILD_OUTPUT_BUCKET
-  #           Value: !ImportValue ArtifactBucketId
-  #         - Name: S3_BUCKET
-  #           Value: !ImportValue ArtifactBucketId
-  #     ServiceRole: !ImportValue BuildExecutionRoleArn
-  #     Source:
-  #       Type: CODEPIPELINE
-  #       BuildSpec: infrastructure/pipeline/buildspecs/ui-build.yaml
+  ApiBuildRunner:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub ${AWS::StackName}-ApiBuildRunner
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        ComputeType: BUILD_GENERAL1_MEDIUM
+        Image: aws/codebuild/standard:6.0
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:
+          - Name: BUILD_OUTPUT_BUCKET
+            Value: !ImportValue ArtifactBucketId
+          - Name: S3_BUCKET
+            Value: !ImportValue ArtifactBucketId
+      ServiceRole: !ImportValue BuildExecutionRoleArn
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: infrastructure/pipeline/buildspecs/api-build.yaml
 
-  # ApiBuildRunner:
-  #   Type: AWS::CodeBuild::Project
-  #   Properties:
-  #     Name: !Sub ${AWS::StackName}-ApiBuildRunner
-  #     Artifacts:
-  #       Type: CODEPIPELINE
-  #     Environment:
-  #       ComputeType: BUILD_GENERAL1_MEDIUM
-  #       Image: aws/codebuild/standard:6.0
-  #       Type: LINUX_CONTAINER
-  #       EnvironmentVariables:
-  #         - Name: BUILD_OUTPUT_BUCKET
-  #           Value: !ImportValue ArtifactBucketId
-  #         - Name: S3_BUCKET
-  #           Value: !ImportValue ArtifactBucketId
-  #     ServiceRole: !ImportValue BuildExecutionRoleArn
-  #     Source:
-  #       Type: CODEPIPELINE
-  #       BuildSpec: infrastructure/pipeline/buildspecs/api-build.yaml
-
-  # DataBuildRunner:
-  #   Type: AWS::CodeBuild::Project
-  #   Properties:
-  #     Name: !Sub ${AWS::StackName}-DataBuildRunner
-  #     Artifacts:
-  #       Type: CODEPIPELINE
-  #     Environment:
-  #       ComputeType: BUILD_GENERAL1_MEDIUM
-  #       Image: aws/codebuild/standard:6.0
-  #       Type: LINUX_CONTAINER
-  #       EnvironmentVariables:
-  #         - Name: BUILD_OUTPUT_BUCKET
-  #           Value: !ImportValue ArtifactBucketId
-  #         - Name: S3_BUCKET
-  #           Value: !ImportValue ArtifactBucketId
-  #     ServiceRole: !ImportValue BuildExecutionRoleArn
-  #     Source:
-  #       Type: CODEPIPELINE
-  #       BuildSpec: infrastructure/pipeline/buildspecs/data-build.yaml
+  DataBuildRunner:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub ${AWS::StackName}-DataBuildRunner
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        ComputeType: BUILD_GENERAL1_MEDIUM
+        Image: aws/codebuild/standard:6.0
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:
+          - Name: BUILD_OUTPUT_BUCKET
+            Value: !ImportValue ArtifactBucketId
+          - Name: S3_BUCKET
+            Value: !ImportValue ArtifactBucketId
+      ServiceRole: !ImportValue BuildExecutionRoleArn
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: infrastructure/pipeline/buildspecs/data-build.yaml
 
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -129,49 +129,62 @@ Resources:
               RunOrder: 1
         - Name: Build
           Actions:
-          - Name: Build
+          # - Name: Build
+          #   ActionTypeId:
+          #     Category: Build
+          #     Owner: AWS
+          #     Version: 1
+          #     Provider: CodeBuild
+          #   Configuration:
+          #     ProjectName: !Ref BuildRunner
+          #     BatchEnabled: true
+          #   InputArtifacts:
+          #     - Name: SourceCode
+          #   OutputArtifacts:
+          #     - Name: uiBuild_uiBuildOutput
+          #   RunOrder: 1
+          - Name: BuildUi
             ActionTypeId:
               Category: Build
               Owner: AWS
               Version: 1
               Provider: CodeBuild
             Configuration:
-              ProjectName: !Ref BuildRunner
-              BatchEnabled: true
+              ProjectName: !Ref UiBuildRunner
             InputArtifacts:
               - Name: SourceCode
             OutputArtifacts:
-              - Name: uiBuild_uiBuildOutput
-            #   - Name: lambdaEdgeBuildOutput
+              - Name: uiBuildOutput
+              - Name: urlBuildOutput
             RunOrder: 1
-          # - Name: BuildApi
-          #   ActionTypeId:
-          #     Category: Build
-          #     Owner: AWS
-          #     Version: 1
-          #     Provider: CodeBuild
-          #   Configuration:
-          #     ProjectName: !Ref ApiBuildRunner
-          #   InputArtifacts:
-          #     - Name: SourceCode
-          #   OutputArtifacts:
-          #     - Name: apiGatewayBuildOutput
-          #     - Name: apiGatewayDeploymentBuildOutput
-          #   RunOrder: 2
-          # - Name: BuildData
-          #   ActionTypeId:
-          #     Category: Build
-          #     Owner: AWS
-          #     Version: 1
-          #     Provider: CodeBuild
-          #   Configuration:
-          #     ProjectName: !Ref DataBuildRunner
-          #   InputArtifacts:
-          #     - Name: SourceCode
-          #   OutputArtifacts:
-          #     - Name: databaseBuildOutput
-          #     - Name: processingBuildOutput
-          #   RunOrder: 3
+          - Name: BuildApi
+            ActionTypeId:
+              Category: Build
+              Owner: AWS
+              Version: 1
+              Provider: CodeBuild
+            Configuration:
+              ProjectName: !Ref ApiBuildRunner
+            InputArtifacts:
+              - Name: SourceCode
+            OutputArtifacts:
+              - Name: apiGatewayBuildOutput
+              - Name: apiGatewayDeploymentBuildOutput
+            RunOrder: 1
+          - Name: BuildData
+            ActionTypeId:
+              Category: Build
+              Owner: AWS
+              Version: 1
+              Provider: CodeBuild
+            Configuration:
+              ProjectName: !Ref DataBuildRunner
+            InputArtifacts:
+              - Name: SourceCode
+            OutputArtifacts:
+              - Name: databaseBuildOutput
+              - Name: processingBuildOutput
+            RunOrder: 1
         # - Name: !If [IsProduction, 'Staging', !Ref GitHubBranch]
         #   Actions:
         #     - Name: DeployApi

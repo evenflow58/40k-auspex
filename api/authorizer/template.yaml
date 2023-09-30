@@ -22,7 +22,7 @@ Resources:
       Architectures:
         - arm64
       Timeout: 5
-      CodeUri: target/lambda/authorizer
+      CodeUri: rust_app/target/lambda/authorizer
       # CodeUri: rust_app
       Role: !GetAtt LambdaRole.Arn
       Environment:

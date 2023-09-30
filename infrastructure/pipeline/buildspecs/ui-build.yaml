@@ -27,15 +27,15 @@ phases:
       - echo "packaging packages"
       - npm run package:ui
 
-artifacts:
-  files:
-    - '*'
-  secondary-artifacts:
-    uiBuildOutput:
-      base-directory: ui/www
-      files:
-        - '**/*'
-    lambdaEdgeBuildOutput:
-      base-directory: infrastructure/url
-      files:
-        - '**/*'
+# artifacts:
+#   files:
+#     - '*'
+#   secondary-artifacts:
+#     uiBuildOutput:
+#       base-directory: ui/www
+#       files:
+#         - '**/*'
+#     lambdaEdgeBuildOutput:
+#       base-directory: infrastructure/url
+#       files:
+#         - '**/*'

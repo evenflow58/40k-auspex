@@ -32,7 +32,11 @@ artifacts:
       base-directory: infrastructure/database
       files:
         - '**/*'
-    processingBuildOutput:
-      base-directory: processing
+    loadDataBuildOutput:
+      base-directory: processing/load-data
+      files:
+        - '**/*'
+    dropFilesBuildOutput:
+      base-directory: processing/drop-files
       files:
         - '**/*'

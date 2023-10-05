@@ -80,3 +80,9 @@ Outputs:
     Description: The name of the drop files lambda function
     Export:
       Name: DropFilesFunctionName
+
+  DataBucketName:
+    Value: !Ref BucketName
+    Description: The name of the S3 bucket
+    Export:
+      Name: DataBucketName

@@ -258,18 +258,37 @@ Resources:
                 Provider: CloudFormation
                 Version: 1
               InputArtifacts:
-                - Name: processingBuildOutput
+                - Name: loadDataBuildOutput
                 - Name: databaseDeployOutput
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                TemplatePath: processingBuildOutput::template.package.yaml
+                TemplatePath: loadDataBuildOutput::template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
-                StackName: !Sub '${AWS::StackName}-Stack-Data-Processing'
+                StackName: !Sub '${AWS::StackName}-Stack-Load-Data'
                 ParameterOverrides: !Sub
                   - '{ "TableName": "${TableName}" }'
                   - TableName: databaseDeployOutput.DbTableName
               RunOrder: 3
+            - Name: DeployFileDropLambda
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: dropFilesBuildOutput
+                - Name: loadDataBuildOutput
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                TemplatePath: dropFilesBuildOutput::template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
+                StackName: !Sub '${AWS::StackName}-Stack-Drop-Files'
+                ParameterOverrides: !Sub
+                  - '{ "BucketName": "${BucketName}" }'
+                  - TableName: loadDataBuildOutput.BucketName
+              RunOrder: 4
         - !If
           - IsProduction
           - Name: DeploymentApproval

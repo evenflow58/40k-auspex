@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm-run-all --parallel build:*",
     "build:load-data": "cd load-data && npm run build",
-    "build:drop-files": "cd drop-files && npm run build",
+    "build:drop-files":  "cd drop-files && npm run build",
     "package": "npm-run-all --parallel package:*",
     "package:load-data": "cd load-data && npm run package",
     "package:drop-files": "cd drop-files && npm run package"

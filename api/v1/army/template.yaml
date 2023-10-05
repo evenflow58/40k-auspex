@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: The 40k Auspex V1 api gateway code
+
+Parameters:
+  ApiGatewayId:
+    Type: String
+    Description: The ID of the API Gateway this method should be attached to.
+  RootResourceId:
+    Type: String
+    Description: The ID of the root resource of the api gateway
+  AuthorizerId:
+    Type: String
+    Description: The ID of the authorizer
+
+Resources:
+  V1Path:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref RootResourceId
+      RestApiId: !Ref ApiGatewayId
+      PathPart: v1
+
+  TestGet:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: test/get/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        RootResourceId: !Ref V1Path
+        AuthorizerId: !Ref AuthorizerId

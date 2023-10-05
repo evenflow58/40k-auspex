@@ -1,6 +1,19 @@
 <ion-app>
-  <ion-router-outlet *ngIf="isLoggedIn | async; else elseBlock"></ion-router-outlet>
   <ng-template #elseBlock>
     One moment while we log you in...
   </ng-template>
+
+  <div *ngIf="isLoggedIn | async; else elseBlock">
+    <ion-content>
+      <ion-router-outlet></ion-router-outlet>
+    </ion-content>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="army">
+          <ion-icon name="skull-outline"></ion-icon>
+          <ion-label>Armies</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </div>
 </ion-app>

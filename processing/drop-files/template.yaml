@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Drops files into the S3 bucket for processing
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: The name of the S3 bucket and path name
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: DropFilesRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: S3Permissions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub "arn:aws:s3:::auspex-data/*"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+
+  DropFilesFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Metadata:
+      BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
+    Properties:
+      FunctionName: DropFilesFunction
+      CodeUri: rust_app/target/lambda/drop-files
+      # CodeUri: rust_app
+      Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
+      Runtime: provided.al2
+      Architectures:
+        - arm64
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref BucketName
+
+  DropFilesFunctionAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      Description: The live version to drop files into the S3 bucket for processing
+      FunctionName: !Ref DropFilesFunction
+      FunctionVersion: '$LATEST'
+      Name: live
+
+  DropFilesPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref DataSns
+      FunctionName: !Ref DropFilesFunctionAlias
+  
+Outputs:
+  DropFilesFunctionName:
+    Value: !Ref DropFilesFunction
+    Description: The name of the drop files lambda function
+    Export:
+      Name: DropFilesFunctionName

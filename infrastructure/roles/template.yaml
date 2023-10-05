@@ -73,6 +73,8 @@ Resources:
                 - codepipeline:DeleteWebhook
                 - codepipeline:TagResource
                 - codepipeline:UntagResource
+                - codepipeline:PutJobSuccessResult
+                - codepipeline:PutJobFailureResult
               Resource: !Sub "arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:*"
             - Effect: Allow
               Action:

@@ -5,7 +5,7 @@ Parameters:
   GitHubRepo:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: 40k-auspex
+    Default: auspex
   GitHubBranch:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"

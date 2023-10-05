@@ -4,8 +4,12 @@
   "description": "Processing lambda",
   "main": "index.js",
   "scripts": {
-    "build": "cd load-data && npm run build",
-    "package": "sam package --template-file ./load-data/template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml"
+    "build": "npm-run-all --parallel build:*",
+    "build:load-data": "cd load-data && npm run build",
+    "build:drop-files": "cd drop-files && npm run build",
+    "package": "npm-run-all --parallel package:*",
+    "package:load-data": "cd load-data && npm run package",
+    "package:drop-files": "cd drop-files && npm run package"
   },
   "author": "",
   "license": "ISC"

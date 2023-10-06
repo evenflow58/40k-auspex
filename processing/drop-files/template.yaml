@@ -66,14 +66,6 @@ Resources:
       FunctionVersion: '$LATEST'
       Name: live
 
-  DropFilesPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      Principal: sns.amazonaws.com
-      SourceArn: !Ref DataSns
-      FunctionName: !Ref DropFilesFunctionAlias
-  
 Outputs:
   DropFilesFunctionName:
     Value: !Ref DropFilesFunction

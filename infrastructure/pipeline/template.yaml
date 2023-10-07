@@ -303,7 +303,7 @@ Resources:
                 - Name: loadDataBuildOutput
               Configuration:
                 FunctionName: !ImportValue DropFilesFunctionName
-                UserParameters: !ImportValue DataBucketName
+                UserParameters: auspex-data
               Region: us-east-1
               RunOrder: 1
         - !If

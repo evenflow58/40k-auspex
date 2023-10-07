@@ -252,7 +252,7 @@ Resources:
                   - '{ "BasePathDomain": "${BasePathDomain}" }'
                   - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
               RunOrder: 2
-        - Name: SeedData
+        - Name: DeployDataLambda
           Actions:
             - Name: DeployLoadDataLambda
               ActionTypeId:
@@ -294,6 +294,8 @@ Resources:
                   - '{ "BucketName": "${BucketName}" }'
                   - BucketName: loadDataBuildOutput.BucketName
               RunOrder: 2
+        - Name: SeedData
+          Actions:
             - Name: DropFiles
               ActionTypeId:
                 Category: Invoke
@@ -303,9 +305,12 @@ Resources:
               InputArtifacts:
                 - Name: dropFilesDeployOutput
               Configuration:
-                FunctionName: dropFilesDeployOutput.DropFilesFunctionName
+                FunctionName: !ImportValue DropFilesFunctionName
+                UserParameters: !Sub
+                  - '{ "BucketName": "${BucketName}" }'
+                  - BucketName: loadDataBuildOutput.BucketName
               Region: us-east-1
-              RunOrder: 3
+              RunOrder: 1
         - !If
           - IsProduction
           - Name: DeploymentApproval

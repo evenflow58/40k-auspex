@@ -1,5 +1,6 @@
 use aws_lambda_events::event::codepipeline_job::CodePipelineJobEvent;
 use aws_sdk_s3::Client as s3_sdk_client;
+use aws_sdk_codepipeline::Client as codepipeline_job_sdk_client;
 use envmnt;
 use futures::future::join_all;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
@@ -7,6 +8,7 @@ use tracing::info;
 use include_dir::Dir;
 use bytes::Bytes;
 use aws_smithy_http::byte_stream::ByteStream;
+
 
 use drop_files::models::response::Response;
 
@@ -40,6 +42,7 @@ async fn function_handler(event: LambdaEvent<CodePipelineJobEvent>) -> Result<Re
 
     // Create a variable called s3_client that is a s3::Client that is created from the config
     let s3_client = s3_sdk_client::new(&config);
+    let codepipeline_job_client = codepipeline_job_sdk_client::new(&config);
 
     let mut futures = Vec::new();
 
@@ -58,6 +61,12 @@ async fn function_handler(event: LambdaEvent<CodePipelineJobEvent>) -> Result<Re
 
     // await futures
     join_all(futures).await;
+
+    codepipeline_job_client
+        .put_job_success_result()
+        .set_job_id(event.payload.code_pipeline_job.id)
+        .send()
+        .await?;
 
     Ok(Response {})
 }

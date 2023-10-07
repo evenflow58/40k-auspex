@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 aws-config = "0.56.1"
+aws-sdk-codepipeline = "0.33.0"
 aws-sdk-s3 = "0.30.0"
 aws-smithy-http = "0.56.1"
 aws_lambda_events = { version = "0.11.1", features = ["codepipeline_job"], default-features = false }

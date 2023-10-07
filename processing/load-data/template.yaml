@@ -120,8 +120,8 @@ Outputs:
     Export:
       Name: LoadDataFunctionName
 
-  BucketName:
+  DataBucketName:
     Value: !Ref DataBucket
     Description: The name of the bucket to upload data to
     Export:
-      Name: BucketName
+      Name: DataBucketName

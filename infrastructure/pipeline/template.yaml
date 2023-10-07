@@ -300,11 +300,10 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: dropFilesDeployOutput
+                - Name: loadDataBuildOutput
               Configuration:
                 FunctionName: !ImportValue DropFilesFunctionName
-                UserParameters: !Sub
-                  - '{ "BucketName": "${BucketName}" }'
-                  - BucketName: loadDataBuildOutput.BucketName
+                UserParameters: !ImportValue DataBucketName
               Region: us-east-1
               RunOrder: 1
         - !If

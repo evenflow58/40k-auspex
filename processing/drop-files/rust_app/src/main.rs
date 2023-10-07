@@ -1,7 +1,6 @@
 use aws_lambda_events::event::codepipeline_job::CodePipelineJobEvent;
 use aws_sdk_s3::Client as s3_sdk_client;
 use aws_sdk_codepipeline::Client as codepipeline_job_sdk_client;
-use envmnt;
 use futures::future::join_all;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use tracing::info;
@@ -47,13 +46,13 @@ async fn function_handler(event: LambdaEvent<CodePipelineJobEvent>) -> Result<Re
     let mut futures = Vec::new();
 
     // Loop through the DATA_DIR.files() and put them into the S3 bucket
+    let bucket = event.payload.code_pipeline_job.data.action_configuration.configuration.user_parameters.unwrap();
     for file in DATA_DIR.files() {
-        let bucket = envmnt::get_or_panic("BUCKET_NAME");
         let key = file.path().to_str().unwrap();
         let body = ByteStream::from(Bytes::from_static(file.contents()));
         futures.push(s3_client
             .put_object()
-            .bucket(bucket)
+            .bucket(&bucket)
             .key(key)
             .body(body)
             .send());

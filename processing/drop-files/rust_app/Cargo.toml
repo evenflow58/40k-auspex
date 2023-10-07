@@ -12,7 +12,6 @@ aws-sdk-s3 = "0.30.0"
 aws-smithy-http = "0.56.1"
 aws_lambda_events = { version = "0.11.1", features = ["codepipeline_job"], default-features = false }
 bytes = "1.5.0"
-envmnt = "0.10.4"
 futures = "0.3.28"
 include_dir = "0.7.3"
 lambda_runtime = "0.6.1"

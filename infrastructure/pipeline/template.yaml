@@ -281,7 +281,6 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: dropFilesBuildOutput
-                - Name: loadDataBuildOutput
               OutputArtifacts:
                 - Name: dropFilesDeployOutput
               Configuration:
@@ -290,10 +289,7 @@ Resources:
                 TemplatePath: dropFilesBuildOutput::template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
                 StackName: !Sub '${AWS::StackName}-Stack-Drop-Files'
-                ParameterOverrides: !Sub
-                  - '{ "BucketName": "${BucketName}" }'
-                  - BucketName: loadDataBuildOutput.BucketName
-              RunOrder: 2
+              RunOrder: 1
         - Name: SeedData
           Actions:
             - Name: DropFiles

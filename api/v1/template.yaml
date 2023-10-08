@@ -29,3 +29,12 @@ Resources:
         ApiGatewayId: !Ref ApiGatewayId
         RootResourceId: !Ref V1Path
         AuthorizerId: !Ref AuthorizerId
+
+  Army:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: army/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        RootResourceId: !Ref V1Path
+        AuthorizerId: !Ref AuthorizerId

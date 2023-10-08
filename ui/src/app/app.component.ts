@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.socialAuthService.authState.subscribe((user: SocialUser) => {
       this.authStateService.setUser(user);
+      console.log(user?.idToken);
     });
   }
 }

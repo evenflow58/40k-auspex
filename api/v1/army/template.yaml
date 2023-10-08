@@ -14,18 +14,11 @@ Parameters:
     Description: The ID of the authorizer
 
 Resources:
-  V1Path:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !Ref RootResourceId
-      RestApiId: !Ref ApiGatewayId
-      PathPart: v1
-
-  TestGet:
+  GetAll:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: test/get/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
-        RootResourceId: !Ref V1Path
+        RootResourceId: !Ref RootResourceId
         AuthorizerId: !Ref AuthorizerId

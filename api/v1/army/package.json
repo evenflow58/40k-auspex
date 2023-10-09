@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "npm-run-all --parallel build:*",
-    "build:get-all": "cd get-all && npm run build",
+    "build:get-all": "cd get_all && npm run build",
     "package": "npm-run-all --parallel package:*",
-    "package:get-all": "cd get-all && npm run package"
+    "package:get-all": "cd get_all && npm run package"
   },
   "author": "",
   "license": "ISC"

@@ -33,7 +33,7 @@ Resources:
   Army:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: army/get-all/template.yaml
+      TemplateURL: army/get_all/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
         RootResourceId: !Ref V1Path

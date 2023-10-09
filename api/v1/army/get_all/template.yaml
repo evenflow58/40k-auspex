@@ -23,7 +23,7 @@ Resources:
       BuildMethod: rust-cargolambda
     Properties:
       FunctionName: !Sub TestGet_V1
-      CodeUri: rust_app/target/lambda/get-all
+      CodeUri: rust_app/target/lambda/get_all
       # CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2

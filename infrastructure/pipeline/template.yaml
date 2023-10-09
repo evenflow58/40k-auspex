@@ -190,12 +190,17 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: apiGatewayBuildOutput
+                - Name: databaseDeployOutput
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-API'
+                ParameterOverrides: |
+                  {
+                    "TableName": { "Fn::GetParam": ["databaseDeployOutput", "databaseDeployOutput.json", "DbTableName"] }
+                  }
               RunOrder: 2
             - Name: DeployUiCode
               ActionTypeId:
@@ -226,7 +231,7 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
                 ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}", "TableName": { "Fn::GetParam": ["databaseDeployOutput", "databaseDeployOutput.json", "DbTableName"] } }'
+                  - '{ "BasePathDomain": "${BasePathDomain}" }'
                   - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
               RunOrder: 3
         - Name: DeployDataLambda

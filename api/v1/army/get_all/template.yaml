@@ -22,7 +22,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: !Sub TestGet_V1
+      FunctionName: ArmyGetAll_V1
       CodeUri: rust_app/target/lambda/get_all
       # CodeUri: rust_app
       Handler: bootstrap

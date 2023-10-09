@@ -12,6 +12,9 @@ Parameters:
   AuthorizerId:
     Type: String
     Description: The ID of the authorizer
+  TableName:
+    Type: String
+    Description: The name of the database table
 
 Resources:
   V1Path:
@@ -38,3 +41,4 @@ Resources:
         ApiGatewayId: !Ref ApiGatewayId
         RootResourceId: !Ref V1Path
         AuthorizerId: !Ref AuthorizerId
+        TableName: !Ref TableName

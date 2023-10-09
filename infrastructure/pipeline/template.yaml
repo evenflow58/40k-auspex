@@ -164,35 +164,6 @@ Resources:
             RunOrder: 1
         - Name: Deploy
           Actions:
-            - Name: DeployApi
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: 1
-              InputArtifacts:
-                - Name: apiGatewayBuildOutput
-              Configuration:
-                ActionMode: CREATE_UPDATE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                StackName: !Sub '${AWS::StackName}-Stack-API'
-              RunOrder: 1
-            - Name: DeployUiCode
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: S3
-                Version: 1
-              RunOrder: 2
-              Configuration:
-                BucketName: !ImportValue UiBucketName
-                Extract: true
-                ObjectKey: !If [IsProduction, 'master', !Ref GitHubBranch]
-              InputArtifacts:
-                - Name: uiBuildOutput
-              Region: us-east-1
             - Name: DeployDatabase
               ActionTypeId:
                 Category: Deploy
@@ -210,6 +181,35 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Database'
                 OutputFileName: databaseDeployOutput.json
+              RunOrder: 1
+            - Name: DeployApi
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: apiGatewayBuildOutput
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                StackName: !Sub '${AWS::StackName}-Stack-API'
+              RunOrder: 2
+            - Name: DeployUiCode
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: S3
+                Version: 1
+              Configuration:
+                BucketName: !ImportValue UiBucketName
+                Extract: true
+                ObjectKey: !If [IsProduction, 'master', !Ref GitHubBranch]
+              InputArtifacts:
+                - Name: uiBuildOutput
+              Region: us-east-1
               RunOrder: 2
             - Name: DeployApiStage
               ActionTypeId:
@@ -226,9 +226,9 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
                 ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}" }'
+                  - '{ "BasePathDomain": "${BasePathDomain}", "TableName": { "Fn::GetParam": ["databaseDeployOutput", "databaseDeployOutput.json", "DbTableName"] } }'
                   - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
-              RunOrder: 2
+              RunOrder: 3
         - Name: DeployDataLambda
           Actions:
             - Name: DeployLoadDataLambda

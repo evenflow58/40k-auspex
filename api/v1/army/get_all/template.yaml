@@ -63,6 +63,7 @@ Resources:
         RequestParameters:
           integration.request.querystring.take: method.request.querystring.take
           integration.request.querystring.skip: method.request.querystring.skip
+        PassthroughBehavior: WHEN_NO_TEMPLATES
         # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
         RequestTemplates:
           application/json: |

@@ -23,4 +23,3 @@ tracing = { version = "0.1", features = ["log"] }
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
 http = "0.2.9"
 lambda_http = "0.8.1"
-

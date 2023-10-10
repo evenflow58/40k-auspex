@@ -52,8 +52,8 @@ Resources:
       MethodResponses:
         - StatusCode: 200
       RequestParameters:
-        - method.request.querystring.take: true
-        - method.request.querystring.skip: true
+        method.request.querystring.take: true
+        method.request.querystring.skip: true
       Integration:
         Type: AWS
         Credentials: !GetAtt ApiRole.Arn
@@ -61,8 +61,8 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
         RequestParameters:
-          - integration.request.querystring.take: method.request.querystring.take
-          - integration.request.querystring.skip: method.request.querystring.skip
+          integration.request.querystring.take: method.request.querystring.take
+          integration.request.querystring.skip: method.request.querystring.skip
         IntegrationResponses:
           - ResponseTemplates:
               application/json: |

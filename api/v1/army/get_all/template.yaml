@@ -23,8 +23,8 @@ Resources:
       BuildMethod: rust-cargolambda
     Properties:
       FunctionName: ArmyGetAll_V1
-      # CodeUri: rust_app/target/lambda/get_all
-      CodeUri: rust_app
+      CodeUri: rust_app/target/lambda/get_all
+      # CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
       Architectures:
@@ -49,46 +49,12 @@ Resources:
       HttpMethod: GET
       AuthorizationType: CUSTOM
       AuthorizerId: !Ref AuthorizerId
-      # MethodResponses:
-      #   - StatusCode: 200
-      # RequestParameters:
-      #   method.request.querystring.take: true
-      #   method.request.querystring.skip: true
       Integration:
         Type: AWS_PROXY
         Credentials: !GetAtt ApiRole.Arn
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
-        # RequestParameters:
-        #   integration.request.querystring.take: method.request.querystring.take
-        #   integration.request.querystring.skip: method.request.querystring.skip
-        # PassthroughBehavior: WHEN_NO_TEMPLATES
-        # # https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
-        # RequestTemplates:
-        #   application/json: |
-        #     #set($allParams = $input.params())
-        #     {
-        #       "params" : {
-        #         #foreach($type in $allParams.keySet())
-        #         #set($params = $allParams.get($type))
-        #         "$type" : {
-        #           #foreach($paramName in $params.keySet())
-        #           "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
-        #           #if($foreach.hasNext),#end
-        #           #end
-        #         }
-        #         #if($foreach.hasNext),#end
-        #         #end
-        #       }
-        #     }
-        # IntegrationResponses:
-        #   - ResponseTemplates:
-        #       application/json: |
-        #         #set($inputRoot = $input.path('$'))
-        #         $inputRoot.body
-        #         #set($context.responseOverride.header = $inputRoot.headers)
-        #     StatusCode: 200
 
   LambdaRole:
     Type: AWS::IAM::Role

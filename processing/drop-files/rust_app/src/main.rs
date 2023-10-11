@@ -19,7 +19,7 @@ use aws_smithy_http::byte_stream::ByteStream;
 use aws_smithy_runtime_api::client::orchestrator::HttpResponse;
 use aws_smithy_types::error::display::DisplayErrorContext;
 
-use drop_files::models::response::Response;
+use utils::models::response::Response;
 
 #[macro_use]
 extern crate include_dir;

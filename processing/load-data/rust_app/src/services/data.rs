@@ -1,4 +1,4 @@
-use crate::models::army::Army;
+use utils::models::army::Army;
 use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
     Client as dynamodb_sdk_client,

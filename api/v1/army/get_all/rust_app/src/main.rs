@@ -16,7 +16,7 @@ async fn function_handler(event: LambdaEvent<ApiGatewayProxyRequest>) -> Result<
     
     match get_armies().await
     {
-        Ok(army_names) => {
+        Ok(armies) => {
             let mut headers = HeaderMap::new();
             headers.insert("content-type", "application/json".parse().unwrap());
 
@@ -24,7 +24,7 @@ async fn function_handler(event: LambdaEvent<ApiGatewayProxyRequest>) -> Result<
                 status_code: 200,
                 headers: headers.clone(),
                 multi_value_headers: headers.clone(),
-                body: Some(Body::Text(serde_json::to_string(&army_names).unwrap())),
+                body: Some(Body::Text(serde_json::to_string(&armies).unwrap())),
                 is_base64_encoded: false,
             };
 

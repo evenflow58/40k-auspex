@@ -8,6 +8,7 @@ use std::collections::HashMap;
 pub struct Army {
     pub name: String,
     units: Vec<Unit>,
+    factions: Vec<Faction>,
 }
 
 impl Army {
@@ -22,6 +23,15 @@ impl Army {
                     .collect(),
             ),
         );
+        map.insert(
+            "tags".to_string(),
+            AttributeValue::L(
+                self.factions
+                    .iter()
+                    .map(|faction| AttributeValue::M(faction.get_hash_map()))
+                    .collect(),
+            ),
+        )
         map
     }
 }

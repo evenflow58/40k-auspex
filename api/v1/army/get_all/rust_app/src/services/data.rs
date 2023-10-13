@@ -3,10 +3,12 @@ use aws_sdk_dynamodb::types::AttributeValue;
 use tracing::info;
 use std::error::Error;
 
+use crate::models::army_entry::ArmyEntry;
+
 pub async fn get_armies(
     // take: i64,
     // skip: i64,
-) -> Result<Vec<String>, Box<dyn Error>> {
+) -> Result<Vec<ArmyEntry>, Box<dyn Error>> {
     let config = ::aws_config::load_from_env().await;
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
@@ -27,8 +29,10 @@ pub async fn get_armies(
             info!("Query succeeded.");
 
             let mapped_items = output.items.unwrap().iter().map(|item| {
-                let name = item.get("id").unwrap();
-                name.as_s().unwrap().to_string()
+                ArmyEntry {
+                    name: item.get("id").unwrap().as_s().unwrap().to_string(),
+                    tag: item.get("tag").unwrap().as_s().unwrap().to_string(),
+                }
             }).collect();
 
             Ok(mapped_items)

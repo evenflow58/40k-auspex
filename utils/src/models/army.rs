@@ -24,7 +24,7 @@ impl Army {
             ),
         );
         map.insert(
-            "tags".to_string(),
+            "factions".to_string(),
             AttributeValue::L(
                 self.factions
                     .iter()

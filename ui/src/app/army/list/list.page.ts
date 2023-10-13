@@ -13,6 +13,7 @@ export class ListPage implements OnInit {
   constructor(private armyService: ArmyService) { }
 
   ngOnInit(): void {
+    debugger;
     this.armies$ = this.armyService.getArmies();
   }
 }

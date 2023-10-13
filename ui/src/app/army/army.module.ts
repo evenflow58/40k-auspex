@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { ArmyPageRoutingModule } from './army-routing.module';
 
 import { ArmyPage } from './army.page';
+import { ArmyService } from '../services/api';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { ArmyPage } from './army.page';
     ArmyPageRoutingModule,
     RouterModule
   ],
-  declarations: [ArmyPage]
+  declarations: [ArmyPage],
+  providers: [ArmyService]
 })
 export class ArmyPageModule {}

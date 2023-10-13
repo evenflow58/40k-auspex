@@ -20,18 +20,26 @@ pub async fn get_armies(
         .expression_attribute_names("#T", "type")
         .expression_attribute_values(":V", AttributeValue::S("Army".to_string()))
         .key_condition_expression("#T = :V")
-        .select(Select::SpecificAttributes)
-        .projection_expression("id")
+        .select(Select::AllAttributes)
         .send()
         .await
     {
         Ok(output) => {
-            info!("Query succeeded.");
+            info!("Query succeeded. Items returned from DynamoDB: {:?}", output.items);
 
             let mapped_items = output.items.unwrap().iter().map(|item| {
+                let name = item.get("id").unwrap().as_s().unwrap().to_string();
+                info!("name: {:?}", name);
+
+                let factions = item.get("factions").unwrap();
+                info!("factions: {:?}", factions);
+
+                // info!("Factions: {:?}", item.get("factions"));
                 ArmyEntry {
-                    name: item.get("id").unwrap().as_s().unwrap().to_string(),
-                    tag: item.get("tag").unwrap().as_s().unwrap().to_string(),
+                    name: "".to_string(),
+                    factions: vec!["".to_string()],
+                    // name: item.get("id").unwrap().as_s().unwrap().to_string(),
+                    // factions: item.get("factions").unwrap().as_l(),
                 }
             }).collect();
 

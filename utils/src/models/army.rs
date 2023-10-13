@@ -1,4 +1,4 @@
-use crate::models::unit::Unit;
+use crate::models::{unit::Unit, faction::Faction};
 use aws_sdk_dynamodb::types::AttributeValue;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -31,7 +31,7 @@ impl Army {
                     .map(|faction| AttributeValue::M(faction.get_hash_map()))
                     .collect(),
             ),
-        )
+        );
         map
     }
 }

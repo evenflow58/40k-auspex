@@ -72,6 +72,15 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
+      Policies:
+      - PolicyName: "DynamoDBAccess"
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/40kAuspexTable/index/*"
 
   Permission:
     Type: AWS::Lambda::Permission

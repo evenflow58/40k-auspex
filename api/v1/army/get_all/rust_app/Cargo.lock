@@ -739,6 +739,7 @@ dependencies = [
  "envmnt",
  "http",
  "lambda_runtime",
+ "serde_json",
  "tokio",
  "tracing",
  "tracing-subscriber",

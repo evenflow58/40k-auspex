@@ -1,7 +1,10 @@
 use lambda_runtime::{run, service_fn, LambdaEvent, Error};
 use aws_lambda_events::event::apigw::{ApiGatewayProxyRequest, ApiGatewayProxyResponse};
+use aws_lambda_events::encodings::Body;
 use http::HeaderMap;
 use tracing::info;
+
+use get_all::{services::data::get_armies};
 
 /// This is the main body for the function.
 /// Write your code inside it.
@@ -11,20 +14,24 @@ async fn function_handler(event: LambdaEvent<ApiGatewayProxyRequest>) -> Result<
     info!("Event: {:?}", event);
     info!("Params: {:?}", event.payload.query_string_parameters);
     
-    
+    match get_armies().await
+    {
+        Ok(army_names) => {
+            let mut headers = HeaderMap::new();
+            headers.insert("content-type", "application/json".parse().unwrap());
 
-    let mut headers = HeaderMap::new();
-    headers.insert("content-type", "application/json".parse().unwrap());
+            let resp = ApiGatewayProxyResponse {
+                status_code: 200,
+                headers: headers.clone(),
+                multi_value_headers: headers.clone(),
+                body: Some(Body::Text(serde_json::to_string(&army_names).unwrap())),
+                is_base64_encoded: false,
+            };
 
-    let resp = ApiGatewayProxyResponse {
-        status_code: 200,
-        headers: headers.clone(),
-        multi_value_headers: headers.clone(),
-        body: Some("Some response".into()),
-        is_base64_encoded: false,
-    };
-
-    Ok(resp)
+            Ok(resp)       
+        },
+        Err(error) => panic!("Error querying DynamoDB: {:?}", error),
+    }
 }
 
 #[tokio::main]

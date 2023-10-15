@@ -4,7 +4,7 @@ use aws_lambda_events::encodings::Body;
 use http::HeaderMap;
 use tracing::info;
 
-use get_all::{services::data::get_armies};
+use get_all::{services::data::get_armies, models::army_entry::ArmyEntry};
 
 /// This is the main body for the function.
 /// Write your code inside it.
@@ -18,13 +18,23 @@ async fn function_handler(event: LambdaEvent<ApiGatewayProxyRequest>) -> Result<
     {
         Ok(armies) => {
             let mut headers = HeaderMap::new();
-            headers.insert("content-type", "application/json".parse().unwrap());
+            headers.insert("Content-Type", "application/json".parse().unwrap());
+            headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
+
+            let mapped_items: Vec<ArmyEntry> = armies.iter().map(|army| {
+                ArmyEntry {
+                    name: army.name.clone(),
+                    factions: army.factions.iter().map(|faction| {
+                        faction.name.clone()
+                    }).collect()
+                }
+            }).collect();
 
             let resp = ApiGatewayProxyResponse {
                 status_code: 200,
                 headers: headers.clone(),
                 multi_value_headers: headers.clone(),
-                body: Some(Body::Text(serde_json::to_string(&armies).unwrap())),
+                body: Some(Body::Text(serde_json::to_string(&mapped_items).unwrap())),
                 is_base64_encoded: false,
             };
 

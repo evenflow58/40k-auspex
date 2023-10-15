@@ -7,6 +7,6 @@ import { BaseHttpService } from '../base-http/base-http.service';
 export class ArmyService {
   constructor(private http: BaseHttpService) { }
 
-  public getArmies = (): Observable<Array<string>> =>
-    this.http.get<Array<string>>('army');
+  public getArmies = (): Observable<Array<{ name: string, factions: Array<string> }>> =>
+    this.http.get<Array<{ name: string, factions: Array<string> }>>('army');
 }

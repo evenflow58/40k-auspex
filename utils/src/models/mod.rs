@@ -6,3 +6,4 @@ pub mod response;
 pub mod unit;
 pub mod faction;
 pub mod weapon;
+pub mod dynamo_result;

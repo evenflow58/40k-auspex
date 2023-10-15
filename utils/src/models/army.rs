@@ -1,37 +1,21 @@
 use crate::models::{unit::Unit, faction::Faction};
-use aws_sdk_dynamodb::types::AttributeValue;
-use serde::Deserialize;
-use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
 
 // Create a struct named Army that contains a list of Units
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Army {
     pub name: String,
-    units: Vec<Unit>,
-    factions: Vec<Faction>,
+    pub units: Vec<Unit>,
+    pub factions: Vec<Faction>,
 }
 
 impl Army {
-    pub fn get_hash_map(&self) -> HashMap<String, AttributeValue> {
-        let mut map = HashMap::new();
-        map.insert(
-            "units".to_string(),
-            AttributeValue::L(
-                self.units
-                    .iter()
-                    .map(|unit| AttributeValue::M(unit.get_hash_map()))
-                    .collect(),
-            ),
-        );
-        map.insert(
-            "factions".to_string(),
-            AttributeValue::L(
-                self.factions
-                    .iter()
-                    .map(|faction| AttributeValue::M(faction.get_hash_map()))
-                    .collect(),
-            ),
-        );
-        map
+    pub fn new(name: String, units: Vec<Unit>, factions: Vec<Faction>) -> Self {
+        Army {
+            name,
+            units,
+            factions,
+        }
     }
+
 }

@@ -2,18 +2,17 @@ use aws_sdk_dynamodb::{Client as dynamodb_sdk_client, types::Select};
 use aws_sdk_dynamodb::types::AttributeValue;
 use tracing::info;
 use std::error::Error;
-
-use crate::models::army_entry::ArmyEntry;
+use utils::models::{army::Army, dynamo_result::DynamoResult};
 
 pub async fn get_armies(
     // take: i64,
     // skip: i64,
-) -> Result<Vec<ArmyEntry>, Box<dyn Error>> {
+) -> Result<Vec<Army>, Box<dyn Error>> {
     let config = ::aws_config::load_from_env().await;
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
 
-    match dynamodb_client
+    let result = dynamodb_client
         .query()
         .table_name(&table_name)
         .index_name("type-index")
@@ -22,29 +21,15 @@ pub async fn get_armies(
         .key_condition_expression("#T = :V")
         .select(Select::AllAttributes)
         .send()
-        .await
-    {
-        Ok(output) => {
-            info!("Query succeeded. Items returned from DynamoDB: {:?}", output.items);
+        .await?;
 
-            let mapped_items = output.items.unwrap().iter().map(|item| {
-                let name = item.get("id").unwrap().as_s().unwrap().to_string();
-                info!("name: {:?}", name);
+    if let Some(items) = result.items {
+        info!("items: {:?}", items);
+        let armies_result: Vec<DynamoResult<Army>> = serde_dynamo::from_items(items)?;
+        info!("armies: {:?}", armies_result);
 
-                let factions = item.get("factions").unwrap();
-                info!("factions: {:?}", factions);
-
-                // info!("Factions: {:?}", item.get("factions"));
-                ArmyEntry {
-                    name: "".to_string(),
-                    factions: vec!["".to_string()],
-                    // name: item.get("id").unwrap().as_s().unwrap().to_string(),
-                    // factions: item.get("factions").unwrap().as_l(),
-                }
-            }).collect();
-
-            Ok(mapped_items)
-        }
-        Err(error) => panic!("Error querying DynamoDB: {:?}", error),    
-    }
+        Ok(armies_result.iter().map(|army| army.data.clone()).collect())
+    } else {
+        Ok(vec![])
+    }   
 }

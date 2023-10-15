@@ -1,18 +1,13 @@
-use aws_sdk_dynamodb::types::AttributeValue;
-use serde::Deserialize;
-use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Faction {
-    name: String,
-    tag: String,
+    pub name: String,
+    pub tag: String,
 }
 
 impl Faction {
-    pub fn get_hash_map(&self) -> HashMap<String, AttributeValue> {
-        let mut map = HashMap::new();
-        map.insert("Name".to_string(), AttributeValue::S(self.name.clone()));
-        map.insert("Tag".to_string(), AttributeValue::S(self.tag.clone()));
-        map
+    pub fn new(name: String, tag: String) -> Self {
+        Faction { name, tag }
     }
 }

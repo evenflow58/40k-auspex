@@ -51,8 +51,8 @@ Resources:
       BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
     Properties:
       FunctionName: DropFilesFunction
-      CodeUri: rust_app/target/lambda/drop-files
-      # CodeUri: rust_app
+      # CodeUri: rust_app/target/lambda/drop-files
+      CodeUri: rust_app
       Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
       Runtime: provided.al2
       Architectures:

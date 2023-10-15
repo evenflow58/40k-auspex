@@ -1,23 +1,19 @@
 import { NgModule } from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {SocialLoginModule,SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
+import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import {
   GoogleLoginProvider
 } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'army', pathMatch: 'full' },
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
+    path: 'army',
+    loadChildren: () => import('./army/army.module').then(m => m.ArmyPageModule)
+  }
 ];
 
 @NgModule({

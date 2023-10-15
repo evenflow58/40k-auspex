@@ -25,8 +25,6 @@ export class AuthStateService {
     return this._isLoggedIn;
   }
 
-
-
   public setUser(user: SocialUser): void {
     this._user.next(user);
     this._isLoggedIn.next(!!user);

@@ -18,7 +18,7 @@ export const handler = async (event: {
 
   const client = new CloudFormationClient({ region: "us-east-1" });
   const input: CreateStackCommandInput = {
-    StackName: `40k-auspex-${branchName}`,
+    StackName: `auspex-${branchName}`,
     TemplateURL: event.TemplateUrl,
     Parameters: [
       {

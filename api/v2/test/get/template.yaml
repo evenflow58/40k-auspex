@@ -25,7 +25,7 @@ Resources:
       CodeUri: app/target/lambda/get
       # CodeUri: ./app
       Role: !GetAtt LambdaRole.Arn
-      FunctionName: !Sub TestGet_V2
+      FunctionName: TestGet_V2
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource

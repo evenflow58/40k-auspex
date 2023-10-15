@@ -7,7 +7,9 @@ use futures::future::join_all;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use tracing::info;
 
-use load_data::{models::response::Response, services::data::serialize_and_load_data};
+use utils::models::response::Response;
+
+use load_data::{services::data::serialize_and_load_data};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -30,7 +32,6 @@ async fn function_handler(event: LambdaEvent<SnsEvent>) -> Result<Response, Erro
     // Create a variable called config that is a aws_config::Config that is created from
     // the load_from_env() function
     let config = ::aws_config::load_from_env().await;
-    info!("Loaded config {:?}", config);
 
     // Create a variable called dynamodb-client that is a dynamodb::Client that is created from
     // the config variable

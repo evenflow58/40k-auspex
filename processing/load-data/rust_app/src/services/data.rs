@@ -1,4 +1,4 @@
-use crate::models::army::Army;
+use utils::models::army::Army;
 use aws_sdk_dynamodb::{
     types::{AttributeValue, PutRequest, WriteRequest},
     Client as dynamodb_sdk_client,
@@ -46,7 +46,8 @@ pub async fn serialize_and_load_data(
                         .set_item(Some(HashMap::from([
                             ("id".to_string(), AttributeValue::S(army.name.clone())),
                             ("type".to_string(), AttributeValue::S("Army".to_string())),
-                            ("data".to_string(), AttributeValue::M(army.get_hash_map())),
+                            // ("data".to_string(), AttributeValue::M(army.get_hash_map())),
+                            ("data".to_string(), AttributeValue::M(serde_dynamo::to_item(&army)?)),
                         ])))
                         .build(),
                 )

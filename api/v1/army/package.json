@@ -1,0 +1,14 @@
+{
+  "name": "army",
+  "version": "1.0.0",
+  "description": "API calls for the army endpoints",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm-run-all --parallel build:*",
+    "build:get-all": "cd get_all && npm run build",
+    "package": "npm-run-all --parallel package:*",
+    "package:get-all": "cd get_all && npm run package"
+  },
+  "author": "",
+  "license": "ISC"
+}

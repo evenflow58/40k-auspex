@@ -30,11 +30,11 @@ Resources:
           - Effect: Allow
             Action:
               - iam:*
-            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/40k-auspex-roles-*"
+            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/auspex-roles-*"
           - Effect: Allow
             Action:
               - codebuild:DeleteProject
-            Resource: !Sub "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:project/40k-auspex-*"
+            Resource: !Sub "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:project/auspex-*"
           - Effect: Allow
             Action:
               - codepipeline:*

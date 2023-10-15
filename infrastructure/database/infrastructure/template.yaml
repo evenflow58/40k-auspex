@@ -11,15 +11,21 @@ Resources:
           AttributeType: S
         - AttributeName: type
           AttributeType: S
-        # - AttributeName: data
-        #   AttributeType: S
       KeySchema:
         - AttributeName: id
           KeyType: HASH
         - AttributeName: type
           KeyType: RANGE
-        # - AttributeName: data
-        #   KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: type-index
+          KeySchema:
+            - AttributeName: type
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5

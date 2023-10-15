@@ -2,6 +2,11 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
 Description: The 40k Auspex api gateway infrastructure
 
+Parameters:
+  TableName:
+    Type: String
+    Description: The name of the table to load data into
+
 Resources:
   ApiGateway: 
     Type: AWS::ApiGateway::RestApi
@@ -27,6 +32,7 @@ Resources:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
         AuthorizerId: !GetAtt Authorizer.Outputs.ApiAuthorizerId
+        TableName: !Ref TableName
     DependsOn: Authorizer
 
   V2:

@@ -365,7 +365,7 @@ Resources:
               AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:user/evenflow58'
       Path: /
       Policies:
-        - PolicyName: CloudFormationPolicy
+        - PolicyName: !Sub ${AWS::StackName}-CloudFormationPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:

@@ -5,7 +5,7 @@ Resources:
   40kAuspexTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: 40kAuspexTable
+      TableName: !Sub ${AWS::StackName}-40kAuspexTable
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
@@ -35,4 +35,4 @@ Outputs:
     Value: !Ref 40kAuspexTable
     Description: The table name for 40k Auspex
     Export:
-      Name: DbTableName
+      Name: !Sub ${AWS::StackName}-DbTableName

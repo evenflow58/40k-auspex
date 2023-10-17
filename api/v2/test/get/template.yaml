@@ -25,7 +25,7 @@ Resources:
       CodeUri: app/target/lambda/get
       # CodeUri: ./app
       Role: !GetAtt LambdaRole.Arn
-      FunctionName: TestGet_V2
+      FunctionName: !Sub ${AWS::StackName}-TestGet_V2
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource
@@ -91,7 +91,9 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref Function
+      FunctionName: !Sub
+        - "${AWS::StackName}-${Function}"
+        - Function: !Ref Function
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 
@@ -113,7 +115,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: "TestGetLmabdaAccess"
+      PolicyName: !Sub ${AWS::StackName}-TestGetLmabdaAccess
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

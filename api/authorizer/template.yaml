@@ -13,7 +13,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: GatewayAuthorizer
+      FunctionName: !Sub ${AWS::StackName}-GatewayAuthorizer
       MemorySize: 128
       Architectures:
         - arm64

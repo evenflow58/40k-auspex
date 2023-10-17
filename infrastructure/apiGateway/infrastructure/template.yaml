@@ -32,7 +32,9 @@ Resources:
         ApiGatewayId: !Ref ApiGateway
         RootResourceId: !GetAtt ApiGateway.RootResourceId
         AuthorizerId: !GetAtt Authorizer.Outputs.ApiAuthorizerId
-        TableName: !Ref TableName
+        TableName: !Sub
+          - "${AWS::StackName}-${TableName}"
+          - TableName: !Ref TableName
     DependsOn: Authorizer
 
   V2:
@@ -50,10 +52,10 @@ Outputs:
     Value: !Ref ApiGateway
     Description: The ID of the api gateway
     Export:
-      Name: ApiGatewayId
+      Name: !Sub ${AWS::StackName}-ApiGatewayId
 
   RootResourceId:
     Value: !GetAtt ApiGateway.RootResourceId
     Description: The ID of the api root resource
     Export:
-      Name: RootResourceId
+      Name: !Sub ${AWS::StackName}-RootResourceId

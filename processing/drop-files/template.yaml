@@ -12,7 +12,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: DropFilesRole
+      RoleName: !Sub ${AWS::StackName}-DropFilesRole
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -23,7 +23,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: S3Permissions
+        - PolicyName: !Sub ${AWS::StackName}-S3Permissions
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -32,7 +32,7 @@ Resources:
                   - s3:GetObject
                   - s3:PutObject
                 Resource: !Sub "arn:aws:s3:::auspex-data/*"
-        - PolicyName: CodePipelinePermissions
+        - PolicyName: !Sub ${AWS::StackName}-odePipelinePermissions
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -50,7 +50,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
     Properties:
-      FunctionName: DropFilesFunction
+      FunctionName: !Sub ${AWS::StackName}-DropFilesFunction
       CodeUri: rust_app/target/lambda/drop-files
       # CodeUri: rust_app
       Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
@@ -63,7 +63,9 @@ Resources:
     Type: AWS::Lambda::Alias
     Properties:
       Description: The live version to drop files into the S3 bucket for processing
-      FunctionName: !Ref DropFilesFunction
+      FunctionName: !Sub
+        - "${AWS::StackName}-${Function}"
+        - !Ref DropFilesFunction
       FunctionVersion: '$LATEST'
       Name: live
 
@@ -72,4 +74,4 @@ Outputs:
     Value: !Ref DropFilesFunction
     Description: The name of the drop files lambda function
     Export:
-      Name: DropFilesFunctionName
+      !Sub ${AWS::StackName}-DropFilesFunctionName

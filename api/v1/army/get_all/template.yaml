@@ -115,7 +115,9 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref Function
+      FunctionName: !Sub
+        - "${AWS::StackName}-${Function}"
+        - Function: !Ref Function
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 
@@ -137,7 +139,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: "ArmyGetAllLmabdaAccess"
+      PolicyName: !Sub ${AWS::StackName}-ArmyGetAllLmabdaAccess
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

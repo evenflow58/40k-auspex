@@ -201,7 +201,7 @@ Resources:
                 ParameterOverrides: !Sub |
                   {
                     "TableName": "#{db.DbTableName}",
-                    "Prefix": "${Prefix}",
+                    "Prefix": "${Prefix}"
                   }
               RunOrder: 2
             - Name: DeployUiCode
@@ -258,7 +258,7 @@ Resources:
                 ParameterOverrides: !Sub |
                   {
                     "TableName": "#{db.DbTableName}",
-                    "FunctionName": { "Fn::Sub": ["${Prefix}DropFilesFunctionName", { Prefix: !Ref Prefix }] }
+                    "FunctionName": "${Prefix}DropFilesFunctionName"
                   }
               RunOrder: 1
             - Name: DeployFileDropLambda
@@ -278,6 +278,10 @@ Resources:
                 TemplatePath: dropFilesBuildOutput::template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
                 StackName: !Sub ["${Prefix}Drop-Files", { Prefix: !Ref Prefix}]
+                ParameterOverrides: !Sub |
+                  {
+                    "Prefix": "${Prefix}"
+                  }
               RunOrder: 1
         - Name: SeedData
           Actions:

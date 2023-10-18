@@ -9,9 +9,6 @@ Globals:
     MemorySize: 128
 
 Parameters:
-  FunctionName:
-    Type: String
-    Description: The name of the drop files lambda function
   Prefix:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]*"
@@ -59,7 +56,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
     Properties:
-      FunctionName: !Ref FunctionName
+      FunctionName: !Sub "${Prefix}DropFilesFunction"
       CodeUri: rust_app/target/lambda/drop-files
       # CodeUri: rust_app
       Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda

@@ -192,7 +192,6 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: apiGatewayBuildOutput
-                - Name: databaseDeployOutput
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
@@ -247,7 +246,6 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: loadDataBuildOutput
-                - Name: databaseDeployOutput
               OutputArtifacts:
                 - Name: loadDataDeployOutput
               Configuration:

@@ -110,7 +110,7 @@ Resources:
   DataBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !!Sub ["${Prefix}auspex-data", { Prefix: !Ref Prefix}]
+      BucketName: !Sub ["${Prefix}auspex-data", { Prefix: !Ref Prefix}]
       NotificationConfiguration:
         TopicConfigurations:
           - Topic: !Ref DataSns

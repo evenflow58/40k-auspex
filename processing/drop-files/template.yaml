@@ -8,11 +8,20 @@ Globals:
     Timeout: 3
     MemorySize: 128
 
+Parameters:
+  FunctionName:
+    Type: String
+    Description: The name of the drop files lambda function
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
+    Description: The prefix to use for all resources
+
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ${AWS::StackName}-DropFilesRole
+      RoleName: !Sub ["${Prefix}DropFilesRole", Prefix: !Ref Prefix]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -23,7 +32,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: !Sub ${AWS::StackName}-S3Permissions
+        - PolicyName: !Sub ["${Prefix}-S3Permissions", { Prefix: !Ref Prefix }]
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -32,7 +41,7 @@ Resources:
                   - s3:GetObject
                   - s3:PutObject
                 Resource: !Sub "arn:aws:s3:::auspex-data/*"
-        - PolicyName: !Sub ${AWS::StackName}-odePipelinePermissions
+        - PolicyName: !Sub ["${Prefix}CodePipelinePermissions", { Prefix: !Ref Prefix}]
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -50,7 +59,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-DropFilesFunction
+      FunctionName: !Ref FunctionName
       CodeUri: rust_app/target/lambda/drop-files
       # CodeUri: rust_app
       Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
@@ -63,15 +72,12 @@ Resources:
     Type: AWS::Lambda::Alias
     Properties:
       Description: The live version to drop files into the S3 bucket for processing
-      FunctionName: !Sub
-        - "${AWS::StackName}-${Function}"
-        - !Ref DropFilesFunction
+      FunctionName: !Ref DropFilesFunction
       FunctionVersion: '$LATEST'
       Name: live
 
 Outputs:
   DropFilesFunctionName:
     Value: !Ref DropFilesFunction
-    Description: The name of the drop files lambda function
-    Export:
-      !Sub ${AWS::StackName}-DropFilesFunctionName
+    Description: The function name used to drop files for data loading.
+    Name: DropFilesFunctionName

@@ -12,6 +12,10 @@ Parameters:
   AuthorizerId:
     Type: String
     Description: The ID of the authorizer
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
+    Default: ''
 
 Resources:
   Function:
@@ -27,7 +31,7 @@ Resources:
       CodeUri: app/target/lambda/get
       # CodeUri: ./app
       Role: !GetAtt LambdaRole.Arn
-      FunctionName: !Sub ${AWS::StackName}-TestGet_V1
+      FunctionName: !Sub ["${Prefix}TestGet_V1", { Prefix: !Ref Prefix }]
 
   ApiGatewayResource:
     Type: AWS::ApiGateway::Resource
@@ -93,9 +97,7 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Sub
-        - "${AWS::StackName}-${Function}"
-        - Function: !Ref Function
+      FunctionName: !Sub ["${Prefix}${Function}", { Prefix: !Ref Prefix, Function: !Ref Function }]
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayId}/*
 
@@ -117,7 +119,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ${AWS::StackName}-TestGetLmabdaAccess
+      PolicyName: !Sub ["${Prefix}TestGetLmabdaAccess", { Prefix: !Ref Prefix }]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

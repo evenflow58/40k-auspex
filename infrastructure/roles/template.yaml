@@ -15,7 +15,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-      - PolicyName: !Sub ${AWS::StackName}
+      - PolicyName: Build-CloudFormation
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -58,7 +58,7 @@ Resources:
               - sts:AssumeRole
       Path: "/"
       Policies:
-      - PolicyName: !Sub ${AWS::StackName}-Pipeline-CloudFormation
+      - PolicyName: Pipeline-CloudFormation
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -334,7 +334,7 @@ Resources:
           - sts:AssumeRole
       Path: "/"
       Policies:
-      - PolicyName: !Sub ${AWS::StackName}-CloudFormation
+      - PolicyName: CloudFormation
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -365,7 +365,7 @@ Resources:
               AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:user/evenflow58'
       Path: /
       Policies:
-        - PolicyName: !Sub ${AWS::StackName}-CloudFormationPolicy
+        - PolicyName: CloudFormationPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -472,48 +472,6 @@ Resources:
                   - s3:GetObject
                   - s3:PutObject
                 Resource: arn:aws:s3:::*
-      # Policies:
-      # - PolicyName: !Sub ${AWS::StackName}-Pipeline-CloudFormation
-      #   PolicyDocument:
-      #     Version: "2012-10-17"
-      #     Statement:
-      #       - Effect: Allow
-      #         Action:
-      #           - iam:GetRole
-      #         Resource: "*"
-      #       - Effect: Allow
-      #         Action:
-      #           - s3:GetObject
-      #           - s3:PutObject
-      #         Resource: arn:aws:s3:::*
-      #       - Effect: Allow
-      #         Action:
-      #           - lambda:UpdateFunctionCode
-      #           - lambda:UpdateFunctionConfiguration
-      #           - lambda:TagResource
-      #           - lambda:ListTags
-      #           - lambda:GetFunctionConfiguration
-      #           - lambda:UntagResource
-      #           - lambda:AddPermission
-      #           - lambda:RemovePermission
-      #         Resource: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*'
-      #       - Effect: Allow
-      #         Action:
-      #           # - cloudformation:DescribeStacks
-      #           - cloudformation:CreateChangeSet
-      #           # - cloudformation:DescribeChangeSet
-      #           # - cloudformation:ExecuteChangeSet
-      #           # - cloudformation:CreateStack
-      #           # - cloudformation:UpdateStack
-      #           # - cloudformation:DeleteChangeSet
-      #         Resource: !Sub "arn:aws:cloudformation:${AWS::Region}:aws:transform/Serverless-2016-10-31"
-      #       - Effect: Allow
-      #         Action:
-      #           - apigateway:POST
-      #           - apigateway:GET
-      #           - apigateway:PUT
-      #           - apigateway:DELETE
-      #         Resource: !Sub "arn:aws:apigateway:${AWS::Region}::*"
 
 Outputs:
   BuildExecutionRoleArn:

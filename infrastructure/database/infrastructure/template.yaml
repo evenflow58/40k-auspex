@@ -1,11 +1,18 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: The 40k Auspex Database
 
+Parameters:
+  Prefix:
+    Type: String
+    Description: The prefix for the stack
+    AllowedPattern: "[A-Za-z0-9-]*"
+    Default: ''
+
 Resources:
-  40kAuspexTable:
+  AuspexTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub ${AWS::StackName}-40kAuspexTable
+      TableName: !Sub ["${Prefix}AuspexTable", { Prefix: !Ref Prefix }]
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
@@ -32,7 +39,7 @@ Resources:
 
 Outputs:
   DbTableName:
-    Value: !Ref 40kAuspexTable
+    Value: !Ref AuspexTable
     Description: The table name for 40k Auspex
     Export:
-      Name: !Sub ${AWS::StackName}-DbTableName
+      Name: DbTableName

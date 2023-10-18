@@ -258,7 +258,7 @@ Resources:
                 ParameterOverrides: !Sub |
                   {
                     "TableName": "#{db.DbTableName}",
-                    "FunctionName": "${Prefix}DropFilesFunctionName"
+                    "Prefix": "${Prefix}"
                   }
               RunOrder: 1
             - Name: DeployFileDropLambda

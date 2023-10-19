@@ -37,7 +37,7 @@ Resources:
                 Action:
                   - s3:GetObject
                   - s3:PutObject
-                Resource: !Sub "arn:aws:s3:::auspex-data/*"
+                Resource: !Sub ["arn:aws:s3:::${Prefix}auspex-data/*", { Prefix: !Ref Prefix }]
         - PolicyName: !Sub ["${Prefix}CodePipelinePermissions", { Prefix: !Ref Prefix}]
           PolicyDocument:
             Version: 2012-10-17

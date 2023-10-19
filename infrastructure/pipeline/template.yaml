@@ -248,6 +248,7 @@ Resources:
                 - Name: loadDataBuildOutput
               OutputArtifacts:
                 - Name: loadDataDeployOutput
+              Namespace: loadData
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
@@ -295,9 +296,9 @@ Resources:
                 - Name: dropFilesDeployOutput
               Configuration:
                 FunctionName: !Sub "#{dropFiles.DropFilesFunctionName}"
-                UserParameters: auspex-data
+                UserParameters: snrauspex-data
               Region: us-east-1
-              RunOrder: 2
+              RunOrder: 1
         # - !If
         #   - IsProduction
         #   - Name: DeploymentApproval

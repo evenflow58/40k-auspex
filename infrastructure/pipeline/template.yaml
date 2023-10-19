@@ -262,7 +262,7 @@ Resources:
                     "Prefix": "${Prefix}"
                   }
               RunOrder: 1
-            - Name: DeployFileDropLambda
+            - Name: DeployDropFilesLambda
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -270,8 +270,6 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: dropFilesBuildOutput
-              OutputArtifacts:
-                - Name: dropFilesDeployOutput
               Namespace: dropFiles
               Configuration:
                 ActionMode: CREATE_UPDATE
@@ -292,8 +290,6 @@ Resources:
                 Owner: AWS
                 Provider: Lambda
                 Version: 1
-              InputArtifacts:
-                - Name: dropFilesDeployOutput
               Configuration:
                 FunctionName: !Sub "#{dropFiles.DropFilesFunctionName}"
                 UserParameters: snrauspex-data

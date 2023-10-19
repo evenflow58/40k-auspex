@@ -18,7 +18,6 @@ Parameters:
   Prefix:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]*"
-    Default: ''
 
 Resources:
   V1Path:

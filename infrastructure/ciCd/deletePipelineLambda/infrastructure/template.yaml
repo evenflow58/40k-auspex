@@ -3,10 +3,10 @@ Transform: AWS::Serverless-2016-10-31
 Description: Create infrastructure for branch deployments
 
 Resources:
-  DeletePipelineLambdaRole:
+  GetStacksLambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: DeletePipelineLambdaRole
+      RoleName: GetStacksLambdaRole
       Path: /
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -40,15 +40,64 @@ Resources:
               - codepipeline:*
             Resource: "*"
       
-  DeletePipelineLamda:
+  GetStacksLamda:
    Type: AWS::Serverless::Function
    Properties:
-    FunctionName: DeletePipeline
+    FunctionName: GetStacks
+    Description: A lambda used to get stacks for lower environments to delete
+    Handler: index.handler
+    Role: !GetAtt GetStacksLambdaRole.Arn
+    Runtime: nodejs16.x
+    CodeUri: ../dist/getStacks
+    AutoPublishAlias: live
+    Timeout: 900
+
+  DeleteStacksLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: DeleteStacksLambdaRole
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs
+      Policies:
+      - PolicyName: create-pipeline-lambda-policy
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: Allow
+            Action:
+              - iam:*
+            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/40k-auspex-roles-*"
+          - Effect: Allow
+            Action:
+              - codebuild:DeleteProject
+            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/40k-auspex-*"
+          - Effect: Allow
+            Action:
+              - codepipeline:*
+            Resource: "*"
+  
+  DeleteStacksLamda:
+   Type: AWS::Serverless::Function
+   Properties:
+    FunctionName: DeleteStacks
     Description: A lambda used to delete stacks for lower environments
     Handler: index.handler
-    Role: !GetAtt DeletePipelineLambdaRole.Arn
+    Role: !GetAtt DeleteStacksLambdaRole.Arn
     Runtime: nodejs16.x
-    CodeUri: ../dist
+    CodeUri: ../dist/deleteStacks
     AutoPublishAlias: live
     Timeout: 900
 
@@ -56,4 +105,55 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       RetentionInDays: 14
-      LogGroupName: !Join ["", ["/aws/lambda/", !Ref DeletePipelineLamda]]
+      LogGroupName: !Join ["", ["/aws/lambda/", !Ref GetStacksLamda]]
+
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - !Sub states.${AWS::Region}.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: "*"
+  
+  StateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      DefinitionString: !Sub |
+        {
+          "Comment": "Gather and delete stacks for the given branch.",
+          "StartAt": "GatherStacks",
+          "States": {
+            "GatherStacks: {
+              "Type": "Task",
+              "Resource": "${GetStacksLambda.Arn}",
+              "Next": "DeleteStacks"
+            },
+            "DeleteStacks": {
+              "Type": "Task",
+              "Resource": "${DeleteStacksLambda.Arn}",
+              "Retry": [{
+                  "ErrorEquals": ["States.TaskFailed"],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 5
+              }],
+              "Next": "Done"
+            },
+            "Done": {
+              "Type": "Succeed"
+            }
+          }
+        }

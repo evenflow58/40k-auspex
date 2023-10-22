@@ -7,7 +7,8 @@
     "build": "tsc",
     "deploy": "npm run build && npm run copy && cd ./infrastructure && sam build && sam deploy --capabilities CAPABILITY_NAMED_IAM && cd ../",
     "copy": "Xcopy \"node_modules\" \"dist\\node_modules\" /E/H/C/I/Y",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:local": "npm run build && cp -R node_modules ./dist && cd ./infrastructure && sam build && sam deploy --capabilities CAPABILITY_NAMED_IAM --no-confirm-changeset && cd ../"
   },
   "author": "Evan Johnson",
   "license": "ISC",

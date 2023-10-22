@@ -25,6 +25,10 @@ export const handler = async (event: {
         ParameterKey: "GitHubBranch",
         ParameterValue: branchName,
       },
+      {
+        ParameterKey: "Prefix",
+        ParameterValue: branchName.split('-').map(word => word.charAt(0)).join(''),
+      },
     ],
     OnFailure: "ROLLBACK",
     Capabilities: ["CAPABILITY_NAMED_IAM"],

@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Get all the stacks to delete
+
+Resources:
+  GetStacksLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: GetStacksLambdaRole
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs
+      Policies:
+      - PolicyName: get-stacks-lambda-policy
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: Allow
+            Action:
+              - iam:*
+            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/40k-auspex-roles-*"
+          - Effect: Allow
+            Action:
+              - codebuild:DeleteProject
+            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/40k-auspex-*"
+          - Effect: Allow
+            Action:
+              - codepipeline:*
+            Resource: "*"
+      
+  GetStacksLambda:
+   Type: AWS::Serverless::Function
+   Properties:
+    FunctionName: GetStacks
+    Description: A lambda used to get stacks for lower environments to delete
+    Handler: index.handler
+    Role: !GetAtt GetStacksLambdaRole.Arn
+    Runtime: nodejs16.x
+    CodeUri: dist
+    AutoPublishAlias: live
+    Timeout: 900
+
+Outputs:
+  GetStacksLambdaArn:
+    Value: !GetAtt GetStacksLambda.Arn
+    Description: The arn of the get stacks lambda

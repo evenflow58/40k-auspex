@@ -15,6 +15,9 @@ Parameters:
   TableName:
     Type: String
     Description: The name of the table to load data into
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
 
 Resources:
   Function:
@@ -22,7 +25,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: ArmyGetAll_V1
+      FunctionName: !Sub ["${Prefix}ArmyGetAll_V1", { Prefix: !Ref Prefix }]
       CodeUri: rust_app/target/lambda/get_all
       # CodeUri: rust_app
       Handler: bootstrap
@@ -137,7 +140,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: "ArmyGetAllLmabdaAccess"
+      PolicyName: !Sub ["${Prefix}ArmyGetAllLmabdaAccess", { Prefix: !Ref Prefix }]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

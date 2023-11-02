@@ -4,9 +4,12 @@
   "description": "Deletes a pipeline stack on a Github workflow",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "deploy": "npm run build && npm run copy && cd ./infrastructure && sam build && sam deploy --capabilities CAPABILITY_NAMED_IAM && cd ../",
-    "copy": "Xcopy \"node_modules\" \"dist\\node_modules\" /E/H/C/I/Y",
+    "build": "npm-run-all --parallel build:*",
+    "build:emptyBuckets": "cd emptyBuckets && npm run build",
+    "build:getStacks": "cd getStacks && npm run build",
+    "build:deleteStacks": "cd deleteStacks && npm run build",
+    "upload": "aws s3api put-object --bucket auspex-code-repo-bucket --key delete-stacks-definition.json --body state-definition.json",
+    "deploy": "sh deploy.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Evan Johnson",
@@ -15,6 +18,7 @@
     "@aws-sdk/types": "^3.272.0",
     "@types/node": "^18.7.19",
     "@types/uuid": "^8.3.4",
+    "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.3"
   },

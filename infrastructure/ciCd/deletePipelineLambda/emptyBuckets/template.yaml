@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Empty all the buckets related to the stack prefix
+
+Resources:
+  EmptyBucketsLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: EmptyBucketsLambdaRole
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs
+      Policies:
+      - PolicyName: empty-buckets-lambda-policy
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: Allow
+            Action:
+              - iam:*
+            Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/40k-auspex-roles-*"
+          - Effect: Allow
+            Action:
+              - s3:ListBucket
+            Resource: arn:aws:s3:::*auspex-data
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:DeleteObject
+              - s3:DeleteObjectVersion
+            Resource: arn:aws:s3:::*auspex-data/*
+          - Effect: Allow
+            Action:
+              - codepipeline:*
+            Resource: "*"
+      
+  EmptyBucketsLambda:
+   Type: AWS::Serverless::Function
+   Properties:
+    FunctionName: EmptyBuckets
+    Description: A lambda used to empty buckets
+    Handler: index.handler
+    Role: !GetAtt EmptyBucketsLambdaRole.Arn
+    Runtime: nodejs16.x
+    CodeUri: dist
+    AutoPublishAlias: live
+    Timeout: 900
+
+Outputs:
+  EmptyBucketsLambdaArn:
+    Value: !GetAtt EmptyBucketsLambda.Arn
+    Description: The arn of the empty buckets lambda

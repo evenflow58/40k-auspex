@@ -8,11 +8,17 @@ Globals:
     Timeout: 3
     MemorySize: 128
 
+Parameters:
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
+    Description: The prefix to use for all resources
+
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: DropFilesRole
+      RoleName: !Sub ["${Prefix}DropFilesRole", Prefix: !Ref Prefix]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -23,7 +29,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: S3Permissions
+        - PolicyName: !Sub ["${Prefix}-S3Permissions", { Prefix: !Ref Prefix }]
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -31,8 +37,8 @@ Resources:
                 Action:
                   - s3:GetObject
                   - s3:PutObject
-                Resource: !Sub "arn:aws:s3:::auspex-data/*"
-        - PolicyName: CodePipelinePermissions
+                Resource: !Sub ["arn:aws:s3:::${Prefix}auspex-data/*", { Prefix: !Ref Prefix }]
+        - PolicyName: !Sub ["${Prefix}CodePipelinePermissions", { Prefix: !Ref Prefix}]
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -50,7 +56,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
     Properties:
-      FunctionName: DropFilesFunction
+      FunctionName: !Sub "${Prefix}DropFilesFunction"
       CodeUri: rust_app/target/lambda/drop-files
       # CodeUri: rust_app
       Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
@@ -70,6 +76,6 @@ Resources:
 Outputs:
   DropFilesFunctionName:
     Value: !Ref DropFilesFunction
-    Description: The name of the drop files lambda function
+    Description: The function name used to drop files for data loading.
     Export:
       Name: DropFilesFunctionName

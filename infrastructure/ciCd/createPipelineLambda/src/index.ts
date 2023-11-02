@@ -17,13 +17,18 @@ export const handler = async (event: {
   }
 
   const client = new CloudFormationClient({ region: "us-east-1" });
+  const prefix = `${branchName.split('-').map(word => word.charAt(0)).join('')}-`;
   const input: CreateStackCommandInput = {
-    StackName: `auspex-${branchName}`,
+    StackName: `${prefix}auspex-pipeline`,
     TemplateURL: event.TemplateUrl,
     Parameters: [
       {
         ParameterKey: "GitHubBranch",
         ParameterValue: branchName,
+      },
+      {
+        ParameterKey: "Prefix",
+        ParameterValue: prefix,
       },
     ],
     OnFailure: "ROLLBACK",

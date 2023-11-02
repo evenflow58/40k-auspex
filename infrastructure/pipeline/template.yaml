@@ -10,6 +10,10 @@ Parameters:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
     Default: master
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
+    Default: ''
 
 Conditions:
   IsProduction: !Equals [!Ref GitHubBranch, "master"]
@@ -18,7 +22,7 @@ Resources:
   UiBuildRunner:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub ${AWS::StackName}-UiBuildRunner
+      Name: !Sub ["${Prefix}UiBuildRunner", { Prefix: !Ref Prefix}] 
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -38,7 +42,7 @@ Resources:
   ApiBuildRunner:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub ${AWS::StackName}-ApiBuildRunner
+      Name: !Sub ["${Prefix}ApiBuildRunner", { Prefix: !Ref Prefix}]
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -58,7 +62,7 @@ Resources:
   DataBuildRunner:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub ${AWS::StackName}-DataBuildRunner
+      Name: !Sub ["${Prefix}DataBuildRunner", { Prefix: !Ref Prefix}] 
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -78,7 +82,7 @@ Resources:
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      Name: !Sub ${AWS::StackName}
+      Name: !Sub ["${Prefix}AuspexPipeline", { Prefix: !Ref Prefix}]
       ArtifactStore:
         Type: S3
         Location: !ImportValue ArtifactBucketId
@@ -105,20 +109,6 @@ Resources:
               RunOrder: 1
         - Name: Build
           Actions:
-          # - Name: Build
-          #   ActionTypeId:
-          #     Category: Build
-          #     Owner: AWS
-          #     Version: 1
-          #     Provider: CodeBuild
-          #   Configuration:
-          #     ProjectName: !Ref BuildRunner
-          #     BatchEnabled: true
-          #   InputArtifacts:
-          #     - Name: SourceCode
-          #   OutputArtifacts:
-          #     - Name: uiBuild_uiBuildOutput
-          #   RunOrder: 1
           - Name: BuildUi
             ActionTypeId:
               Category: Build
@@ -172,15 +162,13 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: databaseBuildOutput
-              OutputArtifacts:
-                - Name: databaseDeployOutput
+              Namespace: db
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: databaseBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
-                StackName: !Sub '${AWS::StackName}-Stack-Database'
-                OutputFileName: databaseDeployOutput.json
+                StackName: !Sub ["${Prefix}Database", { Prefix: !Ref Prefix}] 
               RunOrder: 1
             - Name: DeployApi
               ActionTypeId:
@@ -190,16 +178,16 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: apiGatewayBuildOutput
-                - Name: databaseDeployOutput
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                StackName: !Sub '${AWS::StackName}-Stack-API'
-                ParameterOverrides: |
+                StackName: !Sub ["${Prefix}Stack-API", { "Prefix": !Ref Prefix }]
+                ParameterOverrides: !Sub |
                   {
-                    "TableName": { "Fn::GetParam": ["databaseDeployOutput", "databaseDeployOutput.json", "DbTableName"] }
+                    "TableName": "#{db.DbTableName}",
+                    "Prefix": "${Prefix}"
                   }
               RunOrder: 2
             - Name: DeployUiCode
@@ -229,7 +217,7 @@ Resources:
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                StackName: !Sub '${AWS::StackName}-Stack-Api-Deployment'
+                StackName: !Sub ["${Prefix}Stack-Stack-Api-Deployment", { "Prefix": !Ref Prefix }]
                 ParameterOverrides: !Sub
                   - '{ "BasePathDomain": "${BasePathDomain}" }'
                   - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
@@ -244,19 +232,23 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: loadDataBuildOutput
-                - Name: databaseDeployOutput
+              OutputArtifacts:
+                - Name: loadDataDeployOutput
+              Namespace: loadData
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: loadDataBuildOutput::template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
-                StackName: !Sub '${AWS::StackName}-Stack-Load-Data'
-                ParameterOverrides: |
+                StackName: !Sub ["${Prefix}Load-Data", { Prefix: !Ref Prefix}] 
+                OutputFileName: loadDataDeployOutput.json
+                ParameterOverrides: !Sub |
                   {
-                    "TableName": { "Fn::GetParam": ["databaseDeployOutput", "databaseDeployOutput.json", "DbTableName"] }
+                    "TableName": "#{db.DbTableName}",
+                    "Prefix": "${Prefix}"
                   }
               RunOrder: 1
-            - Name: DeployFileDropLambda
+            - Name: DeployDropFilesLambda
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -264,14 +256,17 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: dropFilesBuildOutput
-              OutputArtifacts:
-                - Name: dropFilesDeployOutput
+              Namespace: dropFiles
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
                 TemplatePath: dropFilesBuildOutput::template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM
-                StackName: !Sub '${AWS::StackName}-Stack-Drop-Files'
+                StackName: !Sub ["${Prefix}Drop-Files", { Prefix: !Ref Prefix}]
+                ParameterOverrides: !Sub |
+                  {
+                    "Prefix": "${Prefix}"
+                  }
               RunOrder: 1
         - Name: SeedData
           Actions:
@@ -281,11 +276,9 @@ Resources:
                 Owner: AWS
                 Provider: Lambda
                 Version: 1
-              InputArtifacts:
-                - Name: dropFilesDeployOutput
               Configuration:
-                FunctionName: !ImportValue DropFilesFunctionName
-                UserParameters: auspex-data
+                FunctionName: !Sub "#{dropFiles.DropFilesFunctionName}"
+                UserParameters: !Sub ["${Prefix}auspex-data", { Prefix: !Ref Prefix}] 
               Region: us-east-1
               RunOrder: 1
         # - !If

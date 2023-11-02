@@ -1,0 +1,61 @@
+{
+    "Comment": "Gather and delete stacks for the given branch.",
+    "StartAt": "EmptyBuckets",
+    "States": {
+      "EmptyBuckets": {
+        "Type": "Task",
+        "Resource": "${EmptyBucketsLambdaArn}",
+        "Next": "GatherStacks"
+      },
+      "GatherStacks": {
+        "Type": "Task",
+        "Resource": "${GatherStacksLambdaArn}",
+      "Parameters": {
+        "prefix.$": "$.prefix"
+      },
+        "Next": "Route"
+      },
+      "DeleteStacks": {
+        "Type": "Task",
+        "Resource": "${DeleteStacksLambdaArn}",
+        "Parameters": {
+          "data.$": "$.data",
+          "prefix.$": "$.prefix"
+        },
+        "Next": "Route"
+      },
+      "Route": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.result",
+            "StringEquals": "DELETE",
+            "Next": "DeleteStacks"
+          },
+          {
+            "Variable": "$.result",
+            "StringEquals": "RECHECK",
+            "Next": "GatherStacks"
+          },
+          {
+            "Variable": "$.result",
+            "StringEquals": "BUCKET_FAILURE",
+            "Next": "BucketFail"
+          },
+          {
+            "Variable": "$.result",
+            "StringEquals": "DONE",
+            "Next": "Done"
+          }
+        ],
+        "Default": "Done"
+      },
+      "Done": {
+        "Type": "Succeed"
+      },
+      "BucketFail": {
+        "Type": "Fail",
+        "Cause": "Unable to empty buckets"
+      }
+    }
+  }

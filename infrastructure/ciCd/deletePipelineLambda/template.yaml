@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Create infrastructure for branch deployments
+
+Parameters:
+  DefinitionS3VersionId:
+    Type: String
+    Description: The Version Id of the file definition to use.
+
+Resources:
+  DeleteStacksStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: deleteStacks/template.yaml
+
+  GetStacksStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: getStacks/template.yaml
+
+  EmptyBucketsStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: emptyBuckets/template.yaml
+
+  StateLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: StateLogGroup
+      RetentionInDays: 14
+
+  StatesExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - !Sub states.${AWS::Region}.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: "*"
+        - PolicyName: StatesCloudWatchPolicu
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogDelivery
+                  - logs:CreateLogStream
+                  - logs:GetLogDelivery
+                  - logs:UpdateLogDelivery
+                  - logs:DeleteLogDelivery
+                  - logs:ListLogDeliveries
+                  - logs:PutLogEvents
+                  - logs:PutResourcePolicy
+                  - logs:DescribeResourcePolicies
+                  - logs:DescribeLogGroups
+                Resource: "*"
+  
+  StateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      RoleArn: !GetAtt StatesExecutionRole.Arn
+      StateMachineName: DeleteLambdaStateMachine
+      StateMachineType: EXPRESS
+      LoggingConfiguration:
+        Destinations:
+          - CloudWatchLogsLogGroup:
+              LogGroupArn: !GetAtt StateLogGroup.Arn
+        IncludeExecutionData: true
+        Level: ALL
+      DefinitionS3Location:
+        Bucket: auspex-code-repo-bucket
+        Key: delete-stacks-definition.json
+        Version: !Ref DefinitionS3VersionId
+      DefinitionSubstitutions:
+        GatherStacksLambdaArn: !GetAtt GetStacksStack.Outputs.GetStacksLambdaArn
+        DeleteStacksLambdaArn: !GetAtt DeleteStacksStack.Outputs.DeleteStacksLambdaArn
+        EmptyBucketsLambdaArn: !GetAtt EmptyBucketsStack.Outputs.EmptyBucketsLambdaArn
+    DependsOn: [DeleteStacksStack, GetStacksStack]

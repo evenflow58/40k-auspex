@@ -15,6 +15,9 @@ Parameters:
   TableName:
     Type: String
     Description: The name of the database table
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
 
 Resources:
   V1Path:
@@ -32,6 +35,7 @@ Resources:
         ApiGatewayId: !Ref ApiGatewayId
         RootResourceId: !Ref V1Path
         AuthorizerId: !Ref AuthorizerId
+        Prefix: !Ref Prefix
 
   Army:
     Type: AWS::CloudFormation::Stack
@@ -42,3 +46,4 @@ Resources:
         RootResourceId: !Ref V1Path
         AuthorizerId: !Ref AuthorizerId
         TableName: !Ref TableName
+        Prefix: !Ref Prefix

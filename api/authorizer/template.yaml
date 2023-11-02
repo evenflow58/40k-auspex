@@ -6,6 +6,10 @@ Parameters:
   ApiGatewayId:
     Type: String
     Description: The ID of the API Gateway this method should be attached to.
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
+    Default: ''
 
 Resources:
   GatewayAuthorizerLambda:
@@ -13,7 +17,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: GatewayAuthorizer
+      FunctionName: !Sub ["${Prefix}-GatewayAuthorizer", { Prefix: !Ref Prefix }]
       MemorySize: 128
       Architectures:
         - arm64

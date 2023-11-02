@@ -6,6 +6,9 @@ Parameters:
   TableName:
     Type: String
     Description: The name of the table to load data into
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -17,7 +20,7 @@ Resources:
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: LoadDataRole
+      RoleName: !Sub ["${Prefix}LoadDataRole", { Prefix: !Ref Prefix}]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -28,7 +31,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: S3Permissions
+        - PolicyName: !Sub ["${Prefix}S3Permissions", { Prefix: !Ref Prefix}]
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -36,7 +39,7 @@ Resources:
                 Action:
                   - s3:GetObject
                 Resource: !Sub "arn:aws:s3:::auspex-data/*"
-        - PolicyName: DynamoPermissions
+        - PolicyName: !Sub ["${Prefix}DynamoPermissions", { Prefix: !Ref Prefix}]
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -53,7 +56,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
     Properties:
-      FunctionName: LoadDataFunction
+      FunctionName: !Sub ["${Prefix}LoadDataFunction", { Prefix: !Ref Prefix}]
       CodeUri: rust_app/target/lambda/load-data
       # CodeUri: rust_app
       Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
@@ -84,7 +87,7 @@ Resources:
   DataSns:
     Type: AWS::SNS::Topic
     Properties:
-      TopicName: DataSns
+      TopicName: !Sub ["${Prefix}Data-Sns", { Prefix: !Ref Prefix}]
       Subscription:
         - Endpoint: !Ref LoadDataFunctionAlias
           Protocol: lambda
@@ -107,7 +110,7 @@ Resources:
   DataBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: auspex-data
+      BucketName: !Sub ["${Prefix}auspex-data", { Prefix: !Ref Prefix}]
       NotificationConfiguration:
         TopicConfigurations:
           - Topic: !Ref DataSns

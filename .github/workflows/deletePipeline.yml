@@ -12,8 +12,8 @@ jobs:
       run: |
         aws stepfunctions start-execution \
           --state-machine-arn arn:aws:states:us-east-1:625961017727:stateMachine:DeleteLambdaStateMachine \
-          --input '{ "BranchName": "${{ github.head_ref || github.ref_name }}" }''
+          --input '{ "BranchName": "${{ github.head_ref || github.ref_name }}" }'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: 'us-east-1'

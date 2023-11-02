@@ -1,0 +1,15 @@
+{
+  "name": "getstacks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm i && tsc && cp -R node_modules ./dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.437.0"
+  }
+}

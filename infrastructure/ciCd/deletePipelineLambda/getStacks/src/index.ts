@@ -1,35 +1,14 @@
-import { PipelineDeclaration } from '@aws-sdk/client-codepipeline';
-import { deleteStacks} from './delete';
-import { deleteEdgeLambda } from './lambda';
-import { getPipeline } from './pipeline';
 import { getStacks } from './stacks';
 
-export const handler = async (event: { BranchName: string }): Promise<any> => {
+export const handler = async (event: { prefix: string }): Promise<any> => {
   console.log("event", event);
+  const prefix = event.prefix;
 
-  const branchName = event.BranchName;
-  const stackPrefix = branchName.split('-').map(word => word.charAt(0)).join('');
+  const stacks = await getStacks(prefix);
 
-  const stacks = await getStacks(stackPrefix);
+  // Finish
+  if (stacks.length === 0) return { result: 'DONE' };
 
-  console.log(stacks);
-
-  // await deleteStacks(stacks);
-
-  // const pipeline = await getPipeline(branchName);
-
-  // if (!pipeline) throw new Error(`No pipeline found for branch ${branchName}`)
-
-  // const promises = await Promise.allSettled([
-  //   deleteStacks(pipeline as PipelineDeclaration),
-  //   deleteEdgeLambda(),
-  // ]);
-
-  // const rejectedPromises =
-  //   promises.filter((promise: PromiseSettledResult<void>) => promise.status === 'rejected') as Array<PromiseRejectedResult>;
-
-  // if (rejectedPromises.length > 0) {
-  //   console.log(rejectedPromises.map((promise: PromiseRejectedResult) => promise.reason).join(" | "));
-  //   throw new Error("Something didn't delete correctly.");
-  // }
+  // Send to delete
+  return { result: 'DELETE', data: stacks.map(({ name }) => name), prefix };
 }

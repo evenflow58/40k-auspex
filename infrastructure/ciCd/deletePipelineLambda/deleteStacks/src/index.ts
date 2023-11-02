@@ -1,27 +1,45 @@
-import { PipelineDeclaration } from '@aws-sdk/client-codepipeline';
-import { deleteStacks} from './delete';
-import { deleteEdgeLambda } from './lambda';
-import { getPipeline } from './pipeline';
-import { getStacks } from './stacks';
+import {
+  CloudFormationClient,
+  DeleteStackCommand,
+  DeleteStackCommandInput,
+  waitUntilStackDeleteComplete,
+  DescribeStacksCommandInput
+} from "@aws-sdk/client-cloudformation";
+import { WaiterConfiguration } from "@aws-sdk/util-waiter";
 
-export const handler = async (event): Promise<any> => {
-    console.log('event', event);
-  // await deleteStacks(stacks);
+export const handler = async (event: { prefix: string, data: Array<string>}): Promise<any> => {
+  console.log('event', event);
 
-  // const pipeline = await getPipeline(branchName);
+  const stackNames = event.data.map(( stackName: string ) => stackName);
 
-  // if (!pipeline) throw new Error(`No pipeline found for branch ${branchName}`)
+  const deleteRequests = await Promise.allSettled(stackNames.map(deleteStack));
 
-  // const promises = await Promise.allSettled([
-  //   deleteStacks(pipeline as PipelineDeclaration),
-  //   deleteEdgeLambda(),
-  // ]);
+  if (deleteRequests.filter(({ status }) => status === 'rejected')) {
+    return { result: 'RECHECK', prefix: event.prefix };
+  }
 
-  // const rejectedPromises =
-  //   promises.filter((promise: PromiseSettledResult<void>) => promise.status === 'rejected') as Array<PromiseRejectedResult>;
+  return { result: 'DONE' };
+}
 
-  // if (rejectedPromises.length > 0) {
-  //   console.log(rejectedPromises.map((promise: PromiseRejectedResult) => promise.reason).join(" | "));
-  //   throw new Error("Something didn't delete correctly.");
-  // }
+const deleteStack = async (stackName: string): Promise<void> => {
+  const stackClient = new CloudFormationClient({ region: 'us-east-1' });
+  const deleteStackCommandInput: DeleteStackCommandInput = {
+      StackName: stackName
+  };
+
+  stackClient.send(new DeleteStackCommand(deleteStackCommandInput));
+
+  const waitUntilStackDeleteInput: DescribeStacksCommandInput = {
+    StackName: stackName,
+  };
+
+  const waiterConfig: WaiterConfiguration<CloudFormationClient> = {
+    client: stackClient,
+    maxWaitTime: 600000,
+  };
+
+  await waitUntilStackDeleteComplete(
+    waiterConfig,
+    waitUntilStackDeleteInput
+  );
 }

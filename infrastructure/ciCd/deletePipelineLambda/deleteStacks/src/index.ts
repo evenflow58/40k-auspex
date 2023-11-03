@@ -35,7 +35,7 @@ const deleteStack = async (stackName: string): Promise<void> => {
 
   const waiterConfig: WaiterConfiguration<CloudFormationClient> = {
     client: stackClient,
-    maxWaitTime: 600000,
+    maxWaitTime: 180,
   };
 
   await waitUntilStackDeleteComplete(

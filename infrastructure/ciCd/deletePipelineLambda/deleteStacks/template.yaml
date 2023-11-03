@@ -34,7 +34,7 @@ Resources:
           - Effect: Allow
             Action:
               - codebuild:DeleteProject
-            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/40k-auspex-*"
+            Resource: !Sub "arn:aws:codebuild:us-east-1:${AWS::AccountId}:project/*"
           - Effect: Allow
             Action:
               - codepipeline:*

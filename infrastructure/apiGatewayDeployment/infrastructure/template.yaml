@@ -9,12 +9,14 @@ Parameters:
   HostedZoneId:
     Type: String
     Default: Z0979474E2LBKBWMAJBG
+  ApiGatewayId:
+    Type: String
 
 Resources:
   ProdDeployment:
     Type: AWS::ApiGateway::Deployment
     Properties:
-      RestApiId: !ImportValue ApiGatewayId
+      RestApiId: !Ref ApiGatewayId
       StageName: prod
 
   ApiGatewayDomainName:
@@ -31,7 +33,7 @@ Resources:
     Properties:
       Stage: prod
       DomainName: !Ref ApiGatewayDomainName
-      RestApiId: !ImportValue ApiGatewayId
+      RestApiId: !Ref ApiGatewayId
     DependsOn: ApiGatewayDomainName
 
   RecordSet:

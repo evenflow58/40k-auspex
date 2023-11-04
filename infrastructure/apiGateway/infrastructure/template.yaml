@@ -54,11 +54,7 @@ Outputs:
   ApiGatewayId:
     Value: !Ref ApiGateway
     Description: The ID of the api gateway
-    Export:
-      Name: ApiGatewayId
 
   RootResourceId:
     Value: !GetAtt ApiGateway.RootResourceId
     Description: The ID of the api root resource
-    Export:
-      Name: RootResourceId

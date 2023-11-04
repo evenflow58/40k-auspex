@@ -4,7 +4,7 @@
   "description": "Processing lambda",
   "main": "index.js",
   "scripts": {
-    "build": "npm-run-all --parallel build:*",
+    "build": "npm-run-all --sequential build:*",
     "build:load-data": "cd load-data && npm run build",
     "build:drop-files":  "cd drop-files && npm run build",
     "package": "npm-run-all --sequential package:*",

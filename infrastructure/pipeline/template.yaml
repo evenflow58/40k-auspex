@@ -169,6 +169,10 @@ Resources:
                 TemplatePath: databaseBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub ["${Prefix}Database", { Prefix: !Ref Prefix}] 
+                ParameterOverrides: !Sub |
+                  {
+                    "Prefix": "${Prefix}"
+                  }
               RunOrder: 1
             - Name: DeployApi
               ActionTypeId:

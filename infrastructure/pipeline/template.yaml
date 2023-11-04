@@ -169,6 +169,10 @@ Resources:
                 TemplatePath: databaseBuildOutput::infrastructure/template.package.yaml
                 Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub ["${Prefix}Database", { Prefix: !Ref Prefix}] 
+                ParameterOverrides: !Sub |
+                  {
+                    "Prefix": "${Prefix}"
+                  }
               RunOrder: 1
             - Name: DeployApi
               ActionTypeId:
@@ -178,6 +182,7 @@ Resources:
                 Version: 1
               InputArtifacts:
                 - Name: apiGatewayBuildOutput
+              Namespace: api
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn: !ImportValue CloudFormationExecutionRoleArn
@@ -219,7 +224,7 @@ Resources:
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
                 StackName: !Sub ["${Prefix}Stack-Stack-Api-Deployment", { "Prefix": !Ref Prefix }]
                 ParameterOverrides: !Sub
-                  - '{ "BasePathDomain": "${BasePathDomain}" }'
+                  - '{ "BasePathDomain": "${BasePathDomain}", "ApiGatewayId": "#{api.ApiGatewayId}" }'
                   - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
               RunOrder: 3
         - Name: DeployDataLambda

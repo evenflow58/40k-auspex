@@ -77,5 +77,3 @@ Outputs:
   DropFilesFunctionName:
     Value: !Ref DropFilesFunction
     Description: The function name used to drop files for data loading.
-    Export:
-      Name: DropFilesFunctionName

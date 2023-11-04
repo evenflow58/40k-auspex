@@ -120,11 +120,7 @@ Outputs:
   LoadDataFunctionName:
     Value: !Ref LoadDataFunction
     Description: The name of the load data lambda function
-    Export:
-      Name: LoadDataFunctionName
 
   DataBucketName:
     Value: !Ref DataBucket
     Description: The name of the bucket to upload data to
-    Export:
-      Name: DataBucketName

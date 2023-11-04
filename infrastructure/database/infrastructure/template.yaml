@@ -41,5 +41,3 @@ Outputs:
   DbTableName:
     Value: !Ref AuspexTable
     Description: The table name for 40k Auspex
-    Export:
-      Name: DbTableName

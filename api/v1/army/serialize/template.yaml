@@ -6,9 +6,6 @@ Parameters:
   ApiGatewayId:
     Type: String
     Description: The ID of the API Gateway this method should be attached to.
-  RootResourceId:
-    Type: String
-    Description: The ID of the root resource of the api gateway
   AuthorizerId:
     Type: String
     Description: The ID of the authorizer
@@ -18,6 +15,9 @@ Parameters:
   Prefix:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]*"
+  ApiGatewayResource:
+    Type: String
+    Description: The api gateway resource to attach the endpoint to
 
 Resources:
   Function:
@@ -36,13 +36,6 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref TableName
-
-  ApiGatewayResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      RestApiId: !Ref ApiGatewayId
-      ParentId: !Ref RootResourceId
-      PathPart: army 
 
   OptionsEndpoint:
     Type: AWS::ApiGateway::Method

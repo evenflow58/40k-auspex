@@ -729,26 +729,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "get_all"
-version = "0.1.0"
-dependencies = [
- "aws-config",
- "aws-sdk-dynamodb",
- "aws_lambda_events",
- "env_logger",
- "envmnt",
- "http",
- "lambda_runtime",
- "serde",
- "serde_dynamo",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "utils",
-]
-
-[[package]]
 name = "gimli"
 version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1331,6 +1311,26 @@ checksum = "4beec8bce849d58d06238cb50db2e1c417cfeafa4c63f692b15c82b7c80f8335"
 dependencies = [
  "itoa",
  "serde",
+]
+
+[[package]]
+name = "serialize"
+version = "0.1.0"
+dependencies = [
+ "aws-config",
+ "aws-sdk-dynamodb",
+ "aws_lambda_events",
+ "env_logger",
+ "envmnt",
+ "http",
+ "lambda_runtime",
+ "serde",
+ "serde_dynamo",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "utils",
 ]
 
 [[package]]

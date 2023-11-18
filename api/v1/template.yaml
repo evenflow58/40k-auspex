@@ -37,10 +37,21 @@ Resources:
         AuthorizerId: !Ref AuthorizerId
         Prefix: !Ref Prefix
 
-  Army:
+  GetArmy:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: army/get_all/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        RootResourceId: !Ref V1Path
+        AuthorizerId: !Ref AuthorizerId
+        TableName: !Ref TableName
+        Prefix: !Ref Prefix
+
+  SerializeArmy:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: army/serialize/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
         RootResourceId: !Ref V1Path

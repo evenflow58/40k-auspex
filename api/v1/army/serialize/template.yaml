@@ -25,8 +25,8 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: !Sub ["${Prefix}ArmyGetAll_V1", { Prefix: !Ref Prefix }]
-      CodeUri: rust_app/target/lambda/serialize
+      FunctionName: !Sub ["${Prefix}SerializeArmy_V1", { Prefix: !Ref Prefix }]
+      CodeUri: rust_app/target/lambda/get_all
       # CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
@@ -42,7 +42,7 @@ Resources:
     Properties:
       RestApiId: !Ref ApiGatewayId
       ParentId: !Ref RootResourceId
-      PathPart: army
+      PathPart: army 
 
   OptionsEndpoint:
     Type: AWS::ApiGateway::Method
@@ -57,7 +57,7 @@ Resources:
           - StatusCode: 200
             ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             ResponseTemplates:
               application/json: ''
@@ -78,7 +78,7 @@ Resources:
     Properties:
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
-      HttpMethod: GET
+      HttpMethod: POST
       AuthorizationType: CUSTOM
       AuthorizerId: !Ref AuthorizerId
       Integration:
@@ -140,7 +140,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ["${Prefix}ArmyGetAllLambdaAccess", { Prefix: !Ref Prefix }]
+      PolicyName: !Sub ["${Prefix}SerializeArmyLambdaAccess", { Prefix: !Ref Prefix }]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

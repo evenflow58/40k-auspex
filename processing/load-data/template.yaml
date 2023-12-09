@@ -38,7 +38,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - s3:GetObject
-                Resource: !Sub "arn:aws:s3:::auspex-data/*"
+                Resource: !Sub "arn:aws:s3:::${Prefix}auspex-data/*"
         - PolicyName: !Sub ["${Prefix}DynamoPermissions", { Prefix: !Ref Prefix}]
           PolicyDocument:
             Version: 2012-10-17

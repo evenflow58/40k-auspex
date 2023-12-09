@@ -46,7 +46,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - dynamodb:BatchWriteItem
-                Resource: !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/40kAuspexTable"
+                Resource: !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/${Prefix}AuspexTable"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /

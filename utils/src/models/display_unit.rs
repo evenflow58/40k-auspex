@@ -5,15 +5,15 @@ use serde::{Deserialize, Serialize};
 // and that's it
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DisplayUnit {
-    name: String,
-    enchancement: Option<String>,
+    pub name: String,
+    pub enhancement: Option<String>,
 }
 
 impl DisplayUnit {
     pub fn new(name: String) -> Self {
         DisplayUnit {
             name,
-            enchancement: None,
+            enhancement: None,
         }
     }
 }

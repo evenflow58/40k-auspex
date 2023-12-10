@@ -4,7 +4,7 @@ use std::error::Error;
 use tracing::info;
 use serde::{Deserialize, Serialize};
 
-use crate::models::{display_unit::DisplayUnit};
+use utils::models::{display_unit::DisplayUnit};
 
 // const GREY_KNIGHTS: &str = "Grey Knights";
 const ARMIES: [&str; 2] = ["Grey Knights", "Orks"];
@@ -66,7 +66,7 @@ pub fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
     all_locations.sort_by(|a, b| a.cmp(&b));
     
     // let mapped_locations: Vec<_> = all_locations.iter().map(|x| x.1).collect();
-    let mapped_locations: Vec<Unit> = all_locations
+    let mapped_locations: Vec<DisplayUnit> = all_locations
         .into_iter()
         .fold(Vec::new(), |mut acc, x| {
             if x.2 == "Unit" {

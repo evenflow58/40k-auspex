@@ -1,19 +1,24 @@
-use lambda_runtime::{run, service_fn, LambdaEvent, Error};
 use aws_lambda_events::event::apigw::{ApiGatewayProxyRequest, ApiGatewayProxyResponse};
-use tracing::info;
 use http::HeaderMap;
+use lambda_runtime::{run, service_fn, Error, LambdaEvent};
+use tracing::info;
+
+use serialize::services::serialize::serialize_army;
 
 /// This is the main body for the function.
 /// Write your code inside it.
 /// There are some code example in the following URLs:
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/examples
-async fn function_handler(event: LambdaEvent<ApiGatewayProxyRequest>) -> Result<ApiGatewayProxyResponse, Error> {
+async fn function_handler(
+    event: LambdaEvent<ApiGatewayProxyRequest>,
+) -> Result<ApiGatewayProxyResponse, Error> {
     info!("Event: {:?}", event);
-    info!("Params: {:?}", event.payload.query_string_parameters);
 
     let mut headers = HeaderMap::new();
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
+
+    let _ = serialize_army(&event.payload.body.unwrap());
 
     let resp = ApiGatewayProxyResponse {
         status_code: 200,
@@ -23,7 +28,7 @@ async fn function_handler(event: LambdaEvent<ApiGatewayProxyRequest>) -> Result<
         is_base64_encoded: false,
     };
 
-    Ok(resp) 
+    Ok(resp)
 }
 
 #[tokio::main]

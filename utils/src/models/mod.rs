@@ -7,3 +7,4 @@ pub mod unit;
 pub mod faction;
 pub mod weapon;
 pub mod dynamo_result;
+pub mod display_unit;

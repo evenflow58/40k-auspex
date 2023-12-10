@@ -3,7 +3,6 @@ use aws_sdk_dynamodb::{
     Client as dynamodb_sdk_client,
 };
 use std::error::Error;
-use tracing::info;
 
 use utils::models::{army::Army, dynamo_result::DynamoResult};
 

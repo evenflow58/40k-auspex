@@ -1,6 +1,5 @@
 use regex::Regex;
 // use regex_split::RegexSplit;
-use serde::{Deserialize, Serialize};
 use std::error::Error;
 use tracing::info;
 
@@ -46,7 +45,7 @@ pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
     info!("Army names {:?}", army_names);
 
     let army_re = Regex::new(&format!(
-        r#".*\(\d+ Points\) (?<army>{armies})(.*)"#,
+        r#".*\(\d+ Points\) (?<army>{armies})(?<all>.*)"#,
         armies = army_names.join("|"),
     ))
     .unwrap();
@@ -77,7 +76,7 @@ pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
             battle_size = BATTLE_SIZE.join("|"),
         )
     ).unwrap();
-    let Some(caps) = army_re.captures(army_string) else {
+    let Some(caps) = re.captures(&army_caps["all"]) else {
         panic!("no match");
     };
 

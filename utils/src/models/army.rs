@@ -1,4 +1,4 @@
-use crate::models::{unit::Unit, faction::Faction};
+use crate::models::{unit::Unit};
 use serde::{Deserialize, Serialize};
 
 // Create a struct named Army that contains a list of Units

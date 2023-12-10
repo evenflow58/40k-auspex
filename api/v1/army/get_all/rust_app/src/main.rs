@@ -25,7 +25,7 @@ async fn function_handler(event: LambdaEvent<ApiGatewayProxyRequest>) -> Result<
                 ArmyEntry {
                     name: army.name.clone(),
                     factions: army.factions.iter().map(|faction| {
-                        faction.name.clone()
+                        faction.clone()
                     }).collect()
                 }
             }).collect();

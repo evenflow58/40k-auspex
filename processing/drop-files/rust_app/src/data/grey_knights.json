@@ -1,10 +1,7 @@
 {
     "name": "Grey Knights",
     "factions": [
-        {
-            "name": "Teleport Strike Force",
-            "tag": "Teleport Assault"
-        }
+        "Teleport Strike Force"
     ],
     "units": [
         {

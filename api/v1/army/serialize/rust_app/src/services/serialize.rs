@@ -1,16 +1,14 @@
 use regex::Regex;
 // use regex_split::RegexSplit;
+use serde::{Deserialize, Serialize};
 use std::error::Error;
 use tracing::info;
-use serde::{Deserialize, Serialize};
 
-use utils::models::{display_unit::DisplayUnit};
+use super::data::get_armies;
+use utils::models::display_unit::DisplayUnit;
 
-// const GREY_KNIGHTS: &str = "Grey Knights";
-const ARMIES: [&str; 2] = ["Grey Knights", "Orks"];
-const FACTIONS: [&str; 1] = ["Teleport Strike Force"];
-const ARMY_TYPE: [&str; 3] = ["Onslaught", "Incursion", "Strike Force"];
-const GREY_KNIGHTS_UNITS: [&str;8] = [
+const BATTLE_SIZE: [&str; 3] = ["Onslaught", "Incursion", "Strike Force"];
+const GREY_KNIGHTS_UNITS: [&str; 8] = [
     "Brotherhood Librarian",
     "Grand Master in Nemesis Dreadknight",
     "Kaldor Draigo",
@@ -19,18 +17,18 @@ const GREY_KNIGHTS_UNITS: [&str;8] = [
     "Paladin Squad",
     "Purifier Squad",
     "Nemesis Dreadknight",
-    ];
-const GREY_KNIGHTS_ENHANCEMENTS: [&str; 2] = [
-    "Domina Liber Daemonica",
-    "Sigil of Exigence"
 ];
+const GREY_KNIGHTS_ENHANCEMENTS: [&str; 2] = ["Domina Liber Daemonica", "Sigil of Exigence"];
 
 // fn get_units(units_string: &str) {
 //     const GREY_KNIGHTS_UNITS: &str = "Brotherhood Librarian|Grand Master in Nemesis Dreadknight|Kaldor Draigo|Brotherhood Terminator Squad|Strike Squad|Paladin Squad|Purifier Squad|Nemesis Dreadknight";
 //     let re = Regex::new(r"(?<unit>) \(\d+ Points\)")
 // }
 
-fn find_locations<'a>(search_string: &'a str, search_terms: &'a [&'a str]) -> Vec<(usize, &'a str)> {
+fn find_locations<'a>(
+    search_string: &'a str,
+    search_terms: &'a [&'a str],
+) -> Vec<(usize, &'a str)> {
     let mut locations = Vec::new();
     for term in search_terms {
         let term_locations: Vec<_> = search_string.match_indices(term).collect();
@@ -41,15 +39,45 @@ fn find_locations<'a>(search_string: &'a str, search_terms: &'a [&'a str]) -> Ve
     return locations;
 }
 
-pub fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
+pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
+    let armies = get_armies().await?;
+
+    let army_names: Vec<String> = armies.clone().into_iter().map(|x| x.name).collect();
+    info!("Army names {:?}", army_names);
+
+    let army_re = Regex::new(&format!(
+        r#".*\(\d+ Points\) (?<army>{armies})(.*)"#,
+        armies = army_names.join("|"),
+    ))
+    .unwrap();
+
+    // let re = Regex::new(
+    //     &format!(
+    //         r#".*\(\d+ Points\) (?<army>{armies}) (?<faction>.*) (?<army_type>{army_types}) \(\d+ Points\) CHARACTERS (?<units>.*)"#,
+    //         armies = army_names.join("|"),
+    //         army_types = ARMY_TYPE.join("|"),
+    //     )
+    // ).unwrap();
+    let Some(army_caps) = army_re.captures(army_string) else {
+        panic!("no match");
+    };
+
+    let factions: Vec<_> = armies
+        .clone()
+        .into_iter()
+        .filter(|x| x.name == army_caps["army"])
+        .flat_map(|x| x.factions)
+        .collect();
+    info!("Factions {:?}", factions);
+
     let re = Regex::new(
         &format!(
-            r#".*\(\d+ Points\) (?<army>{armies}) (?<faction>.*) (?<army_type>{army_types}) \(\d+ Points\) CHARACTERS (?<units>.*)"#,
-            armies = ARMIES.join("|"),
-            army_types = ARMY_TYPE.join("|"),
+            r#"(?<faction>{factions}) (?<battle_size>{battle_size}) \(\d+ Points\) CHARACTERS (?<units>.*)"#,
+            factions = factions.join("|"),
+            battle_size = BATTLE_SIZE.join("|"),
         )
     ).unwrap();
-    let Some(caps) = re.captures(army_string) else {
+    let Some(caps) = army_re.captures(army_string) else {
         panic!("no match");
     };
 
@@ -64,23 +92,19 @@ pub fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
 
     let mut all_locations = [&units[..], &enhancements[..]].concat();
     all_locations.sort_by(|a, b| a.cmp(&b));
-    
+
     // let mapped_locations: Vec<_> = all_locations.iter().map(|x| x.1).collect();
-    let mapped_locations: Vec<DisplayUnit> = all_locations
-        .into_iter()
-        .fold(Vec::new(), |mut acc, x| {
+    let mapped_locations: Vec<DisplayUnit> =
+        all_locations.into_iter().fold(Vec::new(), |mut acc, x| {
             if x.2 == "Unit" {
                 acc.push(DisplayUnit::new(x.1.to_string()))
             } else if x.2 == "Enhancement" {
-                acc
-                    .last_mut()
-                    .unwrap()
-                    .enhancement = Some(x.1.to_string());
+                acc.last_mut().unwrap().enhancement = Some(x.1.to_string());
             }
 
             return acc;
         });
     info!("Mapped locations {:?}", &mapped_locations);
-    
+
     return Ok(());
 }

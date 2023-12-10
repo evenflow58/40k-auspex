@@ -18,7 +18,7 @@ async fn function_handler(
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
-    let _ = serialize_army(&event.payload.body.unwrap());
+    let _ = serialize_army(&event.payload.body.unwrap()).await;
 
     let resp = ApiGatewayProxyResponse {
         status_code: 200,

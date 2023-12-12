@@ -30,3 +30,16 @@ pub async fn get_armies() -> Result<Vec<Army>, Box<dyn Error>> {
         Ok(vec![])
     }
 }
+
+// pub async func save_army(user_id: String) -> Result<(), Box<dyn Error>> {
+//     let config = ::aws_config::load_from_env().await;
+//     let dynamodb_client = dynamodb_sdk_client::new(&config);
+//     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
+
+//     let request = dynamodb_client
+//         .put_item()
+//         .table_name(&table_name)
+//         .item("id", AttributeValue::S(user_id))
+//         .item("type", AttributeValue::S("List"))
+//         .item("data", )
+// }

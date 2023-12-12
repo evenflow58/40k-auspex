@@ -281,5 +281,31 @@
                 }
             ]
         }
+    ],
+    "enhancements": [
+        {
+            "name": "First to the Fray",
+            "tags": [
+                "movement"
+            ]
+        },
+        {
+            "name": "Domina Liber Daemonica",
+            "tags": [
+                "fight"
+            ]
+        },
+        {
+            "name": "Sigil of Exigence",
+            "tags": [
+                "shooting"
+            ]
+        },
+        {
+            "name": "Inescapable Wrath",
+            "tags": [
+                "charge"
+            ]
+        }
     ]
 }

@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Enhancement {
-    name: String,
-    tags: Vec<String>
+    pub name: String,
+    pub tags: Vec<String>
 }
 
 impl Enhancement {

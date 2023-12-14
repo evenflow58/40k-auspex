@@ -7,22 +7,8 @@ use super::data::get_armies;
 use utils::models::display_unit::DisplayUnit;
 
 const BATTLE_SIZE: [&str; 3] = ["Onslaught", "Incursion", "Strike Force"];
-const GREY_KNIGHTS_UNITS: [&str; 8] = [
-    "Brotherhood Librarian",
-    "Grand Master in Nemesis Dreadknight",
-    "Kaldor Draigo",
-    "Brotherhood Terminator Squad",
-    "Strike Squad",
-    "Paladin Squad",
-    "Purifier Squad",
-    "Nemesis Dreadknight",
-];
-const GREY_KNIGHTS_ENHANCEMENTS: [&str; 2] = ["Domina Liber Daemonica", "Sigil of Exigence"];
 
-fn find_locations<'a>(
-    search_string: &'a str,
-    search_terms: &'a [&'a str],
-) -> Vec<(usize, &'a str)> {
+fn find_locations<'a>(search_string: &'a str, search_terms: &Vec<String>) -> Vec<(usize, &'a str)> {
     let mut locations = Vec::new();
     for term in search_terms {
         let term_locations: Vec<_> = search_string.match_indices(term).collect();
@@ -35,6 +21,7 @@ fn find_locations<'a>(
 
 pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
     let armies = get_armies().await?;
+    info!("Armies found");
 
     let army_names: Vec<String> = armies.clone().into_iter().map(|x| x.name).collect();
     info!("Army names {:?}", army_names);
@@ -49,7 +36,11 @@ pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
         panic!("no match");
     };
 
-    let army = armies.clone().into_iter().filter(|x| x.name == army_caps["army"])
+    let army = armies
+        .clone()
+        .into_iter()
+        .find(|x| x.name == army_caps["army"])
+        .unwrap();
 
     let re = Regex::new(
         &format!(
@@ -62,16 +53,26 @@ pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
         panic!("no match");
     };
 
-    let army_units = army.units.clone().into_iter().map(|x| x.name);
+    let army_units = army
+        .units
+        .clone()
+        .into_iter()
+        .map(|x| x.name)
+        .collect::<Vec<_>>();
     info!("Units {:?}", army_units);
-    let army_enhancements = army.enhancements.clone().into_iter().map(|x| x.name);
+    let army_enhancements = army
+        .enhancements
+        .clone()
+        .into_iter()
+        .map(|x| x.name)
+        .collect();
     info!("Enhancements {:?}", army_enhancements);
 
     let units = find_locations(&caps["units"], &army_units)
         .iter()
         .map(|x| (x.0, x.1, "Unit"))
         .collect::<Vec<_>>();
-    let enhancements = find_locations(&caps["units"], &enhancements)
+    let enhancements = find_locations(&caps["units"], &army_enhancements)
         .iter()
         .map(|x| (x.0, x.1, "Enhancement"))
         .collect::<Vec<_>>();

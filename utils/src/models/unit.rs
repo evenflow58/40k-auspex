@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 // and that's it
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Unit {
-    name: String,
-    abilities: Vec<Ability>
+    pub name: String,
+    pub abilities: Vec<Ability>
 }
 
 impl Unit {

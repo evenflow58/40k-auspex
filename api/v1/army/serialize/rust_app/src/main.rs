@@ -4,11 +4,13 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use tracing::info;
 
 use serialize::services::serialize::serialize_army;
+use utils::traits::api_context::ApiContext;
 
 /// This is the main body for the function.
 /// Write your code inside it.
 /// There are some code example in the following URLs:
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/examples
+#[tracing::instrument(skip(event), fields(req_id = %event.context.request_id))]
 async fn function_handler(
     event: LambdaEvent<ApiGatewayProxyRequest>,
 ) -> Result<ApiGatewayProxyResponse, Error> {
@@ -18,7 +20,7 @@ async fn function_handler(
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
-    let _ = serialize_army(&event.payload.body.unwrap()).await;
+    let _ = serialize_army(&event.get_email(), &event.payload.body.unwrap()).await;
 
     let resp = ApiGatewayProxyResponse {
         status_code: 200,

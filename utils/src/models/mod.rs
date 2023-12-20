@@ -1,5 +1,6 @@
 pub mod ability;
 pub mod army;
+pub mod army_list;
 pub mod composition;
 pub mod effect;
 pub mod response;

@@ -1,10 +1,8 @@
+use super::data::{get_armies, save_army_list};
 use regex::Regex;
-// use regex_split::RegexSplit;
 use std::error::Error;
 use tracing::info;
-
-use super::data::get_armies;
-use utils::models::display_unit::DisplayUnit;
+use utils::models::{army_list::ArmyList, enhancment::Enhancement, unit::Unit};
 
 const BATTLE_SIZE: [&str; 3] = ["Onslaught", "Incursion", "Strike Force"];
 
@@ -19,12 +17,14 @@ fn find_locations<'a>(search_string: &'a str, search_terms: &Vec<String>) -> Vec
     return locations;
 }
 
-pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
+pub async fn serialize_army(user_id: &str, army_string: &str) -> Result<(), Box<dyn Error>> {
     let armies = get_armies().await?;
-    info!("Armies found");
+    info!("Army {:?}", armies);
 
     let army_names: Vec<String> = armies.clone().into_iter().map(|x| x.name).collect();
     info!("Army names {:?}", army_names);
+    let factions: Vec<String> = armies.clone().into_iter().map(|x| x.faction).collect();
+    info!("Faction names {:?}", factions);
 
     let army_re = Regex::new(&format!(
         r#".*\(\d+ Points\) (?<army>{armies})(?<all>.*)"#,
@@ -45,7 +45,7 @@ pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
     let re = Regex::new(
         &format!(
             r#"(?<faction>{factions}) (?<battle_size>{battle_size}) \(\d+ Points\) CHARACTERS (?<units>.*)"#,
-            factions = army.factions.join("|"),
+            factions = factions.join("|"),
             battle_size = BATTLE_SIZE.join("|"),
         )
     ).unwrap();
@@ -57,41 +57,67 @@ pub async fn serialize_army(army_string: &str) -> Result<(), Box<dyn Error>> {
         .units
         .clone()
         .into_iter()
-        .map(|x| x.name)
-        .collect::<Vec<_>>();
-    info!("Units {:?}", army_units);
+        .map(|x| Unit::new(x.name, &x.abilities, None))
+        .collect::<Vec<Unit>>();
     let army_enhancements = army
         .enhancements
         .clone()
         .into_iter()
-        .map(|x| x.name)
-        .collect();
-    info!("Enhancements {:?}", army_enhancements);
+        .map(|x| Enhancement::new(x.name, &x.tags))
+        .collect::<Vec<Enhancement>>();
 
-    let units = find_locations(&caps["units"], &army_units)
-        .iter()
-        .map(|x| (x.0, x.1, "Unit"))
-        .collect::<Vec<_>>();
-    let enhancements = find_locations(&caps["units"], &army_enhancements)
-        .iter()
-        .map(|x| (x.0, x.1, "Enhancement"))
-        .collect::<Vec<_>>();
+    let units = find_locations(
+        &caps["units"],
+        &army_units
+            .clone()
+            .into_iter()
+            .map(|x| x.name)
+            .collect::<Vec<String>>(),
+    )
+    .iter()
+    .map(|x| (x.0, x.1, "Unit"))
+    .collect::<Vec<_>>();
+    let enhancements = find_locations(
+        &caps["units"],
+        &army_enhancements
+            .clone()
+            .into_iter()
+            .map(|x| x.name)
+            .collect::<Vec<String>>(),
+    )
+    .iter()
+    .map(|x| (x.0, x.1, "Enhancement"))
+    .collect::<Vec<_>>();
 
     let mut all_locations = [&units[..], &enhancements[..]].concat();
     all_locations.sort_by(|a, b| a.cmp(&b));
 
-    // let mapped_locations: Vec<_> = all_locations.iter().map(|x| x.1).collect();
-    let mapped_locations: Vec<DisplayUnit> =
-        all_locations.into_iter().fold(Vec::new(), |mut acc, x| {
-            if x.2 == "Unit" {
-                acc.push(DisplayUnit::new(x.1.to_string()))
-            } else if x.2 == "Enhancement" {
-                acc.last_mut().unwrap().enhancement = Some(x.1.to_string());
-            }
+    let units: Vec<Unit> = all_locations.into_iter().fold(Vec::new(), |mut acc, x| {
+        if x.2 == "Unit" {
+            let abilities = &army_units
+                .iter()
+                .find(|unit| unit.name == x.1.to_string())
+                .unwrap()
+                .abilities;
+            acc.push(Unit::new(x.1.to_string(), &abilities, None))
+        } else if x.2 == "Enhancement" {
+            acc.last_mut().unwrap().enhancement = army_enhancements
+                .iter()
+                .find(|enhancement| enhancement.name == x.1.to_string())
+                .cloned();
+        }
 
-            return acc;
-        });
-    info!("Mapped locations {:?}", &mapped_locations);
+        return acc;
+    });
 
-    return Ok(());
+    let army_list: ArmyList = ArmyList::new(
+        army_caps["army"].to_string(),
+        caps["faction"].to_string(),
+        units,
+    );
+
+    match save_army_list(user_id.to_string(), army_list).await {
+        Ok(()) => Ok(()),
+        Err(err) => panic!("{}", err),
+    }
 }

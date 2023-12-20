@@ -6,16 +6,16 @@ use serde::{Deserialize, Serialize};
 pub struct Army {
     pub name: String,
     pub units: Vec<Unit>,
-    pub factions: Vec<String>,
+    pub faction: String,
     pub enhancements: Vec<Enhancement>,
 }
 
 impl Army {
-    pub fn new(name: String, units: Vec<Unit>, factions: Vec<String>, enhancements: Vec<Enhancement>) -> Self {
+    pub fn new(name: String, units: Vec<Unit>, faction: String, enhancements: Vec<Enhancement>) -> Self {
         Army {
             name,
             units,
-            factions,
+            faction,
             enhancements,
         }
     }

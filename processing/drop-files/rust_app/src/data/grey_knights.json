@@ -1,8 +1,6 @@
 {
     "name": "Grey Knights",
-    "factions": [
-        "Teleport Strike Force"
-    ],
+    "faction": "Teleport Strike Force",
     "units": [
         {
             "name": "Kaldor Draigo",

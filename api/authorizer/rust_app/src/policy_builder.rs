@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
-use std::fmt::{Debug};
 use log::info;
+use serde::{Deserialize, Serialize};
+use std::fmt::Debug;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
@@ -55,12 +55,7 @@ pub struct PolicyBuilder {
 }
 
 impl PolicyBuilder {
-    pub fn new(
-        region: &str,
-        account_id: &str,
-        api_id: &str,
-        stage: &str,
-    ) -> PolicyBuilder {
+    pub fn new(region: &str, account_id: &str, api_id: &str, stage: &str) -> PolicyBuilder {
         Self {
             region: region.to_string(),
             aws_account_id: account_id.to_string(),
@@ -88,9 +83,8 @@ impl PolicyBuilder {
             &self.rest_api_id,
             &self.stage,
             "*",
-            "*"
-            // serde_json::to_string(&method).unwrap(),
-            // resource.into().trim_start_matches("/")
+            "*" // serde_json::to_string(&method).unwrap(),
+                // resource.into().trim_start_matches("/")
         );
 
         let stmt = IAMPolicyStatement {

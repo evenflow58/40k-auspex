@@ -26,8 +26,8 @@ Resources:
       BuildMethod: rust-cargolambda
     Properties:
       FunctionName: !Sub ["${Prefix}SerializeArmy_V1", { Prefix: !Ref Prefix }]
-      CodeUri: rust_app/target/lambda/serialize
-      # CodeUri: rust_app
+      # CodeUri: rust_app/target/lambda/serialize
+      CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
       Architectures:
@@ -77,6 +77,10 @@ Resources:
               Action:
                 - dynamodb:Query
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable/index/*"
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable"
 
   Permission:
     Type: AWS::Lambda::Permission

@@ -2,18 +2,16 @@ use aws_sdk_dynamodb::{
     types::{AttributeValue, Select},
     Client as dynamodb_sdk_client,
 };
+use serde_dynamo::{from_items, to_item};
 use std::error::Error;
 use tracing::info;
-use serde_dynamo::from_items;
 
-use utils::models::{army::Army, dynamo_result::DynamoResult};
+use utils::models::{army::Army, army_list::ArmyList, dynamo_result::DynamoResult};
 
 pub async fn get_armies() -> Result<Vec<Army>, Box<dyn Error>> {
-    info!("Getting armies");
     let config = ::aws_config::load_from_env().await;
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
-    info!("Base set");
 
     let result = dynamodb_client
         .query()
@@ -27,26 +25,33 @@ pub async fn get_armies() -> Result<Vec<Army>, Box<dyn Error>> {
         .await?;
 
     if let Some(items) = result.items {
-        info!("items {:?}", items);
-        let armies_result: Vec<DynamoResult<Army>> = from_items(items)?;
-        info!("armies_result {:?}", armies_result);
-
-        Ok(armies_result.iter().map(|army| army.data.clone()).collect())
+        match from_items(items) {
+            Ok(armies_result) => Ok(armies_result
+                .iter()
+                .map(|army: &DynamoResult<Army>| army.data.clone())
+                .collect()),
+            Err(error) => panic!("Unable to serialize army. {:?}", error),
+        }
     } else {
-        info!("else");
         Ok(vec![])
     }
 }
 
-// pub async func save_army(user_id: String) -> Result<(), Box<dyn Error>> {
-//     let config = ::aws_config::load_from_env().await;
-//     let dynamodb_client = dynamodb_sdk_client::new(&config);
-//     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
+pub async fn save_army_list(user_id: String, data: ArmyList) -> Result<(), Box<dyn Error>> {
+    let config = ::aws_config::load_from_env().await;
+    let dynamodb_client = dynamodb_sdk_client::new(&config);
+    let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
 
-//     let request = dynamodb_client
-//         .put_item()
-//         .table_name(&table_name)
-//         .item("id", AttributeValue::S(user_id))
-//         .item("type", AttributeValue::S("List"))
-//         .item("data", )
-// }
+    match dynamodb_client
+        .put_item()
+        .table_name(&table_name)
+        .item("id", AttributeValue::S(user_id))
+        .item("type", AttributeValue::S("List".to_string()))
+        .item("data", AttributeValue::M(to_item(&data)?))
+        .send()
+        .await
+    {
+        Ok(_) => Ok(()),
+        Err(err) => panic!("Unable to put item: {:?}", err.raw_response()),
+    }
+}

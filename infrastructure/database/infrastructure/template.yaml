@@ -24,7 +24,7 @@ Resources:
         - AttributeName: id
           KeyType: HASH
         - AttributeName: sub_id
-          KeyType: Range
+          KeyType: HASH
         - AttributeName: type
           KeyType: RANGE
       GlobalSecondaryIndexes:

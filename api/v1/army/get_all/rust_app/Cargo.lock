@@ -1620,6 +1620,8 @@ checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
 name = "utils"
 version = "0.1.0"
 dependencies = [
+ "aws_lambda_events",
+ "lambda_runtime",
  "serde",
 ]
 

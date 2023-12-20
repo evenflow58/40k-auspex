@@ -1,11 +1,10 @@
-use aws_sdk_dynamodb::{Client as dynamodb_sdk_client, types::Select};
 use aws_sdk_dynamodb::types::AttributeValue;
-use tracing::info;
+use aws_sdk_dynamodb::{types::Select, Client as dynamodb_sdk_client};
 use std::error::Error;
+use tracing::info;
 use utils::models::{army::Army, dynamo_result::DynamoResult};
 
-pub async fn get_armies(
-    // take: i64,
+pub async fn get_armies(// take: i64,
     // skip: i64,
 ) -> Result<Vec<Army>, Box<dyn Error>> {
     let config = ::aws_config::load_from_env().await;
@@ -31,5 +30,5 @@ pub async fn get_armies(
         Ok(armies_result.iter().map(|army| army.data.clone()).collect())
     } else {
         Ok(vec![])
-    }   
+    }
 }

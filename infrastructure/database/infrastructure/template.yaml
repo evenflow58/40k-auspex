@@ -16,15 +16,11 @@ Resources:
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
-        - AttributeName: sub_id
-          AttributeType: S
         - AttributeName: type
           AttributeType: S
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-        - AttributeName: sub_id
-          KeyType: RANGE
         - AttributeName: type
           KeyType: RANGE
       GlobalSecondaryIndexes:

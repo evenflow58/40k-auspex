@@ -2,7 +2,6 @@ use aws_sdk_dynamodb::{types::AttributeValue, Client as dynamodb_sdk_client};
 use aws_sdk_s3::Client as s3_sdk_client;
 use serde_dynamo::to_item;
 use serde_json::from_str;
-use std::collections::HashMap;
 use std::error::Error;
 use tracing::info;
 use utils::models::army::Army;
@@ -31,7 +30,6 @@ pub async fn serialize_and_load_data(
         .put_item()
         .table_name(&*table_name)
         .item("id", AttributeValue::S(army.name.clone()))
-        .item("sub_id", AttributeValue::S(army.faction.clone()))
         .item("type", AttributeValue::S("Army".to_string()))
         .item("data", AttributeValue::M(to_item(&army)?))
         .send()

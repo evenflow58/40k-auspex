@@ -1,4 +1,4 @@
-use crate::models::{ability::Ability};
+use crate::models::rule::Rule;
 use serde::{Deserialize, Serialize};
 
 use super::enhancment::Enhancement;
@@ -10,13 +10,13 @@ use super::enhancment::Enhancement;
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Unit {
     pub name: String,
-    pub abilities: Vec<Ability>,
+    pub abilities: Vec<Rule>,
     pub enhancement: Option<Enhancement>,
 }
 
 impl Unit {
     pub fn new(name: String,
-        abilities: &Vec<Ability>,
+        abilities: &Vec<Rule>,
         enhancement: Option<Enhancement>,
     ) -> Self {
         Unit {

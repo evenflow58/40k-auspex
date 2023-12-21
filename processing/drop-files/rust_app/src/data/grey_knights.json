@@ -1,6 +1,55 @@
 {
     "name": "Grey Knights",
-    "faction": "Teleport Strike Force",
+    "army_rule": {
+        "name": "Teleport Assault",
+        "tags": [
+            "end"
+        ]
+    },
+    "detachments": [
+        {
+            "name": "Teleport Strike Force",
+            "rule": {
+                "name": "Teleport Shunt",
+                "tags": [
+                    "movement"
+                ]
+            },
+            "stratagems": [
+                {
+                    "name": "Radiant Strike",
+                    "tags": [
+                        "fight"
+                    ]
+                },
+                {
+                    "name": "Prognosticated Arrival",
+                    "tags": [
+                        "move"
+                    ]
+                },
+                {
+                    "name": "Haloed in Soulfire",
+                    "tags": [
+                        "move"
+                    ]
+                },
+                {
+                    "name": "Mists of Deimos",
+                    "tags": [
+                        "move"
+                    ]
+                },
+                {
+                    "name": "Truesilver Armour",
+                    "tags": [
+                        "shooting",
+                        "fight"
+                    ]
+                }
+            ]
+        }
+    ],
     "units": [
         {
             "name": "Kaldor Draigo",
@@ -74,7 +123,7 @@
         },
         {
             "name": "Castellan Crowe",
-            "abilities": [  
+            "abilities": [
                 {
                     "name": "Champion of the Order of Purifiers",
                     "tags": [
@@ -91,7 +140,7 @@
         },
         {
             "name": "Brother-Captain Stern",
-            "abilities": [  
+            "abilities": [
                 {
                     "name": "Exemplar of the Silvered Host",
                     "tags": [
@@ -108,7 +157,7 @@
         },
         {
             "name": "Brother-Captain",
-            "abilities": [  
+            "abilities": [
                 {
                     "name": "Empyric Amplification",
                     "tags": [
@@ -142,7 +191,7 @@
         },
         {
             "name": "Brotherhood Librarian",
-            "abilities": [  
+            "abilities": [
                 {
                     "name": "Sanctic Hood",
                     "tags": [
@@ -159,7 +208,7 @@
         },
         {
             "name": "Brotherhood Techmarine",
-            "abilities": [  
+            "abilities": [
                 {
                     "name": "Awaken the Machine Spirit",
                     "tags": [
@@ -178,7 +227,7 @@
         },
         {
             "name": "Brotherhood Chaplin",
-            "abilities": [  
+            "abilities": [
                 {
                     "name": "Words of Power",
                     "tags": [

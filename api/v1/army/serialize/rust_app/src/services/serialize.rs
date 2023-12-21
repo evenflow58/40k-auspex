@@ -21,10 +21,20 @@ pub async fn serialize_army(user_id: &str, army_string: &str) -> Result<(), Box<
     let armies = get_armies().await?;
     info!("Army {:?}", armies);
 
-    let army_names: Vec<String> = armies.clone().into_iter().map(|x| x.name).collect();
+    let army_names: Vec<String> = armies.clone().into_iter().map(|a| a.name).collect();
     info!("Army names {:?}", army_names);
-    let factions: Vec<String> = armies.clone().into_iter().map(|x| x.faction).collect();
-    info!("Faction names {:?}", factions);
+    let detachments: Vec<String> = armies
+        .clone()
+        .into_iter()
+        .flat_map(|a| {
+            a.detachments
+                .clone()
+                .into_iter()
+                .map(|d| d.name)
+                .collect::<Vec<String>>()
+        })
+        .collect();
+    info!("Detachment names {:?}", detachments);
 
     let army_re = Regex::new(&format!(
         r#".*\(\d+ Points\) (?<army>{armies})(?<all>.*)"#,
@@ -44,8 +54,8 @@ pub async fn serialize_army(user_id: &str, army_string: &str) -> Result<(), Box<
 
     let re = Regex::new(
         &format!(
-            r#"(?<faction>{factions}) (?<battle_size>{battle_size}) \(\d+ Points\) CHARACTERS (?<units>.*)"#,
-            factions = factions.join("|"),
+            r#"(?<detachment>{detachments}) (?<battle_size>{battle_size}) \(\d+ Points\) CHARACTERS (?<units>.*)"#,
+            detachments = detachments.join("|"),
             battle_size = BATTLE_SIZE.join("|"),
         )
     ).unwrap();
@@ -112,7 +122,7 @@ pub async fn serialize_army(user_id: &str, army_string: &str) -> Result<(), Box<
 
     let army_list: ArmyList = ArmyList::new(
         army_caps["army"].to_string(),
-        caps["faction"].to_string(),
+        caps["detachment"].to_string(),
         units,
     );
 

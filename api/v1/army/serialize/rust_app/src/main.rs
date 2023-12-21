@@ -1,9 +1,10 @@
 use aws_lambda_events::event::apigw::{ApiGatewayProxyRequest, ApiGatewayProxyResponse};
 use http::HeaderMap;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
+use serde_json::from_str;
 use tracing::info;
 
-use serialize::services::serialize::serialize_army;
+use serialize::{models::request_model::RequestModel, services::serialize::serialize_army};
 use utils::traits::api_context::ApiContext;
 
 /// This is the main body for the function.
@@ -20,17 +21,28 @@ async fn function_handler(
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
-    let _ = serialize_army(&event.get_email(), &event.payload.body.unwrap()).await;
+    let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
+    info!("Name {}", payload.name);
 
-    let resp = ApiGatewayProxyResponse {
-        status_code: 200,
-        headers: headers.clone(),
-        multi_value_headers: headers.clone(),
-        body: None,
-        is_base64_encoded: false,
-    };
-
-    Ok(resp)
+    match serialize_army(&event.get_email(), &payload.name, &payload.army).await {
+        Ok(()) => Ok(ApiGatewayProxyResponse {
+            status_code: 200,
+            headers: headers.clone(),
+            multi_value_headers: headers.clone(),
+            body: None,
+            is_base64_encoded: false,
+        }),
+        Err(err) => {
+            info!("Error {:?}", err);
+            Ok(ApiGatewayProxyResponse {
+                status_code: 500,
+                headers: headers.clone(),
+                multi_value_headers: headers.clone(),
+                body: None,
+                is_base64_encoded: false,
+            })
+        }
+    }
 }
 
 #[tokio::main]

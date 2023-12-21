@@ -21,12 +21,12 @@ Resources:
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-        - AttributeName: type
+        - AttributeName: entry_type
           KeyType: RANGE
       GlobalSecondaryIndexes:
         - IndexName: type-index
           KeySchema:
-            - AttributeName: type
+            - AttributeName: entry_type
               KeyType: HASH
           Projection:
             ProjectionType: ALL

@@ -31,3 +31,4 @@ utils = { path = "../../../../../utils"}
 serde_dynamo = { version = "4.2.7", features = ["aws-sdk-dynamodb+0_33"] }
 regex = "1.10.2"
 regex-split = "0.1.0"
+uuid = { version = "1.6.1", features = ["v4", "fast-rng", "macro-diagnostics"] }

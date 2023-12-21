@@ -73,17 +73,6 @@ Resources:
           ResponseModels:
             application/json: 'Empty'
 
-  GetArmy:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: army/get_all/template.yaml
-      Parameters:
-        ApiGatewayId: !Ref ApiGatewayId
-        AuthorizerId: !Ref AuthorizerId
-        TableName: !Ref TableName
-        Prefix: !Ref Prefix
-        ApiGatewayResource: !Ref ApiGatewayResource
-
   SerializeArmy:
     Type: AWS::CloudFormation::Stack
     Properties:

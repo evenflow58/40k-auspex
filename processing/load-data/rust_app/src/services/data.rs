@@ -31,7 +31,7 @@ pub async fn serialize_and_load_data(
         .table_name(&*table_name)
         .item("id", AttributeValue::S(army.name.clone()))
         .item("entry_type", AttributeValue::S("Army".to_string()))
-        .item("data", AttributeValue::M(to_item(&army)?))
+        .item("entry_data", AttributeValue::M(to_item(&army)?))
         .send()
         .await
     {

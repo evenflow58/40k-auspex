@@ -51,15 +51,15 @@ pub async fn save_army_list(
         .update_item()
         .table_name(&table_name)
         .key("id", AttributeValue::S(Uuid::new_v4().to_string()))
-        .update_expression("SET entry_type = if_not_exists(entry_type, :entry_type), user = if_not_exists(user, :user), name = :name, data = :data")
-        // .item("type", AttributeValue::S("List".to_string()))
-        // .item("user", AttributeValue::S(user_id))
-        // .item("name", AttributeValue::S(name))
-        // .item("data", AttributeValue::M(to_item(&data)?))
+        .update_expression("SET \
+            entry_type = if_not_exists(entry_type, :entry_type), \
+            user_email = if_not_exists(user_email, :user_email), \
+            list_name = :name, \
+            entry_data = :entry_data")
         .expression_attribute_values(":entry_type", AttributeValue::S("List".to_string()))
-        .expression_attribute_values(":user", AttributeValue::S(user_id))
-        .expression_attribute_values(":name", AttributeValue::S(name))
-        .expression_attribute_values(":data", AttributeValue::M(to_item(&data)?))
+        .expression_attribute_values(":user_email", AttributeValue::S(user_id))
+        .expression_attribute_values(":list_name", AttributeValue::S(name))
+        .expression_attribute_values(":entry_data", AttributeValue::M(to_item(&data)?))
         .send()
         .await
     {

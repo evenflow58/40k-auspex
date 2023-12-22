@@ -29,7 +29,7 @@ pub async fn get_armies() -> Result<Vec<Army>, Box<dyn Error>> {
         match from_items(items) {
             Ok(armies_result) => Ok(armies_result
                 .iter()
-                .map(|army: &DynamoResult<Army>| army.data.clone())
+                .map(|army: &DynamoResult<Army>| army.entry_data.clone())
                 .collect()),
             Err(error) => panic!("Unable to serialize army. {:?}", error),
         }
@@ -47,16 +47,19 @@ pub async fn save_army_list(
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
 
+    let id = AttributeValue::S(Uuid::new_v4().to_string());
+
     match dynamodb_client
         .update_item()
         .table_name(&table_name)
-        .key("id", AttributeValue::S(Uuid::new_v4().to_string()))
-        .update_expression("SET \
-            entry_type = if_not_exists(entry_type, :entry_type), \
+        .key("id", id)
+        .key("entry_type", AttributeValue::S("List".to_string()))
+        .update_expression(
+            "SET \
             user_email = if_not_exists(user_email, :user_email), \
-            list_name = :name, \
-            entry_data = :entry_data")
-        .expression_attribute_values(":entry_type", AttributeValue::S("List".to_string()))
+            list_name = :list_name, \
+            entry_data = :entry_data",
+        )
         .expression_attribute_values(":user_email", AttributeValue::S(user_id))
         .expression_attribute_values(":list_name", AttributeValue::S(name))
         .expression_attribute_values(":entry_data", AttributeValue::M(to_item(&data)?))

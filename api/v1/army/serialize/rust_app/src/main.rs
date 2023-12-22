@@ -22,27 +22,34 @@ async fn function_handler(
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
     let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
-    info!("Name {}", payload.name);
 
-    match serialize_army(&event.get_email(), &payload.name, &payload.army).await {
-        Ok(()) => Ok(ApiGatewayProxyResponse {
-            status_code: 200,
-            headers: headers.clone(),
-            multi_value_headers: headers.clone(),
-            body: None,
-            is_base64_encoded: false,
-        }),
-        Err(err) => {
-            info!("Error {:?}", err);
-            Ok(ApiGatewayProxyResponse {
-                status_code: 500,
-                headers: headers.clone(),
-                multi_value_headers: headers.clone(),
-                body: None,
-                is_base64_encoded: false,
-            })
-        }
-    }
+    Ok(ApiGatewayProxyResponse {
+        status_code: 500,
+        headers: headers.clone(),
+        multi_value_headers: headers.clone(),
+        body: None,
+        is_base64_encoded: false,
+    })
+
+    // match serialize_army(&event.get_email(), &payload.name, &payload.army).await {
+    //     Ok(()) => Ok(ApiGatewayProxyResponse {
+    //         status_code: 200,
+    //         headers: headers.clone(),
+    //         multi_value_headers: headers.clone(),
+    //         body: None,
+    //         is_base64_encoded: false,
+    //     }),
+    //     Err(err) => {
+    //         info!("Error {:?}", err);
+    //         Ok(ApiGatewayProxyResponse {
+    //             status_code: 500,
+    //             headers: headers.clone(),
+    //             multi_value_headers: headers.clone(),
+    //             body: None,
+    //             is_base64_encoded: false,
+    //         })
+    //     }
+    // }
 }
 
 #[tokio::main]

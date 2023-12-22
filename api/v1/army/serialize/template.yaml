@@ -37,12 +37,34 @@ Resources:
         Variables:
           TABLE_NAME: !Ref TableName
 
-  Endpoint:
+  PostEndpoint:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
       HttpMethod: POST
+      AuthorizationType: CUSTOM
+      AuthorizerId: !Ref AuthorizerId
+      Integration:
+        Type: AWS_PROXY
+        Credentials: !GetAtt ApiRole.Arn
+        TimeoutInMillis: 29000
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
+
+  IdApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ParentId: !Ref ApiGatewayResource
+      PathPart: "{id}"
+
+  PutEndpoint:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ResourceId: !Ref IdApiGatewayResource
+      HttpMethod: PUT
       AuthorizationType: CUSTOM
       AuthorizerId: !Ref AuthorizerId
       Integration:
@@ -79,7 +101,7 @@ Resources:
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable/index/*"
             - Effect: Allow
               Action:
-                - dynamodb:PutItem
+                - dynamodb:UpdateItem
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable"
 
   Permission:

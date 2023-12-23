@@ -1,7 +1,8 @@
+use aws_lambda_events::encodings::Body;
 use aws_lambda_events::event::apigw::{ApiGatewayProxyRequest, ApiGatewayProxyResponse};
 use http::HeaderMap;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-use serde_json::from_str;
+use serde_json::{from_str, json};
 use tracing::info;
 
 use serialize::{models::request_model::RequestModel, services::serialize::serialize_army};
@@ -22,34 +23,28 @@ async fn function_handler(
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
     let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
+    let id = event.payload.path_parameters.get("id");
+    info!("id {:?}", id);
 
-    Ok(ApiGatewayProxyResponse {
-        status_code: 500,
-        headers: headers.clone(),
-        multi_value_headers: headers.clone(),
-        body: None,
-        is_base64_encoded: false,
-    })
-
-    // match serialize_army(&event.get_email(), &payload.name, &payload.army).await {
-    //     Ok(()) => Ok(ApiGatewayProxyResponse {
-    //         status_code: 200,
-    //         headers: headers.clone(),
-    //         multi_value_headers: headers.clone(),
-    //         body: None,
-    //         is_base64_encoded: false,
-    //     }),
-    //     Err(err) => {
-    //         info!("Error {:?}", err);
-    //         Ok(ApiGatewayProxyResponse {
-    //             status_code: 500,
-    //             headers: headers.clone(),
-    //             multi_value_headers: headers.clone(),
-    //             body: None,
-    //             is_base64_encoded: false,
-    //         })
-    //     }
-    // }
+    match serialize_army(id, &event.get_email(), &payload.name, &payload.army).await {
+        Ok(id) => Ok(ApiGatewayProxyResponse {
+            status_code: 200,
+            headers: headers.clone(),
+            multi_value_headers: headers.clone(),
+            body: Some(Body::Text(json!({ "id": id }).to_string())),
+            is_base64_encoded: false,
+        }),
+        Err(err) => {
+            info!("Error {:?}", err);
+            Ok(ApiGatewayProxyResponse {
+                status_code: 500,
+                headers: headers.clone(),
+                multi_value_headers: headers.clone(),
+                body: None,
+                is_base64_encoded: false,
+            })
+        }
+    }
 }
 
 #[tokio::main]

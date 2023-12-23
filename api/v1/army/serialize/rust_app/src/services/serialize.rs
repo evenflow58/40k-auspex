@@ -18,10 +18,11 @@ fn find_locations<'a>(search_string: &'a str, search_terms: &Vec<String>) -> Vec
 }
 
 pub async fn serialize_army(
+    id: Option<&String>,
     user_id: &str,
     name: &str,
     army_string: &str,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<String, Box<dyn Error>> {
     let armies = get_armies().await?;
     info!("Army {:?}", armies);
 
@@ -130,8 +131,8 @@ pub async fn serialize_army(
         units,
     );
 
-    match save_army_list(user_id.to_string(), name.to_string(), army_list).await {
-        Ok(()) => Ok(()),
+    match save_army_list(id, user_id.to_string(), name.to_string(), army_list).await {
+        Ok(id) => Ok(id),
         Err(err) => panic!("{}", err),
     }
 }

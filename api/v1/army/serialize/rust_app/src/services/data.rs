@@ -39,20 +39,22 @@ pub async fn get_armies() -> Result<Vec<Army>, Box<dyn Error>> {
 }
 
 pub async fn save_army_list(
+    id: Option<&String>,
     user_id: String,
     name: String,
     data: ArmyList,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<String, Box<dyn Error>> {
     let config = ::aws_config::load_from_env().await;
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
 
-    let id = AttributeValue::S(Uuid::new_v4().to_string());
-
     match dynamodb_client
         .update_item()
         .table_name(&table_name)
-        .key("id", id)
+        .key(
+            "id",
+            AttributeValue::S(id.unwrap_or(&Uuid::new_v4().to_string()).to_string()),
+        )
         .key("entry_type", AttributeValue::S("List".to_string()))
         .update_expression(
             "SET \
@@ -63,10 +65,18 @@ pub async fn save_army_list(
         .expression_attribute_values(":user_email", AttributeValue::S(user_id))
         .expression_attribute_values(":list_name", AttributeValue::S(name))
         .expression_attribute_values(":entry_data", AttributeValue::M(to_item(&data)?))
+        .return_values("ALL_NEW".into())
         .send()
         .await
     {
-        Ok(_) => Ok(()),
+        Ok(returned_values) => Ok(returned_values
+            .attributes
+            .unwrap()
+            .get("id")
+            .unwrap()
+            .as_s()
+            .unwrap()
+            .to_string()),
         Err(err) => panic!("Unable to put item: {:?}", err.raw_response()),
     }
 }

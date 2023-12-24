@@ -24,7 +24,8 @@ export class BaseHttpService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Origin': '*',
       'Authorization': `${this.idToken}`
     })
   })

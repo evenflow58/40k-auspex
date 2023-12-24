@@ -44,7 +44,7 @@ export class BaseHttpService {
         this.getRequestOptions()
       );
 
-  public post = <T>(url: string, body: T) =>
+  public post = <T>(url: string, body: any) =>
     this.http
       .post<T>(
         `${this.baseUrl}${url}`,

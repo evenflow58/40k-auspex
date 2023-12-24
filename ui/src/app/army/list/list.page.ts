@@ -38,23 +38,10 @@ export class ListPage implements OnInit {
     this.loader.present();
   }
 
-  public openArmyList() {
-    this.isFactionListOpen = false;
-    this.isArmyListOpen = true;
-  }
-
-  public openFactionList(selectedArmy: { name: string, factions: Array<string> }) {
-    this.isArmyListOpen = false;
-    this.isFactionListOpen = true;
-
-    this.selectedArmyName = selectedArmy.name;
-    this.factions = selectedArmy.factions;
-  }
-
-  public navigateToEdit(faction: string) {
-    // Create army here and get id. Navigate to edit page with id.
+  public navigateToEdit() {
     this.router.navigate(
       ['../edit'],
+      { relativeTo: this.activatedRoute }
     );
   }
 }

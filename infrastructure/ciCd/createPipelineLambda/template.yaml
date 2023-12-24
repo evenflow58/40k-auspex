@@ -55,7 +55,7 @@ Resources:
     Description: A lambda used to create stacks for lower environments
     Handler: index.handler
     Role: !GetAtt CreatePipelineLambdaRole.Arn
-    Runtime: nodejs16.x
+    Runtime: nodejs18.x
     CodeUri: dist
     AutoPublishAlias: live
 

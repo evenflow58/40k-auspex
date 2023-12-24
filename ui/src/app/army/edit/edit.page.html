@@ -1,2 +1,14 @@
-<army-list *ngIf="id === null; else editBlock"></army-list>
-<ng-template #editBlock>here</ng-template>
+<form [formGroup]="listForm" (ngSubmit)="serializeList()">
+    <ion-item class="input-item">
+        <ion-label position="floating">Name</ion-label>
+        <ion-input type="text" formControlName="name" required />
+    </ion-item>
+
+    <ion-item class="input-item">
+        <ion-label position="floating">List</ion-label>
+        <ion-textarea type="text" formControlName="listString" required [autoGrow]="true" rows="5" />
+    </ion-item>
+    
+    <ion-button expand="block" type="submit">Submit</ion-button>
+    <ion-button expand="block" color="danger">Cancel</ion-button>
+</form>

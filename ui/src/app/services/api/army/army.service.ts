@@ -9,6 +9,6 @@ export class ArmyService {
   public getArmies = (): Observable<Array<{ name: string, factions: Array<string> }>> =>
     this.http.get<Array<{ name: string, factions: Array<string> }>>('army');
 
-  public serializeList = (name: string, list: string): Observable<{ id: string }> =>
-    this.http.post('army', { name, list});
+  public serializeList = (name: string, army: string): Observable<{ id: string }> =>
+    this.http.post('army', { name, army});
 }

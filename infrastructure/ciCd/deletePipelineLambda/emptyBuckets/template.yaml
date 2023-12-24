@@ -53,7 +53,7 @@ Resources:
     Description: A lambda used to empty buckets
     Handler: index.handler
     Role: !GetAtt EmptyBucketsLambdaRole.Arn
-    Runtime: nodejs16.x
+    Runtime: nodejs18.x
     CodeUri: dist
     AutoPublishAlias: live
     Timeout: 900

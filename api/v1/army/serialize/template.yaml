@@ -6,9 +6,6 @@ Parameters:
   ApiGatewayId:
     Type: String
     Description: The ID of the API Gateway this method should be attached to.
-  RootResourceId:
-    Type: String
-    Description: The ID of the root resource of the api gateway
   AuthorizerId:
     Type: String
     Description: The ID of the authorizer
@@ -18,6 +15,9 @@ Parameters:
   Prefix:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]*"
+  ApiGatewayResource:
+    Type: String
+    Description: The api gateway resource to attach the endpoint to
 
 Resources:
   Function:
@@ -25,8 +25,8 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: !Sub ["${Prefix}ArmyGetAll_V1", { Prefix: !Ref Prefix }]
-      CodeUri: rust_app/target/lambda/get_all
+      FunctionName: !Sub ["${Prefix}SerializeArmy_V1", { Prefix: !Ref Prefix }]
+      CodeUri: rust_app/target/lambda/serialize
       # CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
@@ -37,48 +37,40 @@ Resources:
         Variables:
           TABLE_NAME: !Ref TableName
 
-  ApiGatewayResource:
+  PostEndpoint:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ResourceId: !Ref ApiGatewayResource
+      HttpMethod: POST
+      AuthorizationType: CUSTOM
+      AuthorizerId: !Ref AuthorizerId
+      Integration:
+        Type: AWS_PROXY
+        Credentials: !GetAtt ApiRole.Arn
+        TimeoutInMillis: 29000
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
+      # MethodResponses:
+      # - StatusCode: 200
+      #   ResponseParameters:
+      #     method.response.header.Access-Control-Allow-Headers: true
+      #     method.response.header.Access-Control-Allow-Methods: true
+      #     method.response.header.Access-Control-Allow-Origin: true
+
+  IdApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref ApiGatewayId
-      ParentId: !Ref RootResourceId
-      PathPart: army 
+      ParentId: !Ref ApiGatewayResource
+      PathPart: "{id}"
 
-  OptionsEndpoint:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      RestApiId: !Ref ApiGatewayId
-      ResourceId: !Ref ApiGatewayResource
-      HttpMethod: OPTIONS
-      Integration:
-        Type: MOCK
-        IntegrationResponses:
-          - StatusCode: 200
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Headers: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            ResponseTemplates:
-              application/json: ''
-        PassthroughBehavior: NEVER
-        RequestTemplates:
-          application/json: '{"statusCode": 200}'
-      MethodResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Origin: true
-          ResponseModels:
-            application/json: 'Empty'
-
-  Endpoint:
+  PutEndpoint:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGatewayId
-      ResourceId: !Ref ApiGatewayResource
-      HttpMethod: GET
+      ResourceId: !Ref IdApiGatewayResource
+      HttpMethod: PUT
       AuthorizationType: CUSTOM
       AuthorizerId: !Ref AuthorizerId
       Integration:
@@ -112,7 +104,11 @@ Resources:
             - Effect: Allow
               Action:
                 - dynamodb:Query
-              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/40kAuspexTable/index/*"
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable/index/*"
+            - Effect: Allow
+              Action:
+                - dynamodb:UpdateItem
+              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable"
 
   Permission:
     Type: AWS::Lambda::Permission
@@ -140,7 +136,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ["${Prefix}ArmyGetAllLmabdaAccess", { Prefix: !Ref Prefix }]
+      PolicyName: !Sub ["${Prefix}SerializeArmyLambdaAccess", { Prefix: !Ref Prefix }]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

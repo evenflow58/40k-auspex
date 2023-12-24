@@ -1,528 +1,86 @@
 {
     "name": "Grey Knights",
-    "factions": [
+    "army_rule": {
+        "name": "Teleport Assault",
+        "tags": [
+            "end"
+        ]
+    },
+    "detachments": [
         {
             "name": "Teleport Strike Force",
-            "tag": "Teleport Assault"
+            "rule": {
+                "name": "Teleport Shunt",
+                "tags": [
+                    "movement"
+                ]
+            },
+            "stratagems": [
+                {
+                    "name": "Radiant Strike",
+                    "tags": [
+                        "fight"
+                    ]
+                },
+                {
+                    "name": "Prognosticated Arrival",
+                    "tags": [
+                        "move"
+                    ]
+                },
+                {
+                    "name": "Haloed in Soulfire",
+                    "tags": [
+                        "move"
+                    ]
+                },
+                {
+                    "name": "Mists of Deimos",
+                    "tags": [
+                        "move"
+                    ]
+                },
+                {
+                    "name": "Truesilver Armour",
+                    "tags": [
+                        "shooting",
+                        "fight"
+                    ]
+                }
+            ]
         }
     ],
     "units": [
         {
             "name": "Kaldor Draigo",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 7,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Scourging",
-                    "range": 18,
-                    "attacks": "3",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "anti",
-                            "target": "daemon",
-                            "amount": 2
-                        },
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid_fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "The Titansword",
-                    "range": 0,
-                    "attacks": "6",
-                    "skill": 2,
-                    "strength": 8,
-                    "armor_penetration": 4,
-                    "damage": "3",
-                    "effects": [
-                        {
-                            "effect_type": "anti",
-                            "target": "daemon",
-                            "amount": 2
-                        },
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
             "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
                 {
                     "name": "Untouchable Purity",
                     "tags": [
-                        "leader",
-                        "wound_target"
-                    ],
-                    "text": "While this model is leading a unit, models in that unit have the Feel No Pain 4+ ability against mortal wounds.",
-                    "ability_type": "unique"
+                        "shooting",
+                        "fight"
+                    ]
                 },
                 {
                     "name": "One With the Warp",
                     "tags": [
-                        "psychic",
-                        "per_battle",
                         "charge"
-                    ],
-                    "text": "Once per battle, when this model’s unit declares a charge in the same turn it was set up as Reinforcements using the Deep Strike ability, add 3 to the Charge roll.",
-                    "ability_type": "unique"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Brotherhood Terminator Squad",
-                    "Paladin Squad"
-                ],
-                "restrictions": [
-                    "warlord",
-                    "epic"
-                ]
-            }
+            ]
         },
         {
             "name": "Grand Master Voldus",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 6,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Malleus Argyrum",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 2,
-                    "strength": 10,
-                    "armor_penetration": 2,
-                    "damage": "3",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
             "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep-strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
                 {
                     "name": "Sanctuary",
                     "tags": [
-                        "leader",
-                        "psychic"
-                    ],
-                    "text": "While this model is leading a unit, each time an attack targets that unit, subtract 1 from the Hit roll.",
-                    "ability_type": "unique"
+                        "shooting",
+                        "fight"
+                    ]
                 },
                 {
                     "name": "Hammer Aflame",
-                    "tags": [
-                        "psychic",
-                        "fight",
-                        "daemon"
-                    ],
-                    "text": "Each time this model’s unit is selected to fight, you can select one enemy unit within Engagement Range of this model’s unit and roll one D6, adding 2 to the result if that unit has the Daemon keyword: on a 4-5, that enemy unit suffers D3 mortal wounds; on a 6+, that enemy unit suffers D3+3 mortal wounds.",
-                    "ability_type": "unique"
-                }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Brotherhood Terminator Squad",
-                    "Paladin Squad"
-                ]
-            }
-        },
-        {
-            "name": "Grand Master",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 7,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 2,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 2,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
-                {
-                    "name": "Might of Purity",
-                    "tags": [
-                        "leader",
-                        "psychic"
-                    ],
-                    "text": "While this model is leading a unit, you can ignore any or all modifiers to the characteristics of models in that unit and to any roll or test made for models in that unit (excluding modifiers to saving throws).",
-                    "ability_type": "unique"
-                },
-                {
-                    "name": "Master Strategist",
-                    "tags": [
-                        "per_battle"
-                    ],
-                    "text": "Once per battle, one unit from your army with this ability can be targeted by a Stratagem for 0CP, even if another unit from your army has already been targeted by that Stratagem this phase.",
-                    "ability_type": "unique"
-                }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Brotherhood Terminator Squad",
-                    "Paladin Squad"
-                ]
-            }
-        },
-        {
-            "name": "Grand Master in Nemesis Dreadknight",
-            "movement": 8,
-            "toughness": 8,
-            "save": 2,
-            "wounds": 13,
-            "leadership": 6,
-            "objective_control": 4,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Heavy Incinerator",
-                    "range": 18,
-                    "attacks": "2D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Gatling Psilencer",
-                    "range": 24,
-                    "attacks": "12",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Heavy Psycannon",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 10,
-                    "armor_penetration": 1,
-                    "damage": "3",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Dreadfists",
-                    "range": 0,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1"
-                },
-                {
-                    "name": "Nemesis Daemon Greathammer",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 4,
-                    "strength": 14,
-                    "armor_penetration": 3,
-                    "damage": "D6+1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Nemesis Greatsword - Strike",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 3,
-                    "strength": 10,
-                    "armor_penetration": 2,
-                    "damage": "D6",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Nemesis Greatsword - Sweep",
-                    "range": 0,
-                    "attacks": "10",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [
-                {
-                    "name": "Deadly Demise D3",
-                    "tags": [
-                        "deadly_demise"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
-                {
-                    "name": "Surge of Wrath",
-                    "tags": [
-                        "fight",
-                        "psychic"
-                    ],
-                    "text": "Once per battle round, in the Fight phase, one model from your army with this ability can use it before resolving its attacks. If it does, until the end of the phase, each time that model makes an attack that targets a Monster or Vehicle unit, you can re-roll the Hit roll, you can re-roll the Wound roll and you can re-roll the Damage roll.",
-                    "ability_type": "unique"
-                },
-                {
-                    "name": "Heroism’s Favour",
-                    "tags": [
-                        "per_battle",
-                        "stategem"
-                    ],
-                    "text": "Each time you target this model with a Stratagem, it only costs 1CP to use, even if the CP cost is higher.",
-                    "ability_type": "unique"
-                }
-            ],
-            "composition": {
-                "amount": 1
-            },
-            "degredation": [
-                {
-                    "min_wounds": 1,
-                    "max_wounds": 4,
-                    "text": "Each time this model makes an attack, subtract 1 from the Hit roll.",
                     "tags": [
                         "fight"
                     ]
@@ -530,743 +88,132 @@
             ]
         },
         {
+            "name": "Grand Master",
+            "abilities": [
+                {
+                    "name": "Might of Purity",
+                    "tags": [
+                        "any"
+                    ]
+                },
+                {
+                    "name": "Master Strategist",
+                    "tags": [
+                        "any"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Grand Master in Nemesis Dreadknight",
+            "abilities": [
+                {
+                    "name": "Surge of Wrath",
+                    "tags": [
+                        "fight"
+                    ]
+                },
+                {
+                    "name": "Heroism’s Favour",
+                    "tags": [
+                        "any"
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Castellan Crowe",
-            "movement": 6,
-            "toughness": 4,
-            "save": 2,
-            "wounds": 5,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Purifying Flame",
-                    "range": 18,
-                    "attacks": "3",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "anti",
-                            "target": "infantry",
-                            "amount": 2
-                        },
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid_fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Black Blade of Antwyr",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 6,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "devestating_wounds"
-                        },
-                        {
-                            "effect_type": "precision"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [  
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
+            "abilities": [
                 {
                     "name": "Champion of the Order of Purifiers",
                     "tags": [
-                        "leader",
-                        "psychic",
-                        "attack"
-                    ],
-                    "text": "While this model is leading a unit, add 1 to the Attacks characteristic of that unit’s Purifying Flame.",
-                    "ability_type": "unique"
+                        "shooting"
+                    ]
                 },
                 {
                     "name": "Foresight of the Prognosticars",
                     "tags": [
-                        "psychic",
-                        "per_turn",
-                        "saving"
-                    ],
-                    "text": "Once per turn, the first time a saving throw is failed for this model, change the Damage characteristic of that attack to 0.",
-                    "ability_type": "unique"
+                        "any"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Purifyer Squad"
-                ],
-                "restrictions": [
-                    "epic"
-                ]
-            }
+            ]
         },
         {
             "name": "Brother-Captain Stern",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 6,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid_fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Nemesis Force Sword",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [  
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
+            "abilities": [
                 {
                     "name": "Exemplar of the Silvered Host",
                     "tags": [
-                        "leader",
-                        "attack"
-                    ],
-                    "text": "While this model is leading a unit, each time a model in that unit makes a melee attack, on a Critical Wound, the target suffers 1 mortal wound in addition to any normal damage.",
-                    "ability_type": "unique"
+                        "fight"
+                    ]
                 },
                 {
                     "name": "Strands of Fate",
                     "tags": [
-                        "psychic",
-                        "on_death"
-                    ],
-                    "text": "The first time this model is destroyed, roll one D6 at the end of the phase. On a 2+, set this model back up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.",
-                    "ability_type": "unique"
+                        "any"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Brotherhood Terminator Squad",
-                    "Paladin Squad"
-                ],
-                "restrictions": [
-                    "epic"
-                ]
-            }
+            ]
         },
         {
             "name": "Brother-Captain",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 6,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 2,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 2,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "4",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [  
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
+            "abilities": [
                 {
                     "name": "Empyric Amplification",
                     "tags": [
-                        "leader",
-                        "psychic",
-                        "attack"
-                    ],
-                    "text": "While this model is leading a unit, Psychic weapons equipped by models in that unit have the [SUSTAINED HITS 1] ability.",
-                    "ability_type": "unique"
+                        "shooting"
+                    ]
                 },
                 {
                     "name": "Focused Mind",
                     "tags": [
-                        "psychic",
-                        "attack"
-                    ],
-                    "text": "Each time this model makes an attack with a Psychic weapon, you can re-roll the Wound roll.",
-                    "ability_type": "unique"
+                        "shooting"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Brotherhood Terminator Squad",
-                    "Paladin Squad"
-                ]
-            }
+            ]
         },
         {
             "name": "Brotherhood Champion",
-            "movement": 6,
-            "toughness": 4,
-            "save": 2,
-            "wounds": 4,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "precision"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [  
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Fights First",
-                    "tags": [
-                        "fight"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
+            "abilities": [
                 {
                     "name": "Ethereal Castigation",
                     "tags": [
-                        "leader",
-                        "psychic",
                         "fight"
-                    ],
-                    "text": "While this model is leading a unit, models in that unit have the Fights First ability.",
-                    "ability_type": "unique"
+                    ]
                 },
                 {
                     "name": "Martial Fury",
                     "tags": [
                         "fight"
-                    ],
-                    "text": "Each time this model makes a melee attack that targets a Character unit, you can re-roll the Hit roll and you can re-roll the Wound roll.",
-                    "ability_type": "unique"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Purgation Squad",
-                    "Strike Squad"
-                ]
-            }
+            ]
         },
         {
             "name": "Brotherhood Librarian",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 5,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Combi-Weapon",
-                    "range": 24,
-                    "attacks": "1",
-                    "skill": 4,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "anti",
-                            "target": "infantry",
-                            "amount": 4
-                        },
-                        {
-                            "effect_type": "devestating_wounds"
-                        },
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Purge Soul - witchfire",
-                    "range": 24,
-                    "attacks": "1",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "3",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Purge Soul - focused witchfire",
-                    "range": 24,
-                    "attacks": "1",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "3",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "precision"
-                        },
-                        {
-                            "effect_type": "hazardous"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "4",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [  
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
+            "abilities": [
                 {
                     "name": "Sanctic Hood",
                     "tags": [
-                        "leader"
-                    ],
-                    "text": "While this model is leading a unit, models in that unit have the Feel No Pain 4+ ability against Psychic Attacks.",
-                    "ability_type": "unique"
+                        "any"
+                    ]
                 },
                 {
                     "name": "Vortex of Doom",
                     "tags": [
-                        "psychic",
-                        "shoot"
-                    ],
-                    "text": "In your Shooting phase, you can select one enemy unit within 18\" of and visible to this Psyker and roll one D6: on a 1, this Psyker’s unit suffers D6 mortal wounds; on a 2-5, that enemy unit suffers 2D3 mortal wounds; on a 6, that enemy unit suffers 2D6 mortal wounds.",
-                    "ability_type": "unique"
+                        "shooting"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Brotherhood Terminator Squad",
-                    "Paladin Squad"
-                ]
-            }
+            ]
         },
         {
             "name": "Brotherhood Techmarine",
-            "movement": 5,
-            "toughness": 4,
-            "save": 2,
-            "wounds": 4,
-            "leadership": 6,
-            "objective_control": 1,
-            "ranged_weapons": [
-                {
-                    "name": "Bolt Pistol",
-                    "range": 12,
-                    "attacks": "1",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "pistol"
-                        }
-                    ]
-                },
-                {
-                    "name": "Boltgun",
-                    "range": 23,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1"
-                },
-                {
-                    "name": "Flamer",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Omnissian power axe",
-                    "range": 0,
-                    "attacks": "4",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2"
-                },
-                {
-                    "name": "Plasma Cutter - standard",
-                    "range": 0,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 7,
-                    "armor_penetration": 2,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "extra_attacks"
-                        }
-                    ]
-                },
-                {
-                    "name": "Plasma Cutter - supercharge",
-                    "range": 0,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 8,
-                    "armor_penetration": 3,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "extra_attacks"
-                        },
-                        {
-                            "effect_type": "hazardous"
-                        }
-                    ]
-                },
-                {
-                    "name": "Servo-arms",
-                    "range": 0,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 8,
-                    "armor_penetration": 2,
-                    "damage": "3",
-                    "effects": [
-                        {
-                            "effect_type": "extra_attacks"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [  
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
+            "abilities": [
                 {
                     "name": "Awaken the Machine Spirit",
                     "tags": [
                         "command"
-                    ],
-                    "text": "In your Command phase, you can select one friendly Grey Knights Vehicle model within 6\" of this model. Until the start of your next Command phase, each time that Vehicle model makes an attack, add 1 to the Hit roll.",
-                    "ability_type": "unique"
+                    ]
                 },
                 {
                     "name": "Omnissiah’s Blessing",
@@ -1275,1114 +222,136 @@
                     ],
                     "text": "In your Command phase, you can select one friendly Grey Knights Vehicle model within 3\" of this model. That Vehicle model regains up to D3 lost wounds.",
                     "ability_type": "unique"
-                },
-                {
-                    "name": "Techmarine",
-                    "text": "While this model is within 3\" of one or more friendly Grey Knights Vehicle units, unless it is leading a unit, this model has the Lone Operative ability.",
-                    "ability_type": "unique"
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Servitors",
-                    "Strike Squad"
-                ]
-            }
+            ]
         },
         {
             "name": "Brotherhood Chaplin",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 5,
-            "leadership": 5,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Crozius arcanum",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "2"
-                }
-            ],
-            "abilities": [  
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Leader",
-                    "tags": [
-                        "leader"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
+            "abilities": [
                 {
                     "name": "Words of Power",
                     "tags": [
-                        "leader",
-                        "psychic",
                         "fight"
-                    ],
-                    "text": "While this model is leading a unit, each time a model in that unit makes a melee attack, add 1 to the Wound roll.",
-                    "ability_type": "unique"
+                    ]
                 },
                 {
                     "name": "Dread Bearing",
                     "tags": [
-                        "aura",
-                        "battle_shock",
-                        "leadership"
-                    ],
-                    "text": "While an enemy unit is within 6\" of this model, each time that unit takes a Battle-shock or Leadership test, subtract 1 from that test.",
-                    "ability_type": "unique"
+                        "command"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 1,
-                "attach_to": [
-                    "Brotherhood Terminator Squad",
-                    "Paladin Squad"
-                ]
-            }
+            ]
         },
         {
             "name": "Brotherhood Terminator Squad",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 3,
-            "leadership": 6,
-            "objective_control": 2,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "4",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
             "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
                 {
                     "name": "Hammerhand",
                     "tags": [
-                        "psychic",
                         "charge"
-                    ],
-                    "text": "Each time a model in this unit makes a Charge move, until the end of the turn, melee weapons equipped by models in this unit have the [LETHAL HITS] ability.",
-                    "ability_type": "unique"
-                },
-                {
-                    "name": "Ancient’s Banner",
-                    "tags": [
-                        "objective_control"
-                    ],
-                    "text": "Add 1 to the Objective Control characteristic of models in the bearer’s unit.",
-                    "ability_type": "wargear"
+                    ]
                 },
                 {
                     "name": "Narthecium",
                     "tags": [
                         "command"
-                    ],
-                    "text": "In your Command phase, you can return 1 destroyed model (excluding Characters) to the bearer’s unit.",
-                    "ability_type": "wargear"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 10
-            }
+            ]
         },
         {
             "name": "Strike Squad",
-            "movement": 6,
-            "toughness": 4,
-            "save": 2,
-            "wounds": 2,
-            "leadership": 6,
-            "objective_control": 2,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Close Combat Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1"
-                },
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
             "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Scouts 6\"",
-                    "tags": [
-                        "pregame"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
                 {
                     "name": "Sanctifying Ritual",
                     "tags": [
-                        "psychic",
                         "command"
-                    ],
-                    "text": "If you control an objective marker at the end of your Command phase and this unit is within range of that objective marker, that objective marker remains under you control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn.",
-                    "ability_type": "unique"
+                    ]
                 }
-            ],
-            "composition": {
-                "amount": 10
-            }
+            ]
         },
         {
             "name": "Paladin Squad",
-            "movement": 5,
-            "toughness": 5,
-            "save": 2,
-            "wounds": 3,
-            "leadership": 6,
-            "objective_control": 1,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 2,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 2,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "4",
-                    "skill": 2,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
             "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
                 {
                     "name": "Inner Fortitude",
                     "tags": [
-                        "psychic",
-                        "attack"
-                    ],
-                    "text": "Each time an attack targets this unit, if the Strength characteristic of that attack is greater than the Toughness characteristic of this unit, subtract 1 from the Wound roll.",
-                    "ability_type": "unique"
-                },
-                {
-                    "name": "Ancient’s Banner",
-                    "tags": [
-                        "objective_control"
-                    ],
-                    "text": "Add 1 to the Objective Control characteristic of models in the bearer’s unit.",
-                    "ability_type": "wargear"
-                }
-            ],
-            "composition": {
-                "amount": 10
-            }
-        },
-        {
-            "name": "Purifier Squad",
-            "movement": 6,
-            "toughness": 4,
-            "save": 2,
-            "wounds": 2,
-            "leadership": 6,
-            "objective_control": 1,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Purifying Flame",
-                    "range": 18,
-                    "attacks": "1",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "anti",
-                            "target": "infantry",
-                            "amount": 2
-                        },
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Close Combat Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1"
-                },
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
-                {
-                    "name": "Sanctity of Purpose",
-                    "tags": [
-                        "psychic",
-                        "attack"
-                    ],
-                    "text": "Each time a model in this unit makes an attack, add 1 to the Hit roll if this unit is below its Starting Strength, and add 1 to the Wound roll as well if this unit is Below Half-strength.",
-                    "ability_type": "unique"
-                }
-            ],
-            "composition": {
-                "amount": 10
-            }
-        },
-        {
-            "name": "Interceptor Squad",
-            "movement": 12,
-            "toughness": 4,
-            "save": 2,
-            "wounds": 2,
-            "leadership": 6,
-            "objective_control": 1,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Purifying Flame",
-                    "range": 18,
-                    "attacks": "1",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "anti",
-                            "target": "infantry",
-                            "amount": 2
-                        },
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Close Combat Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1"
-                },
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
-                {
-                    "name": "Personal Teleporters",
-                    "tags": [
-                        "shoot"
-                    ],
-                    "text": "In your Shooting phase, after this unit has shot, if it is not within Engagement Range of one or more enemy units, it can make a Normal move of up to 6\" as if it were your Movement phase. If it does, until the end of the turn, this unit is not eligible to declare a charge.",
-                    "ability_type": "unique"
-                }
-            ],
-            "composition": {
-                "amount": 10
-            }
-        },
-        {
-            "name": "Purgation Squad",
-            "movement": 6,
-            "toughness": 4,
-            "save": 2,
-            "wounds": 2,
-            "leadership": 6,
-            "objective_control": 1,
-            "ranged_weapons": [
-                {
-                    "name": "Incinerator",
-                    "range": 12,
-                    "attacks": "D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Psilencer",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Psycannon",
-                    "range": 24,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 8,
-                    "armor_penetration": 1,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Purifying Flame",
-                    "range": 18,
-                    "attacks": "1",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "anti",
-                            "target": "infantry",
-                            "amount": 2
-                        },
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Storm Bolter",
-                    "range": 24,
-                    "attacks": "2",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "rapid fire",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Close Combat Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 4,
-                    "armor_penetration": 0,
-                    "damage": "1"
-                },
-                {
-                    "name": "Nemesis Force Weapon",
-                    "range": 0,
-                    "attacks": "3",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 2,
-                    "damage": "2",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
-                {
-                    "name": "Astral Aim",
-                    "tags": [
-                        "psychic",
-                        "shoot"
-                    ],
-                    "text": "In your Shooting phase, ranged weapons equipped by models in this unit have the [INDIRECT FIRE] ability, provided the target of that weapon is visible to one or more other friendly Grey Knights Psyker units.",
-                    "ability_type": "unique"
-                }
-            ],
-            "composition": {
-                "amount": 10
-            }
-        },
-        {
-            "name": "Nemesis Dreadknight",
-            "movement": 8,
-            "toughness": 8,
-            "save": 2,
-            "wounds": 13,
-            "leadership": 6,
-            "objective_control": 4,
-            "invulnerable_save": 4,
-            "ranged_weapons": [
-                {
-                    "name": "Heavy Incinerator",
-                    "range": 18,
-                    "attacks": "2D6",
-                    "skill": 0,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "ignores_cover"
-                        },
-                        {
-                            "effect_type": "torrent"
-                        }
-                    ]
-                },
-                {
-                    "name": "Gatling Psilencer",
-                    "range": 24,
-                    "attacks": "12",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 0,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        },
-                        {
-                            "effect_type": "sustained_hits",
-                            "amount": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Heavy Psycannon",
-                    "range": 24,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 10,
-                    "armor_penetration": 1,
-                    "damage": "3",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "melee_weapons": [
-                {
-                    "name": "Dreadfists",
-                    "range": 0,
-                    "attacks": "6",
-                    "skill": 3,
-                    "strength": 6,
-                    "armor_penetration": 1,
-                    "damage": "1"
-                },
-                {
-                    "name": "Nemesis Daemon Greathammer",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 4,
-                    "strength": 14,
-                    "armor_penetration": 3,
-                    "damage": "D6+1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Nemesis Greatsword - Strike",
-                    "range": 0,
-                    "attacks": "5",
-                    "skill": 3,
-                    "strength": 10,
-                    "armor_penetration": 2,
-                    "damage": "D6",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                },
-                {
-                    "name": "Nemesis Greatsword - Sweep",
-                    "range": 0,
-                    "attacks": "10",
-                    "skill": 3,
-                    "strength": 5,
-                    "armor_penetration": 1,
-                    "damage": "1",
-                    "effects": [
-                        {
-                            "effect_type": "psychic"
-                        }
-                    ]
-                }
-            ],
-            "abilities": [
-                {
-                    "name": "Deadly Demise D3",
-                    "tags": [
-                        "deadly_demise"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Deep Strike",
-                    "tags": [
-                        "deep_strike"
-                    ],
-                    "ability_type": "core"
-                },
-                {
-                    "name": "Teleport Assault",
-                    "tags": [
-                        "teleport"
-                    ],
-                    "ability_type": "faction"
-                },
-                {
-                    "name": "Empyric Reprisal",
-                    "tags": [
-                        "shoot",
-                        "charge"
-                    ],
-                    "text": "This model is eligible to shoot and declare a charge in a turn in which it Advanced or Fell Back.",
-                    "ability_type": "unique"
-                }
-            ],
-            "composition": {
-                "amount": 1
-            },
-            "degredation": [
-                {
-                    "min_wounds": 1,
-                    "max_wounds": 4,
-                    "text": "Each time this model makes an attack, subtract 1 from the Hit roll.",
-                    "tags": [
+                        "shooting",
                         "fight"
                     ]
                 }
+            ]
+        },
+        {
+            "name": "Purifier Squad",
+            "abilities": [
+                {
+                    "name": "Sanctity of Purpose",
+                    "tags": [
+                        "shooting",
+                        "fight"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Interceptor Squad",
+            "abilities": [
+                {
+                    "name": "Personal Teleporters",
+                    "tags": [
+                        "shooting"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Purgation Squad",
+            "abilities": [
+                {
+                    "name": "Astral Aim",
+                    "tags": [
+                        "shooting"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Nemesis Dreadknight",
+            "abilities": [
+                {
+                    "name": "Empyric Reprisal",
+                    "tags": [
+                        "shooting",
+                        "charge"
+                    ]
+                }
+            ]
+        }
+    ],
+    "enhancements": [
+        {
+            "name": "First to the Fray",
+            "tags": [
+                "movement"
+            ]
+        },
+        {
+            "name": "Domina Liber Daemonica",
+            "tags": [
+                "fight"
+            ]
+        },
+        {
+            "name": "Sigil of Exigence",
+            "tags": [
+                "shooting"
+            ]
+        },
+        {
+            "name": "Inescapable Wrath",
+            "tags": [
+                "charge"
             ]
         }
     ]

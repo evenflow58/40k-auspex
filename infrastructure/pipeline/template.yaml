@@ -174,6 +174,25 @@ Resources:
                     "Prefix": "${Prefix}"
                   }
               RunOrder: 1
+            - Name: DeployUrl
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: 1
+              InputArtifacts:
+                - Name: urlBuildOutput
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                RoleArn: !ImportValue CloudFormationExecutionRoleArn
+                TemplatePath: urlBuildOutput::infrastructure/template.package.yaml
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+                StackName: !Sub ["${Prefix}Stack-Stack-Url", { "Prefix": !Ref Prefix }]
+                ParameterOverrides: !Sub
+                  - '{ "Domain": "${Domain}", "BranchName": "${BranchName}" }'
+                  - Domain: !If [IsProduction, '40kauspex.com', !Sub '${GitHubBranch}.40kauspex.com']
+                    BranchName: !Ref GitHubBranch
+              RunOrder: 1
             - Name: DeployApi
               ActionTypeId:
                 Category: Deploy
@@ -226,25 +245,6 @@ Resources:
                 ParameterOverrides: !Sub
                   - '{ "BasePathDomain": "${BasePathDomain}", "ApiGatewayId": "#{api.ApiGatewayId}" }'
                   - BasePathDomain: !If [IsProduction, 'api.40kauspex.com', !Sub 'api-${GitHubBranch}.40kauspex.com']
-              RunOrder: 3
-            - Name: DeployUrl
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: 1
-              InputArtifacts:
-                - Name: urlBuildOutput
-              Configuration:
-                ActionMode: CREATE_UPDATE
-                RoleArn: !ImportValue CloudFormationExecutionRoleArn
-                TemplatePath: urlBuildOutput::infrastructure/template.package.yaml
-                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-                StackName: !Sub ["${Prefix}Stack-Stack-Url", { "Prefix": !Ref Prefix }]
-                ParameterOverrides: !Sub
-                  - '{ "Domain": "${Domain}", "BranchName": "${BranchName}" }'
-                  - Domain: !If [IsProduction, '40kauspex.com', !Sub '${GitHubBranch}.40kauspex.com']
-                    BranchName: !Ref GitHubBranch
               RunOrder: 3
         - Name: DeployDataLambda
           Actions:
@@ -305,126 +305,3 @@ Resources:
                 UserParameters: !Sub ["${Prefix}auspex-data", { Prefix: !Ref Prefix}] 
               Region: us-east-1
               RunOrder: 1
-        # - !If
-        #   - IsProduction
-        #   - Name: DeploymentApproval
-        #     Actions:
-        #       - Name: Approval
-        #         ActionTypeId:
-        #           Category: Approval
-        #           Owner: AWS
-        #           Provider: Manual
-        #           Version: 1
-        #         RunOrder: 1
-        #   - !Ref AWS::NoValue
-        # - !If
-        #   - IsProduction
-        #   - Name: Production
-        #     Actions:
-        #       - Name: DeployUiCode
-        #         ActionTypeId:
-        #           Category: Deploy
-        #           Owner: AWS
-        #           Provider: S3
-        #           Version: 1
-        #         RunOrder: 1
-        #         Configuration:
-        #           BucketName: !ImportValue UiBucketName
-        #           Extract: true
-        #           ObjectKey: master
-        #         InputArtifacts:
-        #           - Name: uiBuildOutput
-        #         Region: us-east-1
-        #       - Name: CreateUIChangeSet
-        #         ActionTypeId:
-        #           Category: Deploy
-        #           Owner: AWS
-        #           Provider: CloudFormation
-        #           Version: 1
-        #         Configuration:
-        #           ActionMode: CHANGE_SET_REPLACE
-        #           RoleArn: !ImportValue CloudFormationExecutionRoleArn
-        #           StackName: 'prod-Stack-UI'
-        #           ChangeSetName: ui
-        #           TemplatePath: lambdaEdgeBuildOutput::infrastructure/template.package.yaml
-        #           Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-        #           ParameterOverrides: '{ "Domain": "40kauspex.com", "BranchName": "master" }'
-        #         InputArtifacts:
-        #           - Name: lambdaEdgeBuildOutput
-        #         RunOrder: 1
-        #       - Name: CreateApiChangeSet
-        #         ActionTypeId:
-        #           Category: Deploy
-        #           Owner: AWS
-        #           Provider: CloudFormation
-        #           Version: 1
-        #         InputArtifacts:
-        #           - Name: apiGatewayBuildOutput
-        #         Configuration:
-        #           ActionMode: CHANGE_SET_REPLACE
-        #           RoleArn: !ImportValue CloudFormationExecutionRoleArn
-        #           StackName: 'prod-Stack-Api'
-        #           ChangeSetName: api
-        #           TemplatePath: apiGatewayBuildOutput::infrastructure/template.package.yaml
-        #           Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-        #           ParameterOverrides: '{ "BasePathDomain": "api.40kauspex.com" }'
-        #         RunOrder: 1
-        #       - Name: CreateApiDeploymentChangeSet
-        #         ActionTypeId:
-        #           Category: Deploy
-        #           Owner: AWS
-        #           Provider: CloudFormation
-        #           Version: 1
-        #         InputArtifacts:
-        #           - Name: apiGatewayDeploymentBuildOutput
-        #         Configuration:
-        #           ActionMode: CHANGE_SET_REPLACE
-        #           RoleArn: !ImportValue CloudFormationExecutionRoleArn
-        #           StackName: !Sub 'prod-Stack-Api-Deployment'
-        #           ChangeSetName: api-deployment
-        #           TemplatePath: apiGatewayDeploymentBuildOutput::infrastructure/template.package.yaml
-        #           Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
-        #         RunOrder: 1
-        #       - Name: ExecuteApiChangeSet
-        #         ActionTypeId:
-        #           Category: Deploy
-        #           Owner: AWS
-        #           Provider: CloudFormation
-        #           Version: 1
-        #         Configuration:
-        #           ActionMode: CHANGE_SET_EXECUTE
-        #           RoleArn: !ImportValue CloudFormationExecutionRoleArn
-        #           StackName: !Sub 'prod-Stack-Api'
-        #           ChangeSetName: api
-        #         OutputArtifacts:
-        #           - Name: !Sub 'prod-ChangeSet-Api-Deploy'
-        #         RunOrder: 2
-        #       - Name: ExecuteUIChangeSet
-        #         ActionTypeId:
-        #           Category: Deploy
-        #           Owner: AWS
-        #           Provider: CloudFormation
-        #           Version: 1
-        #         Configuration:
-        #           ActionMode: CHANGE_SET_EXECUTE
-        #           RoleArn: !ImportValue CloudFormationExecutionRoleArn
-        #           StackName: !Sub '$prod-Stack-UI'
-        #           ChangeSetName: ui
-        #         OutputArtifacts:
-        #           - Name: !Sub 'prod-ChangeSet-UI-Deploy'
-        #         RunOrder: 3
-        #       - Name: ExecuteApiDeploymentChangeSet
-        #         ActionTypeId:
-        #           Category: Deploy
-        #           Owner: AWS
-        #           Provider: CloudFormation
-        #           Version: 1
-        #         Configuration:
-        #           ActionMode: CHANGE_SET_EXECUTE
-        #           RoleArn: !ImportValue CloudFormationExecutionRoleArn
-        #           StackName: !Sub 'prod-Stack-Api-Deployment'
-        #           ChangeSetName: api-deployment
-        #         OutputArtifacts:
-        #           - Name: !Sub 'prod-ChangeSet-Api-Deployment-Deploy'
-        #         RunOrder: 3
-        #   - !Ref AWS::NoValue

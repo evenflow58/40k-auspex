@@ -24,7 +24,8 @@ export class BaseHttpService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Origin': '*',
       'Authorization': `${this.idToken}`
     })
   })
@@ -44,7 +45,7 @@ export class BaseHttpService {
         this.getRequestOptions()
       );
 
-  public post = <T>(url: string, body: T) =>
+  public post = <T>(url: string, body: any) =>
     this.http
       .post<T>(
         `${this.baseUrl}${url}`,

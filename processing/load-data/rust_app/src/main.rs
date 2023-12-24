@@ -9,7 +9,7 @@ use tracing::info;
 
 use utils::models::response::Response;
 
-use load_data::{services::data::serialize_and_load_data};
+use load_data::services::data::serialize_and_load_data;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {

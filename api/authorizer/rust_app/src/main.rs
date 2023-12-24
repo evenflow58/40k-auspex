@@ -1,15 +1,15 @@
 #![allow(dead_code)]
 
+use aws_sdk_ssm;
+use envmnt;
+use lambda_runtime::{run, service_fn, Error, LambdaEvent};
+use log::info;
+use reqwest;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::json;
-use log::info;
-use envmnt;
-use lambda_runtime::{run, service_fn, LambdaEvent, Error};
-use aws_sdk_ssm;
-use reqwest;
 
 mod policy_builder;
-use policy_builder::{PolicyBuilder, APIGatewayCustomAuthorizerPolicy};
+use policy_builder::{APIGatewayCustomAuthorizerPolicy, PolicyBuilder};
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -29,14 +29,15 @@ struct APIGatewayCustomAuthorizerResponse {
 }
 
 async fn function_handler(
-    event: LambdaEvent<APIGatewayCustomAuthorizerRequest>
+    event: LambdaEvent<APIGatewayCustomAuthorizerRequest>,
 ) -> Result<APIGatewayCustomAuthorizerResponse, Error> {
     info!("Event: {:?}", event);
 
     // Make a get request to https://oauth2.googleapis.com/tokeninfo?id_token={token}
     // to validate the token. This should return a GoogleAuthResponse struct.
     let client = reqwest::Client::new();
-    let res = client.get("https://oauth2.googleapis.com/tokeninfo")
+    let res = client
+        .get("https://oauth2.googleapis.com/tokeninfo")
         .query(&[("id_token", event.payload.authorization_token)])
         .send()
         .await?
@@ -76,8 +77,7 @@ async fn function_handler(
         .value()
         .expect("Value could not be retrieved.");
 
-    if res.aud == google_audience && res.iss == envmnt::get_or_panic("GoogleIss")
-    {
+    if res.aud == google_audience && res.iss == envmnt::get_or_panic("GoogleIss") {
         let response = APIGatewayCustomAuthorizerResponse {
             principal_id: res.sub,
             policy_document: policy_builder.allow_all_methods().build(),

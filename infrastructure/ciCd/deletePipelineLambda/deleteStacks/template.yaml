@@ -47,7 +47,7 @@ Resources:
     Description: A lambda used to delete stacks for lower environments
     Handler: index.handler
     Role: !GetAtt DeleteStacksLambdaRole.Arn
-    Runtime: nodejs16.x
+    Runtime: nodejs18.x
     CodeUri: dist
     AutoPublishAlias: live
     Timeout: 900

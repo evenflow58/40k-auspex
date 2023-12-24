@@ -1,16 +1,4 @@
-<ion-button expand="block" (click)="openArmyList()" *ngIf="areListsOpen()">
+<ion-button expand="block" (click)="navigateToEdit()">
   New
   <ion-icon name="add-outline"></ion-icon>
 </ion-button>
-
-<ion-list *ngIf="isArmyListOpen">
-  <ion-item *ngFor="let army of armies$ | async" (click)="openFactionList(army)">
-    <ion-label>{{army.name}}</ion-label>
-  </ion-item>
-</ion-list>
-
-<ion-list *ngIf="isFactionListOpen">
-  <ion-item *ngFor="let faction of factions" (click)="navigateToEdit(faction)">
-    <ion-label>{{faction}}</ion-label>
-  </ion-item>
-</ion-list>

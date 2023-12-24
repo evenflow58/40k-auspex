@@ -43,8 +43,7 @@ Resources:
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
       HttpMethod: POST
-      AuthorizationType: CUSTOM
-      AuthorizerId: !Ref AuthorizerId
+      AuthorizationType: NONE
       Integration:
         Type: AWS_PROXY
         Credentials: !GetAtt ApiRole.Arn

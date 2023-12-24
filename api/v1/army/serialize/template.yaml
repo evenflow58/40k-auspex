@@ -50,12 +50,12 @@ Resources:
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
-      MethodResponses:
-      - StatusCode: 200
-        ResponseParameters:
-          method.response.header.Access-Control-Allow-Headers: true
-          method.response.header.Access-Control-Allow-Methods: true
-          method.response.header.Access-Control-Allow-Origin: true
+      # MethodResponses:
+      # - StatusCode: 200
+      #   ResponseParameters:
+      #     method.response.header.Access-Control-Allow-Headers: true
+      #     method.response.header.Access-Control-Allow-Methods: true
+      #     method.response.header.Access-Control-Allow-Origin: true
 
   IdApiGatewayResource:
     Type: AWS::ApiGateway::Resource

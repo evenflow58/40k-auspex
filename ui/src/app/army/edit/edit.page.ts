@@ -26,7 +26,6 @@ export class EditPage implements OnInit {
   }
 
   public async serializeList() {
-    debugger;
     const { name, listString } = this.listForm.value;
     if (!name || !listString) throw new Error();
     await lastValueFrom(this.armyService.serializeList(name, listString));

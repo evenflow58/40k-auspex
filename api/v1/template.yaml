@@ -47,8 +47,7 @@ Resources:
   OptionsEndpoint:
     Type: AWS::ApiGateway::Method
     Properties:
-      AuthorizationType: CUSTOM
-      AuthorizerId: !Ref AuthorizerId
+      AuthorizationType: NONE
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
       HttpMethod: OPTIONS
@@ -58,7 +57,7 @@ Resources:
           - StatusCode: 200
             ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST,GET'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             ResponseTemplates:
               application/json: ''

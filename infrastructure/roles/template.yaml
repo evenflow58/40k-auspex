@@ -275,6 +275,7 @@ Resources:
               - Action:
                   - s3:PutBucketPolicy
                   - s3:GetBucketPolicy
+                  - s3:DeleteBucketPolicy
                 Effect: Allow
                 Resource: arn:aws:s3:::*
               - Action:
@@ -446,6 +447,7 @@ Resources:
               - Action:
                   - s3:PutBucketPolicy
                   - s3:GetBucketPolicy
+                  - s3:DeleteBucketPolicy
                 Effect: Allow
                 Resource: arn:aws:s3:::*
               - Action:

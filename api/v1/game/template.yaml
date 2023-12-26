@@ -59,7 +59,7 @@ Resources:
   CreateGame:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: game/template.yaml
+      TemplateURL: create/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
         AuthorizerId: !Ref AuthorizerId

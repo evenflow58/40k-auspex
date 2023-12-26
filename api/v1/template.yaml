@@ -30,7 +30,18 @@ Resources:
   Army:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: serialize/template.yaml
+      TemplateURL: army/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        AuthorizerId: !Ref AuthorizerId
+        TableName: !Ref TableName
+        Prefix: !Ref Prefix
+        ApiGatewayResource: !Ref ArmyApiGatewayResource
+  
+  Game:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: game/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
         AuthorizerId: !Ref AuthorizerId

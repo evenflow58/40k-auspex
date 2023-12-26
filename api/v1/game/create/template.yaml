@@ -25,7 +25,7 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: !Sub ["${Prefix}SerializeArmy_V1", { Prefix: !Ref Prefix }]
+      FunctionName: !Sub ["${Prefix}CreateGame_V1", { Prefix: !Ref Prefix }]
       CodeUri: rust_app/target/lambda/create
       # CodeUri: rust_app
       Handler: bootstrap
@@ -136,7 +136,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ["${Prefix}SerializeArmyLambdaAccess", { Prefix: !Ref Prefix }]
+      PolicyName: !Sub ["${Prefix}CreateGameLambdaAccess", { Prefix: !Ref Prefix }]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

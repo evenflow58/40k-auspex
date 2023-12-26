@@ -1,0 +1,14 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "Endpoints related to games",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm-run-all --parallel build:*",
+    "build:serialize": "cd create && npm run build",
+    "package": "npm-run-all --parallel package:*",
+    "package:serialize": "cd create && npm run package"
+  },
+  "author": "",
+  "license": "ISC"
+}

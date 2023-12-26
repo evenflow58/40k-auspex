@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: The 40k Auspex api game path
+
+Parameters:
+  ApiGatewayId:
+    Type: String
+    Description: The ID of the API Gateway this method should be attached to.
+  AuthorizerId:
+    Type: String
+    Description: The ID of the authorizer
+  TableName:
+    Type: String
+    Description: The name of the table to load data into
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
+  ApiGatewayResource:
+    Type: String
+    Description: The api gateway resource to attach the endpoint to
+
+Resources:
+  GameApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ParentId: !Ref ApiGatewayResource
+      PathPart: game 
+
+  GameOptionsEndpoint:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      RestApiId: !Ref ApiGatewayId
+      ResourceId: !Ref GameApiGatewayResource
+      HttpMethod: OPTIONS
+      Integration:
+        Type: MOCK
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'*'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: ''
+        PassthroughBehavior: NEVER
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          ResponseModels:
+            application/json: 'Empty'
+
+  CreateGame:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: game/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        AuthorizerId: !Ref AuthorizerId
+        TableName: !Ref TableName
+        Prefix: !Ref Prefix
+        ApiGatewayResource: !Ref GameApiGatewayResource

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The 40k Auspex api serialize method
+Description: The 40k Auspex api create game method
 
 Parameters:
   ApiGatewayId:
@@ -25,9 +25,9 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: !Sub ["${Prefix}SerializeArmy_V1", { Prefix: !Ref Prefix }]
-      CodeUri: rust_app/target/lambda/serialize
-      # CodeUri: rust_app
+      FunctionName: !Sub ["${Prefix}CreateGame_V1", { Prefix: !Ref Prefix }]
+      # CodeUri: rust_app/target/lambda/create
+      CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
       Architectures:
@@ -51,12 +51,6 @@ Resources:
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
-      # MethodResponses:
-      # - StatusCode: 200
-      #   ResponseParameters:
-      #     method.response.header.Access-Control-Allow-Headers: true
-      #     method.response.header.Access-Control-Allow-Methods: true
-      #     method.response.header.Access-Control-Allow-Origin: true
 
   IdApiGatewayResource:
     Type: AWS::ApiGateway::Resource
@@ -103,10 +97,6 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - dynamodb:Query
-              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable/index/*"
-            - Effect: Allow
-              Action:
                 - dynamodb:UpdateItem
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable"
 
@@ -136,7 +126,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ["${Prefix}SerializeArmyLambdaAccess", { Prefix: !Ref Prefix }]
+      PolicyName: !Sub ["${Prefix}CreateGameLambdaAccess", { Prefix: !Ref Prefix }]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

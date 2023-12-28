@@ -7,6 +7,7 @@
     "build": "npm-run-all --parallel build:*",
     "build:serialize": "cd serialize && npm run build",
     "package": "npm-run-all --parallel package:*",
+    "package:army": "sam package --template-file template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml",
     "package:serialize": "cd serialize && npm run package"
   },
   "author": "",

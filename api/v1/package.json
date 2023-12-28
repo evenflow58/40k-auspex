@@ -10,9 +10,12 @@
     "build": "npm-run-all --parallel build:* && cd ../",
     "build:army": "cd army && npm run build",
     "build:test": "cd test && npm run build",
+    "build:game": "cd game && npm run build",
     "package": "npm-run-all --parallel package:*",
+    "package:v1": "sam package --template-file template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml",
     "package:army": "cd army && npm run package",
-    "package:test": "cd test && npm run package"
+    "package:test": "cd test && npm run package",
+    "package:game": "cd game && npm run package"
   },
   "author": "",
   "license": "ISC"

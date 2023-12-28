@@ -5,8 +5,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde_json::{from_str, json};
 use tracing::info;
 
-use serialize::{models::request_model::RequestModel, services::serialize::serialize_army};
-use utils::traits::api_context::ApiContext;
+use create::{models::request_model::RequestModel, services::create::create};
 
 /// This is the main body for the function.
 /// Write your code inside it.
@@ -16,17 +15,15 @@ use utils::traits::api_context::ApiContext;
 async fn function_handler(
     event: LambdaEvent<ApiGatewayProxyRequest>,
 ) -> Result<ApiGatewayProxyResponse, Error> {
-    info!("Event: {}", event);
+    info!("Event: {:?}", event);
 
     let mut headers = HeaderMap::new();
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
     let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
-    let id = event.payload.path_parameters.get("id");
-    info!("id {}", id);
 
-    match serialize_army(id, &event.get_email(), &payload.name, &payload.army).await {
+    match create(payload.name, payload.game).await {
         Ok(id) => Ok(ApiGatewayProxyResponse {
             status_code: 200,
             headers: headers.clone(),

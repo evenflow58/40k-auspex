@@ -27,59 +27,24 @@ Resources:
       RestApiId: !Ref ApiGatewayId
       PathPart: v1
 
-  TestGet:
+  Army:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: test/get/template.yaml
-      Parameters:
-        ApiGatewayId: !Ref ApiGatewayId
-        RootResourceId: !Ref V1Path
-        AuthorizerId: !Ref AuthorizerId
-        Prefix: !Ref Prefix
-
-  ApiGatewayResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      RestApiId: !Ref ApiGatewayId
-      ParentId: !Ref V1Path
-      PathPart: army 
-
-  OptionsEndpoint:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      AuthorizationType: NONE
-      RestApiId: !Ref ApiGatewayId
-      ResourceId: !Ref ApiGatewayResource
-      HttpMethod: OPTIONS
-      Integration:
-        Type: MOCK
-        IntegrationResponses:
-          - StatusCode: 200
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Headers: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            ResponseTemplates:
-              application/json: ''
-        PassthroughBehavior: NEVER
-        RequestTemplates:
-          application/json: '{"statusCode": 200}'
-      MethodResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Origin: true
-          ResponseModels:
-            application/json: 'Empty'
-
-  SerializeArmy:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: army/serialize/template.yaml
+      TemplateURL: army/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
         AuthorizerId: !Ref AuthorizerId
         TableName: !Ref TableName
         Prefix: !Ref Prefix
-        ApiGatewayResource: !Ref ApiGatewayResource
+        ApiGatewayResource: !Ref V1Path
+  
+  Game:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: game/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        AuthorizerId: !Ref AuthorizerId
+        TableName: !Ref TableName
+        Prefix: !Ref Prefix
+        ApiGatewayResource: !Ref V1Path

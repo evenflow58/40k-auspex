@@ -10,3 +10,5 @@ pub mod dynamo_result;
 pub mod display_unit;
 pub mod enhancment;
 pub mod rule;
+pub mod game;
+pub mod player;

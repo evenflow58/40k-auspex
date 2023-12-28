@@ -16,7 +16,7 @@ use utils::traits::api_context::ApiContext;
 async fn function_handler(
     event: LambdaEvent<ApiGatewayProxyRequest>,
 ) -> Result<ApiGatewayProxyResponse, Error> {
-    info!("Event: {}", event);
+    info!("Event: {:?}", event);
 
     let mut headers = HeaderMap::new();
     headers.insert("Content-Type", "application/json".parse().unwrap());

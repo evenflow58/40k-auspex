@@ -1,9 +1,8 @@
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utils::models::game::Game;
 
 #[derive(Serialize, Deserialize)]
 pub struct RequestModel {
-    pub players_in_game: Vec<String>,
-    pub date: DateTime<Utc>,
-    pub name: String, 
+    pub name: String,
+    pub game: Game,
 }

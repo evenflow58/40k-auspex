@@ -26,8 +26,8 @@ Resources:
       BuildMethod: rust-cargolambda
     Properties:
       FunctionName: !Sub ["${Prefix}CreateGame_V1", { Prefix: !Ref Prefix }]
-      CodeUri: rust_app/target/lambda/create
-      # CodeUri: rust_app
+      # CodeUri: rust_app/target/lambda/create
+      CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
       Architectures:
@@ -51,12 +51,6 @@ Resources:
         TimeoutInMillis: 29000
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations'
-      # MethodResponses:
-      # - StatusCode: 200
-      #   ResponseParameters:
-      #     method.response.header.Access-Control-Allow-Headers: true
-      #     method.response.header.Access-Control-Allow-Methods: true
-      #     method.response.header.Access-Control-Allow-Origin: true
 
   IdApiGatewayResource:
     Type: AWS::ApiGateway::Resource
@@ -101,10 +95,6 @@ Resources:
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:Query
-              Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable/index/*"
             - Effect: Allow
               Action:
                 - dynamodb:UpdateItem

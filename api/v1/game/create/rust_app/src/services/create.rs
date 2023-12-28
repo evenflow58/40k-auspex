@@ -1,15 +1,12 @@
+use chrono::offset::Utc;
 use std::error::Error;
-use tracing::info;
-use chrono::{DateTime, Utc};
 
-pub async fn create(
-    players_in_game: Vec<String>,
-    name: String,
-) -> Result<String, Box<dyn Error>> {
-    // match save_army_list(id, user_id.to_string(), name.to_string(), army_list).await {
-    //     Ok(id) => Ok(id),
-    //     Err(err) => panic!("{}", err),
-    // }
+use super::data::save_game;
+use utils::models::game::Game;
 
-    Ok("dummy string".to_string())
+pub async fn create(name: String, game: Game) -> Result<String, Box<dyn Error>> {
+    match save_game(name.to_string(), Utc::now(), game).await {
+        Ok(id) => Ok(id),
+        Err(err) => panic!("{}", err),
+    }
 }

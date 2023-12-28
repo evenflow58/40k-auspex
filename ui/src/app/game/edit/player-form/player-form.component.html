@@ -1,0 +1,38 @@
+<ng-container *ngIf="playerForm" [formGroup]="playerForm">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-input type="text" [placeholder]="placeholder" formControlName="name" />
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-segment formControlName="missionType">
+        <ion-segment-button
+          *ngFor="let missionType of missionTypes"
+          [value]="missionType.value"
+        >
+          <ion-label>{{ missionType.name }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <ion-segment formControlName="turnOrder">
+        <ion-segment-button value="1">
+          <ion-label>First</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="2">
+          <ion-label>Second</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <ion-segment formControlName="playerType">
+        <ion-segment-button value="attacker">
+          <ion-label>Attacker</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="defender">
+          <ion-label>Defender</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-card-content>
+  </ion-card>
+</ng-container>

@@ -1,0 +1,37 @@
+<ion-content>
+  <form [formGroup]="listForm" (ngSubmit)="createGame()">
+    <ion-item class="input-item">
+        <ion-input type="text" label="Game Name" formControlName="name" required />
+    </ion-item>
+
+    <ion-item class="input-item">
+      <ion-segment formControlName="size">
+        <ion-segment-button value="incursion">
+          <ion-label>Incursion</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="strike_force">
+          <ion-label>Strike Force</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="onslaught">
+          <ion-label>Onslaught</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <player-form formGroupName="player1" placeholder="Player 1" [missionTypes]="missionTypes"/>
+    <player-form formGroupName="player2" placeholder="Player 2" [missionTypes]="missionTypes"/>
+
+    <ion-button expand="block" type="submit">Submit</ion-button>
+    <ion-button expand="block" color="danger">Cancel</ion-button>
+  </form>
+
+  <ion-toast
+    [isOpen]="isToastOpen"
+    (didDismiss)="setOpen(false)"
+    position="top"
+    [duration]="10000"
+    color="danger"
+    icon="close"
+    message="Unable to create game"
+  ></ion-toast>
+</ion-content>

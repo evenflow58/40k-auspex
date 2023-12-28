@@ -23,7 +23,7 @@ async fn function_handler(
 
     let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
 
-    match create(payload.players_in_game, payload.name).await {
+    match create(payload.name, payload.game).await {
         Ok(id) => Ok(ApiGatewayProxyResponse {
             status_code: 200,
             headers: headers.clone(),

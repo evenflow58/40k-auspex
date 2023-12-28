@@ -5,7 +5,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde_json::{from_str, json};
 use tracing::info;
 
-use create::{models::request_model::RequestModel, services::update::update};
+use update::{models::request_model::RequestModel, services::update::update};
 
 /// This is the main body for the function.
 /// Write your code inside it.

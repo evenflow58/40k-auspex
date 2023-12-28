@@ -24,7 +24,7 @@ async fn function_handler(
 
     let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
     let id = event.payload.path_parameters.get("id");
-    info!("id {}", id);
+    info!("id {:?}", id);
 
     match serialize_army(id, &event.get_email(), &payload.name, &payload.army).await {
         Ok(id) => Ok(ApiGatewayProxyResponse {

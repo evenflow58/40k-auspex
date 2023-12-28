@@ -40,7 +40,7 @@ Resources:
           - StatusCode: 200
             ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'*'"
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PUT'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             ResponseTemplates:
               application/json: ''
@@ -60,6 +60,17 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: create/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        AuthorizerId: !Ref AuthorizerId
+        TableName: !Ref TableName
+        Prefix: !Ref Prefix
+        ApiGatewayResource: !Ref GameApiGatewayResource
+
+  UpdateGame:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: update/template.yaml
       Parameters:
         ApiGatewayId: !Ref ApiGatewayId
         AuthorizerId: !Ref AuthorizerId

@@ -6,8 +6,10 @@
   "scripts": {
     "build": "npm-run-all --parallel build:*",
     "build:create": "cd create && npm run build",
+    "build:update": "cd update && npm run build",
     "package": "npm-run-all --parallel package:*",
-    "package:create": "cd create && npm run package"
+    "package:create": "cd create && npm run package",
+    "package:update": "cd update && npm run package"
   },
   "author": "",
   "license": "ISC"

@@ -41,7 +41,7 @@ Resources:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGatewayId
-      ResourceId: !Ref IdApiGatewayResource
+      ResourceId: !Ref ApiGatewayResource
       HttpMethod: PUT
       AuthorizationType: CUSTOM
       AuthorizerId: !Ref AuthorizerId

@@ -27,6 +27,13 @@ Resources:
       ParentId: !Ref ApiGatewayResource
       PathPart: game 
 
+  IdApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGatewayId
+      ParentId: !Ref ApiGatewayResource
+      PathPart: "{id}"
+
   GameOptionsEndpoint:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -76,4 +83,15 @@ Resources:
         AuthorizerId: !Ref AuthorizerId
         TableName: !Ref TableName
         Prefix: !Ref Prefix
-        ApiGatewayResource: !Ref GameApiGatewayResource
+        ApiGatewayResource: !Ref IdApiGatewayResource
+
+  # GetAllGame:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: get-all/template.yaml
+  #     Parameters:
+  #       ApiGatewayId: !Ref ApiGatewayId
+  #       AuthorizerId: !Ref AuthorizerId
+  #       TableName: !Ref TableName
+  #       Prefix: !Ref Prefix
+  #       ApiGatewayResource: !Ref IdApiGatewayResource

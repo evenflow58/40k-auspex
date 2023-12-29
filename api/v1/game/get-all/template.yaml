@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-Description: The 40k Auspex api create game method
+Description: The 40k Auspex api get all game method
 
 Parameters:
   ApiGatewayId:
@@ -25,8 +25,8 @@ Resources:
     Metadata:
       BuildMethod: rust-cargolambda
     Properties:
-      FunctionName: !Sub ["${Prefix}CreateGame_V1", { Prefix: !Ref Prefix }]
-      CodeUri: rust_app/target/lambda/create
+      FunctionName: !Sub ["${Prefix}GetAllGame_V1", { Prefix: !Ref Prefix }]
+      CodeUri: rust_app/target/lambda/update
       # CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
@@ -37,12 +37,12 @@ Resources:
         Variables:
           TABLE_NAME: !Ref TableName
 
-  PostEndpoint:
+  GetAllEndpoint:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref ApiGatewayId
       ResourceId: !Ref ApiGatewayResource
-      HttpMethod: POST
+      HttpMethod: GET
       AuthorizationType: CUSTOM
       AuthorizerId: !Ref AuthorizerId
       Integration:
@@ -75,7 +75,7 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - dynamodb:UpdateItem
+                - dynamodb:GetItem
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable"
 
   Permission:
@@ -104,7 +104,7 @@ Resources:
   ApiPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ["${Prefix}CreateGameLambdaAccess", { Prefix: !Ref Prefix }]
+      PolicyName: !Sub ["${Prefix}GetAllGameLambdaAccess", { Prefix: !Ref Prefix }]
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

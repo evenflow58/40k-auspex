@@ -5,7 +5,7 @@ import { finalize, Observable, of, switchMap, tap } from 'rxjs';
 import { GameService } from 'src/app/services/api/game/game.service';
 
 @Component({
-  selector: 'app-list',
+  selector: 'game-list',
   templateUrl: './list.page.html',
   styleUrls: ['./list.page.scss'],
 })
@@ -35,7 +35,7 @@ export class ListPage implements OnInit {
 
   public navigateToEdit() {
     this.router.navigate(
-      ['../edit'],
+      ['..', 'edit'],
       { relativeTo: this.activatedRoute }
     );
   }

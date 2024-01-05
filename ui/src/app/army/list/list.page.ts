@@ -5,7 +5,7 @@ import { LoadingController } from '@ionic/angular';
 import { ArmyService } from '../../services/api';
 
 @Component({
-  selector: 'app-list',
+  selector: 'army-list',
   templateUrl: './list.page.html',
   styleUrls: ['./list.page.scss'],
 })

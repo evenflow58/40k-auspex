@@ -6,7 +6,7 @@ import { lastValueFrom, Subscription } from 'rxjs';
 import { GameService } from 'src/app/services/api/game/game.service';
 
 @Component({
-  selector: 'app-edit',
+  selector: 'game-edit',
   templateUrl: './edit.page.html',
   styleUrls: ['./edit.page.scss'],
 })

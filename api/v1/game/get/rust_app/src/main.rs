@@ -5,7 +5,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde_json::{from_str, json};
 use tracing::info;
 
-use getAll::services::get_all::get_all;
+// use get::services::get_all::get_all;
 
 /// This is the main body for the function.
 /// Write your code inside it.
@@ -21,25 +21,33 @@ async fn function_handler(
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
-    match get_all(&event.get_email()).await {
-        Ok({ id, name }) => Ok(ApiGatewayProxyResponse {
-            status_code: 200,
-            headers: headers.clone(),
-            multi_value_headers: headers.clone(),
-            body: Some(Body::Text(json!({ "id": id }).to_string())),
-            is_base64_encoded: false,
-        }),
-        Err(err) => {
-            info!("Error {:?}", err);
-            Ok(ApiGatewayProxyResponse {
-                status_code: 500,
-                headers: headers.clone(),
-                multi_value_headers: headers.clone(),
-                body: None,
-                is_base64_encoded: false,
-            })
-        }
-    }
+    Ok(ApiGatewayProxyResponse {
+        status_code: 200,
+        headers: headers.clone(),
+        multi_value_headers: headers.clone(),
+        body: Some(Body::Text(json!({ "id": "id" }).to_string())),
+        is_base64_encoded: false,
+    })
+
+    // match get_all(&event.get_email()).await {
+    //     Ok({ id, name }) => Ok(ApiGatewayProxyResponse {
+    //         status_code: 200,
+    //         headers: headers.clone(),
+    //         multi_value_headers: headers.clone(),
+    //         body: Some(Body::Text(json!({ "id": id }).to_string())),
+    //         is_base64_encoded: false,
+    //     }),
+    //     Err(err) => {
+    //         info!("Error {:?}", err);
+    //         Ok(ApiGatewayProxyResponse {
+    //             status_code: 500,
+    //             headers: headers.clone(),
+    //             multi_value_headers: headers.clone(),
+    //             body: None,
+    //             is_base64_encoded: false,
+    //         })
+    //     }
+    // }
 }
 
 #[tokio::main]

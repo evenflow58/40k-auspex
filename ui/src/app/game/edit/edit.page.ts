@@ -26,16 +26,18 @@ export class EditPage implements OnInit, OnDestroy {
     name: new FormControl(`${new Date().toLocaleDateString()} Game`, Validators.required),
     size: new FormControl('incursion', Validators.required),
     player1: new FormGroup({
-      name: new FormControl(''),
+      name: new FormControl('Player 1'),
       missionType: new FormControl('fixed'),
       turnOrder: new FormControl('1', Validators.required),
       playerType: new FormControl('attacker', Validators.required),
+      armyList: new FormControl(''),
     }),
     player2: new FormGroup({
-      name: new FormControl(''),
+      name: new FormControl('Player 2'),
       missionType: new FormControl('fixed'),
       turnOrder: new FormControl('2', Validators.required),
       playerType: new FormControl('defender', Validators.required),
+      armyList: new FormControl(''),
     }),
   });
   public isToastOpen = false;
@@ -52,6 +54,7 @@ export class EditPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
+    // Add subscriptions to allow the form to flip options when one is selected.
     this.subscriptions.concat([
       this
         .listForm
@@ -111,7 +114,7 @@ export class EditPage implements OnInit, OnDestroy {
     this.isToastOpen = isOpen;
   }
 
-  public async createGame() {
+  public async saveGame() {
     const { name, size, player1, player2 } = this.listForm.value;
     if (!name || !size || !player1 || !player2) throw new Error();
 
@@ -125,21 +128,27 @@ export class EditPage implements OnInit, OnDestroy {
         turnOrder: parseInt(attacker?.turnOrder as string),
         missionType: attacker?.missionType,
         playerTypes: attacker?.playerType,
+        armyList: attacker?.armyList,
       },
       defender: {
         name: defender?.name,
         turnOrder: parseInt(defender?.turnOrder as string),
         missionType: defender?.missionType,
         playerTypes: defender?.playerType,
+        armyList: defender?.armyList,
       },
     }
     
     try {
-      const { id } = await lastValueFrom(this.gameService.createGame(name, game));
-      this.router.navigate(
-        [`./${id}`],
-        { relativeTo: this.activatedRoute }
-      );
+      debugger;
+      if (this.id) {
+        const { id } = await lastValueFrom(this.gameService.createGame(name, game));
+        debugger;
+        this.router.navigate(
+          [`./${id}`],
+          { relativeTo: this.activatedRoute }
+        );
+      } else await lastValueFrom(this.gameService.updateGame(this.id as string, name, game));
     } catch (e) {
       console.error(e);
       this.isToastOpen = true;

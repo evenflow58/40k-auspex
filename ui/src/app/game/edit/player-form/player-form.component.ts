@@ -13,8 +13,21 @@ export class PlayerFormComponent implements OnInit {
   @Input() missionTypes = new Array();
 
   public playerForm: any | null = null;
+  public isOpen = false;
+
+  private oldArmyList = '';
 
   ngOnInit(): void {
     this.playerForm = this.controlContainer.control;
+  }
+
+  setIsOpen(isOpen: boolean, canceling: boolean = false) {
+    this.isOpen = isOpen;
+
+    if (this.isOpen) this.oldArmyList = this.playerForm.get('armyList').value;
+    else {
+      if (canceling) this.playerForm.get('armyList').setValue(this.oldArmyList);
+      else this.oldArmyList = '';
+    }
   }
 }

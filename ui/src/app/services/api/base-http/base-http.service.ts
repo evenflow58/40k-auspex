@@ -37,7 +37,7 @@ export class BaseHttpService {
         this.getRequestOptions()
       );
 
-  public put = <T>(url: string, body: T) =>
+  public put = <T>(url: string, body: any) =>
     this.http
       .put<T>(
         `${this.baseUrl}${url}`,

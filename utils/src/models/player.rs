@@ -12,6 +12,7 @@ pub struct Player {
     pub current_missions: Option<Vec<String>>,
     pub discarded_missions: Option<Vec<String>>,
     pub army: Option<Army>,
+    pub army_list: Option<String>,
 }
 
 impl Player {
@@ -22,7 +23,8 @@ impl Player {
         mission_type: Option<MissionType>,
         current_missions: Option<Vec<String>>,
         discarded_missions: Option<Vec<String>>,
-        army: Option<Army>
+        army: Option<Army>,
+        army_list: Option<String>,
     ) -> Self {
         Player {
             id,
@@ -32,6 +34,7 @@ impl Player {
             current_missions,
             discarded_missions,
             army,
+            army_list,
         }
     }
 }

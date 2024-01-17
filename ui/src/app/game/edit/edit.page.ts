@@ -164,10 +164,8 @@ export class EditPage implements OnInit, OnDestroy {
     }
     
     try {
-      debugger;
       if (this.id) {
         const { id } = await lastValueFrom(this.gameService.createGame(name, game));
-        debugger;
         this.router.navigate(
           [`./${id}`],
           { relativeTo: this.activatedRoute }

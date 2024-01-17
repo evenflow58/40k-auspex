@@ -12,7 +12,7 @@ export class BaseHttpService {
 
   constructor(
     private http: HttpClient,
-    private authState: AuthStateService
+    protected authState: AuthStateService
   ) { 
     authState.user.subscribe(async user => {
       this.idToken = user?.idToken || '';

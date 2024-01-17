@@ -12,7 +12,7 @@ pub async fn get(game_id: String, user_id: String) -> Result<Game, Box<dyn Error
         .query()
         .table_name(&table_name)
         .key_condition_expression(
-            "#id = :id AND #entry_type = :entry_type AND :user_id IN #player_ids",
+            "#id = :id AND #entry_type = :entry_type AND contains(#player_ids, :user_id)",
         )
         .expression_attribute_names("#id", "id")
         .expression_attribute_names("#entry_type", "entry_type")

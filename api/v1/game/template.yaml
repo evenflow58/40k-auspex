@@ -31,7 +31,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref ApiGatewayId
-      ParentId: !Ref ApiGatewayResource
+      ParentId: !Ref GameApiGatewayResource
       PathPart: "{id}"
 
   GameOptionsEndpoint:

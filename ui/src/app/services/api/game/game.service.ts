@@ -27,6 +27,9 @@ export class GameService {
   public getGames = (): Observable<Array<{ id: string, name: string, date: Date }>> =>
     this.http.get<Array<{ id: string, name: string, date: Date }>>('game');
 
+  public getGame = (id: string): Observable<any> =>
+    this.http.get<{ id: string, name: string, game: any }>(`game/${id}`);
+
   public createGame = (name: string, game: any): Observable<{ id: string }> =>
     this.http.post('game', {
       name,

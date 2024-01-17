@@ -1,2 +1,2 @@
 pub mod data;
-pub mod get_all;
+pub mod get;

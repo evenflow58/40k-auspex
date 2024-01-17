@@ -54,6 +54,29 @@ export class EditPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
+    if (this.id) {
+      this.gameService.getGame(this.id).subscribe(game => {
+        this.listForm.patchValue({
+          name: game.name,
+          size: game.size,
+          player1: {
+            name: game.attacker.name,
+            missionType: game.attacker.missionType,
+            turnOrder: game.attacker.turnOrder,
+            playerType: game.attacker.playerType,
+            armyList: game.attacker.armyList,
+          },
+          player2: {
+            name: game.defender.name,
+            missionType: game.defender.missionType,
+            turnOrder: game.defender.turnOrder,
+            playerType: game.defender.playerType,
+            armyList: game.defender.armyList,
+          },
+        });
+      });
+    }
+
     // Add subscriptions to allow the form to flip options when one is selected.
     this.subscriptions.concat([
       this
@@ -105,6 +128,7 @@ export class EditPage implements OnInit, OnDestroy {
             ?.setValue(p1TurnOrder === "attacker" ? "defender" : "attacker", { emitEvent: false })),
     ]);
   }
+  
 
   ngOnDestroy(): void {
     this.subscriptions?.forEach(subscription => subscription?.unsubscribe());

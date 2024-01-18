@@ -588,6 +588,7 @@ dependencies = [
  "serde",
  "serde_dynamo",
  "serde_json",
+ "services",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -1486,6 +1487,22 @@ checksum = "4beec8bce849d58d06238cb50db2e1c417cfeafa4c63f692b15c82b7c80f8335"
 dependencies = [
  "itoa",
  "serde",
+]
+
+[[package]]
+name = "services"
+version = "0.1.0"
+dependencies = [
+ "aws-config",
+ "aws-sdk-dynamodb",
+ "chrono",
+ "env_logger",
+ "envmnt",
+ "serde",
+ "serde_dynamo",
+ "serde_json",
+ "utils",
+ "uuid",
 ]
 
 [[package]]

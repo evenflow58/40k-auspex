@@ -5,7 +5,8 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde_json::{from_str, json};
 use tracing::info;
 
-use create::{models::request_model::RequestModel, services::create::create};
+use create::models::request_model::RequestModel;
+use services::business_logic::game;
 use utils::traits::api_context::ApiContext;
 
 /// This is the main body for the function.
@@ -27,7 +28,7 @@ async fn function_handler(
     let email = &event.get_email();
     let player_ids = vec![email.to_string()];
 
-    match create(
+    match game::create(
         player_ids
             .into_iter()
             .map(|player_id| player_id.to_string())

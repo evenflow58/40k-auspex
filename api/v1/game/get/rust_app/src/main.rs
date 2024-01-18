@@ -5,7 +5,7 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde_json::json;
 use tracing::info;
 
-use get::services::get::get;
+use services::business_logic::game;
 use utils::traits::api_context::ApiContext;
 
 /// This is the main body for the function.
@@ -24,7 +24,7 @@ async fn function_handler(
 
     let id = event.payload.path_parameters.get("id").unwrap();
 
-    match get(id.to_string(), event.get_email()).await {
+    match game::get(id.to_string(), event.get_email()).await {
         Ok(game) => Ok(ApiGatewayProxyResponse {
             status_code: 200,
             headers: headers.clone(),

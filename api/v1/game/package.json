@@ -8,10 +8,12 @@
     "build:create": "cd create && npm run build",
     "build:update": "cd update && npm run build",
     "build:get": "cd get && npm run build",
+    "build:get_all": "cd get_all && npm run build",
     "package": "npm-run-all --parallel package:*",
     "package:create": "cd create && npm run package",
     "package:update": "cd update && npm run package",
-    "package:get": "cd get && npm run package"
+    "package:get": "cd get && npm run package",
+    "package:get_all": "cd get_all && npm run package"
   },
   "author": "",
   "license": "ISC"

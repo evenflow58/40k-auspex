@@ -1,12 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { BaseHttpService } from '../base-http/base-http.service';
+import { Game, Player } from '../../../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   constructor(private http: BaseHttpService) { }
+
+  private mapGame = (game: any): Game => ({
+    id: game.id,
+    name: game.name,
+    attacker: this.mapPlayer(game.attacker, 'attacker'),
+    defender: this.mapPlayer(game.defender, 'defender'),
+    size: game.size,
+  });
+
+  private mapPlayer = (player: any, playerType: string): Player => ({
+    army: player.army,
+    armyList: player.army_list,
+    currentMission: player.current_mission,
+    discardedMissions: player.discarded_missions,
+    missionType: player.mission_type,
+    id: player.id,
+    name: player.name,
+    turnOrder: player.turn_order.toString(),
+    playerType,
+  });
 
   private serializeGame = (game: any) => ({
     size: game.size,
@@ -24,11 +45,11 @@ export class GameService {
     }
   });
 
-  public getGames = (): Observable<Array<{ id: string, name: string, date: Date }>> =>
-    this.http.get<Array<{ id: string, name: string, date: Date }>>('game');
+  public getGames = (): Observable<Array<Game>> =>
+    this.http.get<any>('game').pipe(map(games => games.map(this.mapGame)));
 
-  public getGame = (id: string): Observable<any> =>
-    this.http.get<{ id: string, name: string, game: any }>(`game/${id}`);
+  public getGame = (id: string): Observable<Game> =>
+    this.http.get<any>(`game/${id}`).pipe(map(game => this.mapGame(game)));
 
   public createGame = (name: string, game: any): Observable<{ id: string }> =>
     this.http.post('game', {

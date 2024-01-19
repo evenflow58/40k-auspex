@@ -28,14 +28,14 @@ export class EditPage implements OnInit, OnDestroy {
     player1: new FormGroup({
       name: new FormControl('Player 1'),
       missionType: new FormControl('fixed'),
-      turnOrder: new FormControl('1', Validators.required),
+      turnOrder: new FormControl("1", Validators.required),
       playerType: new FormControl('attacker', Validators.required),
       armyList: new FormControl(''),
     }),
     player2: new FormGroup({
       name: new FormControl('Player 2'),
       missionType: new FormControl('fixed'),
-      turnOrder: new FormControl('2', Validators.required),
+      turnOrder: new FormControl("2", Validators.required),
       playerType: new FormControl('defender', Validators.required),
       armyList: new FormControl(''),
     }),
@@ -149,14 +149,14 @@ export class EditPage implements OnInit, OnDestroy {
       size,
       attacker: {
         name: attacker?.name,
-        turnOrder: parseInt(attacker?.turnOrder as string),
+        turnOrder: attacker?.turnOrder,
         missionType: attacker?.missionType,
         playerTypes: attacker?.playerType,
         armyList: attacker?.armyList,
       },
       defender: {
         name: defender?.name,
-        turnOrder: parseInt(defender?.turnOrder as string),
+        turnOrder: defender?.turnOrder,
         missionType: defender?.missionType,
         playerTypes: defender?.playerType,
         armyList: defender?.armyList,

@@ -103,6 +103,17 @@ Resources:
         Prefix: !Ref Prefix
         ApiGatewayResource: !Ref GameApiGatewayResource
 
+  GetAllGames:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: get_all/template.yaml
+      Parameters:
+        ApiGatewayId: !Ref ApiGatewayId
+        AuthorizerId: !Ref AuthorizerId
+        TableName: !Ref TableName
+        Prefix: !Ref Prefix
+        ApiGatewayResource: !Ref GameApiGatewayResource
+
   UpdateGame:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -124,14 +135,3 @@ Resources:
         TableName: !Ref TableName
         Prefix: !Ref Prefix
         ApiGatewayResource: !Ref IdApiGatewayResource
-
-  # GetAllGame:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: get-all/template.yaml
-  #     Parameters:
-  #       ApiGatewayId: !Ref ApiGatewayId
-  #       AuthorizerId: !Ref AuthorizerId
-  #       TableName: !Ref TableName
-  #       Prefix: !Ref Prefix
-  #       ApiGatewayResource: !Ref IdApiGatewayResource

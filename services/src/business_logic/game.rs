@@ -21,3 +21,10 @@ pub async fn get(id: String, user_id: String) -> Result<Game, Box<dyn Error>> {
         Err(err) => panic!("{}", err),
     }
 }
+
+pub async fn get_all(user_id: String) -> Result<Vec<Game>, Box<dyn Error>> {
+    match game::get_all(user_id).await {
+        Ok(games) => Ok(games),
+        Err(err) => panic!("{}", err),
+    }
+}

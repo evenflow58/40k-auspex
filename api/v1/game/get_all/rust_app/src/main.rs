@@ -2,10 +2,13 @@ use aws_lambda_events::encodings::Body;
 use aws_lambda_events::event::apigw::{ApiGatewayProxyRequest, ApiGatewayProxyResponse};
 use http::HeaderMap;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-use serde_json::{from_str, json};
+use serde_json::json;
 use tracing::info;
 
-use getAll::services::get_all::get_all;
+use services::business_logic::game;
+use utils::traits::api_context::ApiContext;
+
+use get_all::models::response_model::ResponseModel;
 
 /// This is the main body for the function.
 /// Write your code inside it.
@@ -21,14 +24,20 @@ async fn function_handler(
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
-    match get_all(&event.get_email()).await {
-        Ok({ id, name }) => Ok(ApiGatewayProxyResponse {
-            status_code: 200,
-            headers: headers.clone(),
-            multi_value_headers: headers.clone(),
-            body: Some(Body::Text(json!({ "id": id }).to_string())),
-            is_base64_encoded: false,
-        }),
+    match game::get_all(event.get_email()).await {
+        Ok(games) => {
+            let responses: Vec<ResponseModel> = games
+                .into_iter()
+                .map(|game| ResponseModel::new(game))
+                .collect();
+            Ok(ApiGatewayProxyResponse {
+                status_code: 200,
+                headers: headers.clone(),
+                multi_value_headers: headers.clone(),
+                body: Some(Body::Text(json!(responses).to_string())),
+                is_base64_encoded: false,
+            })
+        }
         Err(err) => {
             info!("Error {:?}", err);
             Ok(ApiGatewayProxyResponse {

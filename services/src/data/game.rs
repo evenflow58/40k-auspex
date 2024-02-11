@@ -13,10 +13,8 @@ struct Item {
     entry_data: Game,
 }
 
-
 pub async fn upsert(
     player_ids: Vec<String>,
-    name: String,
     date: DateTime<Utc>,
     game: Game,
 ) -> Result<String, Box<dyn Error>> {
@@ -37,7 +35,7 @@ pub async fn upsert(
             player_ids = :player_ids",
         )
         .expression_attribute_values(":start_date", AttributeValue::S(date.to_string()))
-        .expression_attribute_values(":game_name", AttributeValue::S(name.to_string()))
+        .expression_attribute_values(":game_name", AttributeValue::S(game.name.to_string()))
         .expression_attribute_values(":entry_data", AttributeValue::M(to_item(&game)?))
         .expression_attribute_values(
             ":player_ids",
@@ -112,13 +110,14 @@ pub async fn get_all(
     match dynamodb_client
         .query()
         .table_name(&table_name)
+        .index_name("type-index")
         .key_condition_expression("#entry_type = :entry_type")
-        .filter_expression("contains(#player_ids, : user_id)")
+        .filter_expression("contains(#player_ids, :user_id)")
         .expression_attribute_names("#entry_type", "entry_type")
         .expression_attribute_names("#player_ids", "player_ids")
         .expression_attribute_values(":entry_type", AttributeValue::S("Game".to_string()))
         .expression_attribute_values(":user_id", AttributeValue::S(user_id))
-        .projection_expression("entry_data")
+        .projection_expression("id, game_name, entry_data")
         .select(Select::SpecificAttributes)
         .send()
         .await

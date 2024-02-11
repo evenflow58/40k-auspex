@@ -1,5 +1,10 @@
 <ion-button expand="block" (click)="navigateToEdit()">
   New
   <ion-icon name="add-outline"></ion-icon>
+  <ion-list>
+    <ion-item *ngFor="let game of games$ | async">
+      <ion-label>{{ game.name }}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-button>
 Game

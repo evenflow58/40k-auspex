@@ -1,8 +1,7 @@
+use crate::models::game::Game;
 use serde::{Deserialize, Serialize};
-use utils::models::game::Game;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct RequestModel {
-    pub name: String,
     pub game: Game,
 }

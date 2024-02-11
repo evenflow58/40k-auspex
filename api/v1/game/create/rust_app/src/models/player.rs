@@ -1,17 +1,15 @@
 use serde::{Deserialize, Serialize};
-use crate::enums::mission_type::MissionType;
-
-use super::army_list::ArmyList;
+use utils::enums::mission_type::MissionType;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Player {
     pub id: Option<String>,
     pub name: Option<String>,
     pub mission_type: Option<MissionType>,
-    pub turn_order: u8,
+    pub turn_order: String,
     pub current_missions: Option<Vec<String>>,
     pub discarded_missions: Option<Vec<String>>,
-    pub army: Option<ArmyList>,
+    pub army_list: Option<String>,
 }
 
 impl Player {
@@ -19,10 +17,10 @@ impl Player {
         id: Option<String>,
         name: Option<String>,
         mission_type: Option<MissionType>,
-        turn_order: u8,
+        turn_order: String,
         current_missions: Option<Vec<String>>,
         discarded_missions: Option<Vec<String>>,
-        army: Option<ArmyList>,
+        army_list: Option<String>,
     ) -> Self {
         Player {
             id,
@@ -31,7 +29,7 @@ impl Player {
             turn_order,
             current_missions,
             discarded_missions,
-            army,
+            army_list,
         }
     }
 }

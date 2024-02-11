@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
-use crate::enums::game_size::GameSize;
 use crate::models::player::Player;
+use serde::{Deserialize, Serialize};
+use utils::enums::game_size::GameSize;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Game {

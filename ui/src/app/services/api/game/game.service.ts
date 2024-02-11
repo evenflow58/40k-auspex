@@ -30,6 +30,7 @@ export class GameService {
   });
 
   private serializeGame = (game: any) => ({
+    name: game.name,
     size: game.size,
     attacker: {
       name: game.attacker.name,
@@ -51,9 +52,8 @@ export class GameService {
   public getGame = (id: string): Observable<Game> =>
     this.http.get<any>(`game/${id}`).pipe(map(game => this.mapGame(game)));
 
-  public createGame = (name: string, game: any): Observable<{ id: string }> =>
+  public createGame = (game: any): Observable<{ id: string }> =>
     this.http.post('game', {
-      name,
       game: this.serializeGame(game),
     });
 

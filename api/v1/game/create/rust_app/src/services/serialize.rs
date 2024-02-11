@@ -1,5 +1,5 @@
-use super::data::{get_armies, save_army_list};
 use regex::Regex;
+use services::business_logic::army::get_armies;
 use std::error::Error;
 use tracing::info;
 use utils::models::{army_list::ArmyList, enhancment::Enhancement, unit::Unit};
@@ -17,12 +17,12 @@ fn find_locations<'a>(search_string: &'a str, search_terms: &Vec<String>) -> Vec
     return locations;
 }
 
-pub async fn serialize_army(
-    id: Option<&String>,
-    user_id: &str,
-    name: &str,
-    army_string: &str,
-) -> Result<String, Box<dyn Error>> {
+pub async fn serialize_army(army_string: String) -> Result<Option<ArmyList>, Box<dyn Error>> {
+    info!("army_string {:?}", army_string);
+    if army_string.is_empty() {
+        return Ok(None);
+    }
+
     let armies = get_armies().await?;
     info!("Army {:?}", armies);
 
@@ -47,7 +47,7 @@ pub async fn serialize_army(
     ))
     .unwrap();
 
-    let Some(army_caps) = army_re.captures(army_string) else {
+    let Some(army_caps) = army_re.captures(army_string.as_str()) else {
         panic!("no match");
     };
 
@@ -131,8 +131,5 @@ pub async fn serialize_army(
         units,
     );
 
-    match save_army_list(id, user_id.to_string(), name.to_string(), army_list).await {
-        Ok(id) => Ok(id),
-        Err(err) => panic!("{:?}", err),
-    }
+    Ok(Some(army_list))
 }

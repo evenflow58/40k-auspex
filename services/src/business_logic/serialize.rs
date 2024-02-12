@@ -1,7 +1,7 @@
 use regex::Regex;
-use services::business_logic::army::get_armies;
 use std::error::Error;
 use tracing::info;
+use crate::business_logic::army::get_armies;
 use utils::models::{army_list::ArmyList, enhancment::Enhancement, unit::Unit};
 
 const BATTLE_SIZE: [&str; 3] = ["Onslaught", "Incursion", "Strike Force"];

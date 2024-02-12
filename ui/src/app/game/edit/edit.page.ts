@@ -145,7 +145,7 @@ export class EditPage implements OnInit, OnDestroy {
     const players = [player1, player2];
     const attacker = players.find(player => player.playerType === 'attacker');
     const defender = players.find(player => player.playerType === 'defender');
-    debugger;
+
     const game = {
       name,
       size,

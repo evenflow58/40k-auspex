@@ -13,7 +13,8 @@ struct Item {
     entry_data: Game,
 }
 
-pub async fn upsert(
+async fn upsert(
+    id: String,
     player_ids: Vec<String>,
     date: DateTime<Utc>,
     game: Game,
@@ -25,7 +26,7 @@ pub async fn upsert(
     match dynamodb_client
         .update_item()
         .table_name(&table_name)
-        .key("id", AttributeValue::S(Uuid::new_v4().to_string()))
+        .key("id", AttributeValue::S(id))
         .key("entry_type", AttributeValue::S("Game".to_string()))
         .update_expression(
             "SET \
@@ -60,6 +61,24 @@ pub async fn upsert(
             .to_string()),
         Err(err) => panic!("Unable to create item: {:?}", err.raw_response()),
     }
+}
+
+
+pub async fn create(
+    player_ids: Vec<String>,
+    date: DateTime<Utc>,
+    game: Game,
+) -> Result<String, Box<dyn Error>> {
+    return upsert(Uuid::new_v4().to_string(), player_ids, date, game).await;
+}
+
+pub async fn update(
+    id: String,
+    player_ids: Vec<String>,
+    date: DateTime<Utc>,
+    game: Game,
+) -> Result<String, Box<dyn Error>> {
+    return upsert(id, player_ids, date, game).await;
 }
 
 pub async fn get(game_id: String, user_id: String) -> Result<Game, Box<dyn Error>> {

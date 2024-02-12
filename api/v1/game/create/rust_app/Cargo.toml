@@ -23,4 +23,3 @@ serde_dynamo = { version = "4.2.7", features = ["aws-sdk-dynamodb+0_33"] }
 services = { path = "../../../../../services"}
 uuid = { version = "1.6.1", features = ["v4", "fast-rng", "macro-diagnostics"] }
 chrono = { version = "0.4.31", features = ["serde"] }
-regex = "1.10.3"

@@ -5,9 +5,10 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde_json::{from_str, json};
 use tracing::info;
 
-use create::{models::request_model::RequestModel, services::map_to_game::map_to_game};
-use services::business_logic::game;
-use utils::{models::game::Game, traits::api_context::ApiContext};
+use services::business_logic::{game, map_to_game::map_to_game};
+use utils::{
+    models::game::Game, traits::api_context::ApiContext, view_models::request_model::RequestModel,
+};
 
 /// This is the main body for the function.
 /// Write your code inside it.

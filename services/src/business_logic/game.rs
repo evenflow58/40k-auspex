@@ -8,7 +8,33 @@ pub async fn create(
     player_ids: Vec<String>,
     game: Game,
 ) -> Result<String, Box<dyn Error>> {
-    match game::upsert(player_ids, Utc::now(), game).await {
+    match game::create(player_ids, Utc::now(), game).await {
+        Ok(id) => Ok(id),
+        Err(err) => panic!("{:?}", err),
+    }
+}
+
+pub async fn update(
+    id: String,
+    player_ids: Vec<String>,
+    mut game: Game,
+) -> Result<String, Box<dyn Error>> {
+    if game.attacker.army.is_none() || game.defender.army.is_none() {
+        match get(id.clone(), player_ids.first().unwrap().to_string()).await {
+            Ok(saved_game) => {
+                if game.attacker.army.is_none() && !saved_game.attacker.army.is_none() {
+                    game.attacker.army = saved_game.attacker.army.clone();
+                }
+
+                if game.defender.army.is_none() && !saved_game.defender.army.is_none() {
+                    game.defender.army = saved_game.defender.army.clone();
+                }
+            },
+            Err(err) => panic!("{:?}", err),    
+        }
+    }
+
+    match game::update(id, player_ids, Utc::now(), game).await {
         Ok(id) => Ok(id),
         Err(err) => panic!("{:?}", err),
     }

@@ -5,7 +5,6 @@ use aws_sdk_dynamodb::{
 use serde_dynamo::{from_items, to_item};
 use std::error::Error;
 use uuid::Uuid;
-use tracing::info;
 
 use utils::models::{army::Army, army_list::ArmyList, dynamo_result::DynamoResult};
 

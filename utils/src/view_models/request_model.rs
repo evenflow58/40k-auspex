@@ -1,4 +1,4 @@
-use crate::models::game::Game;
+use crate::view_models::game::Game;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]

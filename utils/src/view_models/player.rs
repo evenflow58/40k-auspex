@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use utils::enums::mission_type::MissionType;
+use crate::enums::mission_type::MissionType;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Player {

@@ -1,6 +1,5 @@
-use crate::models::request_model::RequestModel;
-use crate::services::serialize::serialize_army;
-use utils::models::{army_list::ArmyList, game::Game, player::Player};
+use utils::{view_models::request_model::RequestModel,models::{army_list::ArmyList, game::Game, player::Player}};
+use crate::business_logic::serialize::serialize_army;
 
 async fn get_army_or_none(army_list: Option<String>) -> Option<ArmyList> {
     match army_list {

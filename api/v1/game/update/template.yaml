@@ -26,8 +26,8 @@ Resources:
       BuildMethod: rust-cargolambda
     Properties:
       FunctionName: !Sub ["${Prefix}UpdateGame_V1", { Prefix: !Ref Prefix }]
-      CodeUri: rust_app/target/lambda/update
-      # CodeUri: rust_app
+      # CodeUri: rust_app/target/lambda/update
+      CodeUri: rust_app
       Handler: bootstrap
       Runtime: provided.al2
       Architectures:
@@ -75,6 +75,7 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
+                - dynamodb:Query
                 - dynamodb:UpdateItem
               Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${Prefix}AuspexTable"
 

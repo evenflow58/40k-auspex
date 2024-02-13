@@ -25,10 +25,10 @@ async fn function_handler(
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
     match game::get_all(event.get_email()).await {
-        Ok(games) => {
-            let responses: Vec<ResponseModel> = games
+        Ok(get_responses) => {
+            let responses: Vec<ResponseModel> = get_responses
                 .into_iter()
-                .map(|game| ResponseModel::new(game))
+                .map(|get_response| ResponseModel::new(get_response.id, get_response.object.name))
                 .collect();
             Ok(ApiGatewayProxyResponse {
                 status_code: 200,

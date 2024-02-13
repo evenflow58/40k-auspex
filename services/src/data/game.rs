@@ -6,10 +6,11 @@ use std::error::Error;
 use uuid::Uuid;
 use tracing::info;
 
-use utils::models::game::Game;
+use utils::models::{game::Game,object_with_id::ObjectWithId};
 
 #[derive(Deserialize)]
 struct Item {
+    id: String,
     entry_data: Game,
 }
 
@@ -81,7 +82,7 @@ pub async fn update(
     return upsert(id, player_ids, date, game).await;
 }
 
-pub async fn get(game_id: String, user_id: String) -> Result<Game, Box<dyn Error>> {
+pub async fn get(game_id: String, user_id: String) -> Result<ObjectWithId<Game>, Box<dyn Error>> {
     let config = ::aws_config::load_from_env().await;
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
@@ -109,9 +110,9 @@ pub async fn get(game_id: String, user_id: String) -> Result<Game, Box<dyn Error
             .map(|item| {
                 info!("Item: {:?}", item.clone());
                 let game_item: Item = serde_dynamo::from_item(item.clone()).unwrap();
-                game_item.entry_data
+                ObjectWithId::new(game_item.id.clone(), game_item.entry_data)
             })
-            .collect::<Vec<Game>>()
+            .collect::<Vec<ObjectWithId<Game>>>()
             .first()
             .unwrap()
             .clone()),
@@ -121,7 +122,7 @@ pub async fn get(game_id: String, user_id: String) -> Result<Game, Box<dyn Error
 
 pub async fn get_all(
     user_id: String,
-) -> Result<Vec<Game>, Box<dyn Error>> {
+) -> Result<Vec<ObjectWithId<Game>>, Box<dyn Error>> {
     let config = ::aws_config::load_from_env().await;
     let dynamodb_client = dynamodb_sdk_client::new(&config);
     let table_name = envmnt::get_or_panic("TABLE_NAME").to_string();
@@ -148,9 +149,9 @@ pub async fn get_all(
             .map(|item| {
                 info!("Item: {:?}", item.clone());
                 let game_item: Item = serde_dynamo::from_item(item.clone()).unwrap();
-                game_item.entry_data
+                ObjectWithId::new(game_item.id.clone(), game_item.entry_data)
             })
-            .collect::<Vec<Game>>()
+            .collect::<Vec<ObjectWithId<Game>>>()
             .clone()),
         Err(err) => panic!("Unable to get items: {:?}", err.raw_response()),
     }

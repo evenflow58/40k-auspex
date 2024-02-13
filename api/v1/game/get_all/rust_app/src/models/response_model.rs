@@ -1,18 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-use utils::models::game::Game;
-
 #[derive(Serialize, Deserialize)]
 pub struct ResponseModel {
-    pub id: i32,
+    pub id: String,
     pub name: String,
 }
 
 impl ResponseModel {
-    pub fn new(game: Game) -> Self {
-        ResponseModel {
-            id: game.id,
-            name: game.name,
-        }
+    pub fn new(id: String, name: String) -> Self {
+        ResponseModel { id: id, name: name }
     }
 }

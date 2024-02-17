@@ -46,11 +46,11 @@ export class GameService {
     }
   });
 
-  public getGames = (): Observable<Array<Game>> =>
-    this.http.get<any>('game').pipe(map(games => games.map(this.mapGame)));
+  public getGames = (): Observable<Array<{ id: string, name: string }>> =>
+    this.http.get<any>('game');
 
   public getGame = (id: string): Observable<Game> =>
-    this.http.get<any>(`game/${id}`).pipe(map(game => this.mapGame(game)));
+    this.http.get<any>(`game/${id}`).pipe(map(resp => this.mapGame(resp.game)));
 
   public createGame = (game: any): Observable<{ id: string }> =>
     this.http.post('game', {

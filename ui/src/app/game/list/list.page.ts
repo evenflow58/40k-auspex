@@ -11,7 +11,7 @@ import { Game } from 'src/app/models/game';
   styleUrls: ['./list.page.scss'],
 })
 export class ListPage implements OnInit {
-  public games$!: Observable<Array<Game>>;
+  public games$!: Observable<Array<{ id: string, name: string }>>;
   private loader: HTMLIonLoadingElement | undefined;
 
   constructor(
@@ -32,6 +32,14 @@ export class ListPage implements OnInit {
   private async showLoading() {
     this.loader = await this.loadingController.create({ message: 'Loading...' });
     this.loader.present();
+  }
+
+  public edit(id: string) {
+    debugger;
+    this.router.navigate(
+      ['..', 'edit', id],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   public navigateToEdit() {

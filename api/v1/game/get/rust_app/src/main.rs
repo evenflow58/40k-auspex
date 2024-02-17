@@ -8,6 +8,8 @@ use tracing::info;
 use services::business_logic::game;
 use utils::traits::api_context::ApiContext;
 
+use get::models::response::ResponseModel;
+
 /// This is the main body for the function.
 /// Write your code inside it.
 /// There are some code example in the following URLs:
@@ -29,7 +31,9 @@ async fn function_handler(
             status_code: 200,
             headers: headers.clone(),
             multi_value_headers: headers.clone(),
-            body: Some(Body::Text(json!(game).to_string())),
+            body: Some(Body::Text(
+                json!(ResponseModel::new(game.id, game.object)).to_string(),
+            )),
             is_base64_encoded: false,
         }),
         Err(err) => {

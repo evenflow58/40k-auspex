@@ -98,7 +98,7 @@ pub async fn get(game_id: String, user_id: String) -> Result<ObjectWithId<Game>,
         .expression_attribute_values(":id", AttributeValue::S(game_id))
         .expression_attribute_values(":entry_type", AttributeValue::S("Game".to_string()))
         .expression_attribute_values(":user_id", AttributeValue::S(user_id))
-        .projection_expression("entry_data")
+        .projection_expression("id, entry_data")
         .select(Select::SpecificAttributes)
         .send()
         .await

@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   googleClient: '181396477895-mif6hcekhvhi32up28g49hve07vlvchm.apps.googleusercontent.com',
   useServiceWorker: false,
-  apiUrl: 'https://api-create-game.40kauspex.com/v1/',
+  apiUrl: 'https://api-create-serialize.40kauspex.com/v1/',
 };
 
 /*

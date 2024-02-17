@@ -5,7 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { ArmyService } from 'src/app/services/api';
 
 @Component({
-  selector: 'app-edit',
+  selector: 'army-edit',
   templateUrl: './edit.page.html',
   styleUrls: ['./edit.page.scss'],
 })

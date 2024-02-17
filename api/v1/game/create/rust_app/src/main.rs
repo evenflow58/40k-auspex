@@ -5,7 +5,10 @@ use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde_json::{from_str, json};
 use tracing::info;
 
-use create::{models::request_model::RequestModel, services::create::create};
+use services::business_logic::{game, map_to_game::map_to_game};
+use utils::{
+    models::game::Game, traits::api_context::ApiContext, view_models::request_model::RequestModel,
+};
 
 /// This is the main body for the function.
 /// Write your code inside it.
@@ -21,9 +24,30 @@ async fn function_handler(
     headers.insert("Content-Type", "application/json".parse().unwrap());
     headers.insert("Access-Control-Allow-Origin", "*".parse().unwrap());
 
+    info!("Parsing request {:?}", event.payload.clone().body.unwrap());
+
     let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
 
-    match create(payload.name, payload.game).await {
+    info!("Payload parsed");
+
+    let email = &event.get_email();
+    let player_ids = vec![email.to_string()];
+
+    info!("Mapping game");
+
+    let game: Game = map_to_game(payload.clone()).await;
+
+    info!("Createing game");
+
+    match game::create(
+        player_ids
+            .into_iter()
+            .map(|player_id| player_id.to_string())
+            .collect(),
+        game,
+    )
+    .await
+    {
         Ok(id) => Ok(ApiGatewayProxyResponse {
             status_code: 200,
             headers: headers.clone(),

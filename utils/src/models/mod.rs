@@ -12,3 +12,4 @@ pub mod enhancment;
 pub mod rule;
 pub mod game;
 pub mod player;
+pub mod object_with_id;

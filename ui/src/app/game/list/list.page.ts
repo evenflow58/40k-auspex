@@ -3,14 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { finalize, Observable, of, switchMap, tap } from 'rxjs';
 import { GameService } from 'src/app/services/api/game/game.service';
+import { Game } from 'src/app/models/game';
 
 @Component({
-  selector: 'app-list',
+  selector: 'game-list',
   templateUrl: './list.page.html',
   styleUrls: ['./list.page.scss'],
 })
 export class ListPage implements OnInit {
-  public games$!: Observable<Array<{ id: string, name: string, date: Date }>>;
+  public games$!: Observable<Array<{ id: string, name: string }>>;
   private loader: HTMLIonLoadingElement | undefined;
 
   constructor(
@@ -33,9 +34,17 @@ export class ListPage implements OnInit {
     this.loader.present();
   }
 
+  public edit(id: string) {
+    debugger;
+    this.router.navigate(
+      ['..', 'edit', id],
+      { relativeTo: this.activatedRoute }
+    );
+  }
+
   public navigateToEdit() {
     this.router.navigate(
-      ['../edit'],
+      ['..', 'edit'],
       { relativeTo: this.activatedRoute }
     );
   }

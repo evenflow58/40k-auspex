@@ -33,6 +33,26 @@
           <ion-label>Defender</ion-label>
         </ion-segment-button>
       </ion-segment>
+
+      <ion-button expand="block" fill="outline" (click)="setIsOpen(true)">Add Army</ion-button>
+
     </ion-card-content>
   </ion-card>
+
+  <ion-modal [isOpen]="isOpen" (willDismiss)="setIsOpen(false)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Add Army List</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setIsOpen(false)">Add</ion-button>
+            <ion-button (click)="setIsOpen(false, true)">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-item class="input-item">
+        <ion-textarea formControlName="armyList" placeholder="Army List..." rows="25" />
+      </ion-item>
+    </ng-template>
+  </ion-modal>
 </ng-container>

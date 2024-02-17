@@ -133,6 +133,6 @@ pub async fn serialize_army(
 
     match save_army_list(id, user_id.to_string(), name.to_string(), army_list).await {
         Ok(id) => Ok(id),
-        Err(err) => panic!("{}", err),
+        Err(err) => panic!("{:?}", err),
     }
 }

@@ -12,7 +12,7 @@ export class BaseHttpService {
 
   constructor(
     private http: HttpClient,
-    private authState: AuthStateService
+    protected authState: AuthStateService
   ) { 
     authState.user.subscribe(async user => {
       this.idToken = user?.idToken || '';
@@ -37,7 +37,7 @@ export class BaseHttpService {
         this.getRequestOptions()
       );
 
-  public put = <T>(url: string, body: T) =>
+  public put = <T>(url: string, body: any) =>
     this.http
       .put<T>(
         `${this.baseUrl}${url}`,

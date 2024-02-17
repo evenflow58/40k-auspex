@@ -1,0 +1,26 @@
+[package]
+name = "update"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+env_logger = "0.9.0"
+aws-config = "0.56.1"
+aws-sdk-dynamodb = "0.33.0"
+tokio = { version = "1", features = ["macros"] }
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "json"] }
+http = "0.2.9"
+aws_lambda_events = { version = "0.11.1", default-features = false, features = ["apigw"] }
+lambda_runtime = "0.8.2"
+envmnt = "0.10.4"
+serde_json = "1.0.107"
+serde = "1.0.189"
+utils = { path = "../../../../../utils"}
+serde_dynamo = { version = "4.2.7", features = ["aws-sdk-dynamodb+0_33"] }
+services = { path = "../../../../../services"}
+uuid = { version = "1.6.1", features = ["v4", "fast-rng", "macro-diagnostics"] }
+chrono = { version = "0.4.31", features = ["serde"] }
+regex = "1.10.3"

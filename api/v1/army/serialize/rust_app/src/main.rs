@@ -16,7 +16,7 @@ use utils::traits::api_context::ApiContext;
 async fn function_handler(
     event: LambdaEvent<ApiGatewayProxyRequest>,
 ) -> Result<ApiGatewayProxyResponse, Error> {
-    info!("Event: {}", event);
+    info!("Event: {:?}", event);
 
     let mut headers = HeaderMap::new();
     headers.insert("Content-Type", "application/json".parse().unwrap());
@@ -24,7 +24,7 @@ async fn function_handler(
 
     let payload: RequestModel = from_str(&event.payload.clone().body.unwrap())?;
     let id = event.payload.path_parameters.get("id");
-    info!("id {}", id);
+    info!("id {:?}", id);
 
     match serialize_army(id, &event.get_email(), &payload.name, &payload.army).await {
         Ok(id) => Ok(ApiGatewayProxyResponse {

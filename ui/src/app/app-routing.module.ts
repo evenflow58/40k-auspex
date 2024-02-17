@@ -12,11 +12,11 @@ const routes: Routes = [
   { path: '', redirectTo: 'army', pathMatch: 'full' },
   {
     path: 'army',
-    loadChildren: () => import('./army/army.module').then(m => m.ArmyPageModule)
+    loadChildren: () => import('./army/army.module').then(m => m.ArmyPageModule),
   },
   {
     path: 'game',
-    loadChildren: () => import('./game/game.module').then(m => m.GamePageModule)
+    loadChildren: () => import('./game/game.module').then(m => m.GamePageModule),
   }
 ];
 

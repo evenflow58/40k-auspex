@@ -9,6 +9,9 @@ Parameters:
   Prefix:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]*"
+  DataSns:
+    Type: String
+    Description: The SNS topic to subscribe to
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:

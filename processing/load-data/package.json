@@ -6,11 +6,9 @@
   "scripts": {
     "build": "npm-run-all --parallel build:* && cd ../",
     "build:armies": "cd armies && npm run build",
-    "build:missions": "cd missions && npm run build",
     "package": "npm-run-all --parallel package:*",
     "package:load-data": "sam package --template-file template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml",
-    "package:armies": "cd armies && npm run package",
-    "package:missions": "cd missions && npm run package"
+    "package:armies": "cd armies && npm run package"
   },
   "author": "",
   "license": "ISC"

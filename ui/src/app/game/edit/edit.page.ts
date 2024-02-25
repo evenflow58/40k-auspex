@@ -183,7 +183,7 @@ export class EditPage implements OnInit, OnDestroy {
       } else await lastValueFrom(this.gameService.updateGame(this.id as string, name, game));
 
       this.router.navigate(
-        [`../track/${this.id}`],
+        [`../../track/${this.id}`],
         { relativeTo: this.activatedRoute }
       );
     } catch (e) {

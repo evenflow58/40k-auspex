@@ -1,8 +1,8 @@
-export const enum Phase {
-    "START",
-    "COMMAND",
-    "MOVEMENT",
-    "SHOOTING",
-    "CHARGE",
-    "FIGHT",
+export enum Phase {
+    START,
+    COMMAND,
+    MOVEMENT,
+    SHOOTING,
+    CHARGE,
+    FIGHT,
 }

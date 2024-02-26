@@ -71,7 +71,7 @@ Resources:
         Variables:
           TABLE_NAME: !Ref TableName
 
-  LoadDataFunctionAlias:
+ ArmiesLoadDataFunctionAlias:
     Type: AWS::Lambda::Alias
     Properties:
       Description: The live version to process army data uploads for seeding the database

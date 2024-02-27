@@ -100,5 +100,5 @@ Resources:
 
 Outputs:
   ArmiesLoadDataFunctionName:
-    Value: !Ref LoadDataFunction
+    Value: !Ref ArmiesLoadDataFunction
     Description: The name of the armies load data lambda function

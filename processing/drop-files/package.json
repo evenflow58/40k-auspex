@@ -7,7 +7,7 @@
     "build": "cargo lambda build --release --arm64 --manifest-path ./rust_app/Cargo.toml",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "sam package --template-file template.yaml --s3-bucket $S3_BUCKET --s3-prefix url --output-template-file ./template.package.yaml",
-    "deploy": "sam build --beta-features && sam deploy --no-confirm-changeset"
+    "deploy": "npm run build && sam build --beta-features && sam deploy --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --no-confirm-changeset"
   },
   "author": "",
   "license": "ISC"

@@ -73,6 +73,20 @@ async fn function_handler(event: LambdaEvent<CodePipelineJobEvent>) -> Result<Re
             .send());
     }
 
+    if futures.len() == 0 {
+        let failure_details = FailureDetails::builder()
+            .message("No futures found. This is likely due to no files being found to upload.")
+            .set_type(Some(FailureType::JobFailed))
+            .build();
+
+        codepipeline_job_client
+            .put_job_failure_result()
+            .set_job_id(job_id.clone())
+            .failure_details(failure_details)
+            .send()
+            .await?;
+    }
+
     info!("Waiting for futures");
 
     // await futures

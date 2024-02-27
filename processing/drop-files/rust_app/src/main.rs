@@ -24,7 +24,7 @@ use utils::models::response::Response;
 #[macro_use]
 extern crate include_dir;
 
-static DATA_DIR: Dir = include_dir!("src/data");
+static DATA_DIR: Dir = include_dir!("src/data/armies");
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {

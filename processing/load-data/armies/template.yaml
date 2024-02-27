@@ -95,8 +95,24 @@ Resources:
       TopicArn: !Ref DataSns
       FilterPolicyScope: MessageBody
       FilterPolicy:
-        '{"Records":{"s3":{"object":{"key":[{"prefix":"armies/"}]}}
-        ,"eventName":[{"prefix":"ObjectCreated:"}]}}'
+        '{
+            "Records": {
+                "s3": {
+                    "object": {
+                        "key": [
+                            {
+                                "prefix": "armies/"
+                            }
+                        ]
+                    }
+                },
+                "eventName": [
+                    {
+                        "prefix": "ObjectCreated:"
+                    }
+                ]
+            }
+        }'
 
 Outputs:
   ArmiesLoadDataFunctionName:

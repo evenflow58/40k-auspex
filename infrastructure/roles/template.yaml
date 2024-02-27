@@ -311,6 +311,7 @@ Resources:
                   - SNS:Subscribe
                   - SNS:DeleteTopic
                   - SNS:ListSubscriptionsByTopic
+                  - SNS:SetSubscriptionAttributes
                 Effect: Allow
                 Resource: !Sub 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:*'
               - Effect: Allow

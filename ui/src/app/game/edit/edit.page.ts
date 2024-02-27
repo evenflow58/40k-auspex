@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { GameService } from 'src/app/services/api/game/game.service';
+import { AuthStateService } from 'src/app/services/authState/auth-state.service';
 
 @Component({
   selector: 'game-edit',
@@ -22,24 +23,7 @@ export class EditPage implements OnInit, OnDestroy {
       value: "tactical"
     },
   );
-  public listForm = new FormGroup({
-    name: new FormControl(`${new Date().toLocaleDateString()} Game`, Validators.required),
-    size: new FormControl('incursion', Validators.required),
-    player1: new FormGroup({
-      name: new FormControl('Player 1'),
-      missionType: new FormControl('fixed'),
-      turnOrder: new FormControl("1", Validators.required),
-      playerType: new FormControl('attacker', Validators.required),
-      armyList: new FormControl(''),
-    }),
-    player2: new FormGroup({
-      name: new FormControl('Player 2'),
-      missionType: new FormControl('fixed'),
-      turnOrder: new FormControl("2", Validators.required),
-      playerType: new FormControl('defender', Validators.required),
-      armyList: new FormControl(''),
-    }),
-  });
+  public listForm: FormGroup;
   public isToastOpen = false;
 
   private subscriptions = new Array<Subscription | undefined>;
@@ -48,8 +32,35 @@ export class EditPage implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private gameService: GameService,
-    private toastController: ToastController,
-  ) { }
+    private authState: AuthStateService,
+  ) { 
+    this.listForm = new FormGroup({
+      name: new FormControl(`${new Date().toLocaleDateString()} Game`, Validators.required),
+      size: new FormControl('incursion', Validators.required),
+      player1: new FormGroup({
+        name: new FormControl('Player 1'),
+        missionType: new FormControl('fixed'),
+        turnOrder: new FormControl("1", Validators.required),
+        playerType: new FormControl('attacker', Validators.required),
+        armyList: new FormControl(''),
+      }),
+      player2: new FormGroup({
+        name: new FormControl('Player 2'),
+        missionType: new FormControl('fixed'),
+        turnOrder: new FormControl("2", Validators.required),
+        playerType: new FormControl('defender', Validators.required),
+        armyList: new FormControl(''),
+      }),
+    });
+
+    this.authState.user.subscribe(user => {
+      this.listForm.patchValue({
+        player1: {
+          name: `${user?.firstName} ${user?.lastName}`
+        }
+      })
+    })
+  }
 
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -168,11 +179,13 @@ export class EditPage implements OnInit, OnDestroy {
     try {
       if (!this.id) {
         const { id } = await lastValueFrom(this.gameService.createGame(game));
-        this.router.navigate(
-          [`./${id}`],
-          { relativeTo: this.activatedRoute }
-        );
+        this.id = id;
       } else await lastValueFrom(this.gameService.updateGame(this.id as string, name, game));
+
+      this.router.navigate(
+        [`../../track/${this.id}`],
+        { relativeTo: this.activatedRoute }
+      );
     } catch (e) {
       console.error(e);
       this.isToastOpen = true;

@@ -1,0 +1,14 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ this.phase | async }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" [ngSwitch]="(phase$ | async)">
+  <start-phase *ngSwitchCase="phases.START" />
+  <command-phase *ngSwitchCase="phases.COMMAND" />
+  <movement-phase *ngSwitchCase="phases.MOVEMENT" />
+  <shooting-phase *ngSwitchCase="phases.SHOOTING" />
+  <fight-phase *ngSwitchCase="phases.FIGHT" />
+  <div *ngSwitchDefault></div>
+</ion-content>

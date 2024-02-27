@@ -32,6 +32,14 @@ const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'track/:id',
+    loadChildren: () => import('./track/track.module').then( m => m.TrackPageModule)
+  },
+  {
+    path: 'track',
+    loadChildren: () => import('./track/track.module').then( m => m.TrackPageModule)
+  },
 ];
 
 @NgModule({

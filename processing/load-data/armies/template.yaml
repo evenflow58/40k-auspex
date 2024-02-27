@@ -1,0 +1,120 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Loads base armies into the database
+
+Parameters:
+  TableName:
+    Type: String
+    Description: The name of the table to load data into
+  Prefix:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]*"
+  DataSns:
+    Type: String
+    Description: The SNS topic to subscribe to
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ["${Prefix}ArmiesLoadDataRole", { Prefix: !Ref Prefix}]
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub ["${Prefix}S3Permissions", { Prefix: !Ref Prefix}]
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub "arn:aws:s3:::${Prefix}auspex-data/*"
+        - PolicyName: !Sub ["${Prefix}DynamoPermissions", { Prefix: !Ref Prefix}]
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                Resource: !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/${Prefix}AuspexTable"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+
+  ArmiesLoadDataFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Metadata:
+      BuildMethod: rust-cargolambda # More info about Cargo Lambda: https://github.com/cargo-lambda/cargo-lambda
+    Properties:
+      FunctionName: !Sub ["${Prefix}ArmiesLoadDataFunction", { Prefix: !Ref Prefix}]
+      CodeUri: rust_app/target/lambda/armies
+      # CodeUri: rust_app
+      Handler: bootstrap    # Do not change, as this is the default executable name produced by Cargo Lambda
+      Runtime: provided.al2
+      Architectures:
+        - arm64
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TableName
+
+  ArmiesLoadDataFunctionAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      Description: The live version to process army data uploads for seeding the database
+      FunctionName: !Ref ArmiesLoadDataFunction
+      FunctionVersion: '$LATEST'
+      Name: live
+
+  LoadDataPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref DataSns
+      FunctionName: !Ref ArmiesLoadDataFunctionAlias
+
+  ArmySubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: lambda
+      Endpoint: !Ref ArmiesLoadDataFunctionAlias
+      TopicArn: !Ref DataSns
+      FilterPolicyScope: MessageBody
+      FilterPolicy:
+        '{
+            "Records": {
+                "s3": {
+                    "object": {
+                        "key": [
+                            {
+                                "prefix": "armies/"
+                            }
+                        ]
+                    }
+                },
+                "eventName": [
+                    {
+                        "prefix": "ObjectCreated:"
+                    }
+                ]
+            }
+        }'
+
+Outputs:
+  ArmiesLoadDataFunctionName:
+    Value: !Ref ArmiesLoadDataFunction
+    Description: The name of the armies load data lambda function
